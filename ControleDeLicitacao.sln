@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleDeLicitacao.API", "ControleDeLicitacao.API\ControleDeLicitacao.API.csproj", "{72B037A4-50F5-4204-B65E-441331B75C59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleDeLicitacao.App", "ControleDeLicitacao.App\ControleDeLicitacao.App.csproj", "{60E994D2-695D-4959-A765-F47B1174A0B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleDeLicitacao.Domain", "ControleDeLicitacao.Domain\ControleDeLicitacao.Domain.csproj", "{73058537-CFD9-4C2D-9736-8BB2E3D84519}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleDeLicitacao.Infrastructure", "ControleDeLicitacao.Infrastructure\ControleDeLicitacao.Infrastructure.csproj", "{D7D4E4FB-00EA-4004-BE7A-5C0299868255}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleDeLicitacao.Common", "ControleDeLicitacao.Common\ControleDeLicitacao.Common.csproj", "{7A604663-F78A-4D32-B224-3EFB5FBAC629}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72B037A4-50F5-4204-B65E-441331B75C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72B037A4-50F5-4204-B65E-441331B75C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72B037A4-50F5-4204-B65E-441331B75C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72B037A4-50F5-4204-B65E-441331B75C59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E994D2-695D-4959-A765-F47B1174A0B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E994D2-695D-4959-A765-F47B1174A0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E994D2-695D-4959-A765-F47B1174A0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E994D2-695D-4959-A765-F47B1174A0B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73058537-CFD9-4C2D-9736-8BB2E3D84519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73058537-CFD9-4C2D-9736-8BB2E3D84519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73058537-CFD9-4C2D-9736-8BB2E3D84519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73058537-CFD9-4C2D-9736-8BB2E3D84519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D4E4FB-00EA-4004-BE7A-5C0299868255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D4E4FB-00EA-4004-BE7A-5C0299868255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D4E4FB-00EA-4004-BE7A-5C0299868255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D4E4FB-00EA-4004-BE7A-5C0299868255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A604663-F78A-4D32-B224-3EFB5FBAC629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A604663-F78A-4D32-B224-3EFB5FBAC629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A604663-F78A-4D32-B224-3EFB5FBAC629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A604663-F78A-4D32-B224-3EFB5FBAC629}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5A0CBDE2-FCDA-41F3-A961-0C112957629D}
+	EndGlobalSection
+EndGlobal
