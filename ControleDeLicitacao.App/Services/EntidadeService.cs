@@ -39,9 +39,9 @@ public class EntidadeService
     }
 
 
-    public void Editar(EntidadeDTO dto)
+    public void Editar(EntidadeDTO dto, bool edit = false)
     {
-        ValidarInativo(dto.Status);
+        if (edit) ValidarInativo(dto.Status);
 
         var entidade = _mapper.Map<Entidade>(dto);
 

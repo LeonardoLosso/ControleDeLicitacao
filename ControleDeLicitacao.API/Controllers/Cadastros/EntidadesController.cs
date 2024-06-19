@@ -29,7 +29,7 @@ public class EntidadesController : ControllerBase
     public IActionResult EditarEntidade([FromBody] EntidadeDTO dto)
     {
        
-        _service.Editar(dto);
+        _service.Editar(dto, true);
         return NoContent();
     }
 
