@@ -12,10 +12,7 @@ public class EntidadeMapping : Profile
         CreateMap<Entidade, EntidadeDTO>()
             .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco))
             .ReverseMap();
-        
-        //CreateMap<EntidadeDTO, Entidade>()
-        //    .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco));
-
+       
         CreateMap<Endereco, EnderecoDTO>().ReverseMap();
     }
 }

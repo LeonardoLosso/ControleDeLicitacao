@@ -20,8 +20,6 @@ public class EntidadesController : ControllerBase
     {
         _service.Adicionar(entidade);
 
-        //método de caminho para obter, id que se deve obter, retorno no payload
-        // se pah mudar para OK só pq não precisa ser consumida
         return CreatedAtAction(nameof(ObterPorID), new { id = entidade.ID }, entidade);
     }
 

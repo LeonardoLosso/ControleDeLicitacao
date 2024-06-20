@@ -31,37 +31,43 @@ namespace ControleDeLicitacao.Infrastructure.Migrations
 
                     b.Property<string>("CNPJ")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("Fantasia")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("IE")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("Tipo")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Entidades");
+                    b.ToTable("Entidades", (string)null);
                 });
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Cadastros.Entidade", b =>
@@ -73,37 +79,44 @@ namespace ControleDeLicitacao.Infrastructure.Migrations
 
                             b1.Property<string>("Bairro")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Bairro");
 
                             b1.Property<string>("CEP")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(8)
+                                .HasColumnType("nvarchar(8)")
                                 .HasColumnName("CEP");
 
                             b1.Property<string>("Cidade")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Cidade");
 
                             b1.Property<string>("Complemento")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Complemento");
 
                             b1.Property<string>("Logradouro")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Logradouro");
 
                             b1.Property<string>("Numero")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)")
                                 .HasColumnName("Numero");
 
                             b1.Property<string>("UF")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(2)
+                                .HasColumnType("nvarchar(2)")
                                 .HasColumnName("UF");
 
                             b1.HasKey("EntidadeID");

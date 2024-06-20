@@ -13,6 +13,9 @@ var connString = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<EntidadeContext>(opts =>
 opts.UseSqlServer(connString));
 
+builder.Services.AddDbContext<ItemContext>(opts =>
+opts.UseSqlServer(connString));
+
 //builder.Services.AddUserDbContext(connString);
 //falta criar authorization e authentication
 //builder.Services.AddUserConfig();

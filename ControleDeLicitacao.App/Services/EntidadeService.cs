@@ -45,10 +45,6 @@ public class EntidadeService
 
         var entidade = _mapper.Map<Entidade>(dto);
 
-        if (entidade.Status != 1)
-        {
-            throw new Exception("Não é possivel editar um cadastro inativo");
-        }
         _entidadeRepository.Editar(entidade);
     }
     public void AlterarStatus(int id)

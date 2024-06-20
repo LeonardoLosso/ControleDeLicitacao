@@ -5,11 +5,7 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 
 public class EntidadeContext : DbContext
 {
-    public EntidadeContext(DbContextOptions<EntidadeContext> opts)
-        : base(opts)
-    {
-
-    }
+    public EntidadeContext(DbContextOptions<EntidadeContext> opts) : base(opts) { }
 
     public DbSet<Entidade> Entidades { get; set; }
 
@@ -17,9 +13,11 @@ public class EntidadeContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configuração do Value Object Endereco
         modelBuilder.Entity<Entidade>(entity =>
         {
+            entity.ToTable("Entidades");
+            entity.HasKey(e => e.ID);
+
             entity.OwnsOne(e => e.Endereco, endereco =>
             {
                 endereco.Property(e => e.Logradouro).HasColumnName("Logradouro");

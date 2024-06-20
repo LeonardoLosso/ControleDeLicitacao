@@ -24,13 +24,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         _context.Dispose();
     }
 
-    public void Editar(TEntity entity)
+    public virtual void Editar(TEntity entity)
     {
         _dbSet.Update(entity);
         _context.SaveChanges();
     }
 
-    public void Adicionar(TEntity entity)
+    public virtual void Adicionar(TEntity entity)
     {
         _dbSet.Add(entity);
         _context.SaveChanges();

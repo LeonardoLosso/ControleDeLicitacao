@@ -14,13 +14,16 @@ public static class RegistradoresDeServices
     {
         //Services
         services.AddScoped<EntidadeService>();
+        services.AddScoped<ItemService>();
 
         //Repo e context
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<DbContext, EntidadeContext>();
+        services.AddScoped<ItemRepository>();
 
         //Mappers
         services.AddAutoMapper(typeof(EntidadeMapping).Assembly);
+        services.AddAutoMapper(typeof(ItemMapping).Assembly);
 
         return services;
     }
