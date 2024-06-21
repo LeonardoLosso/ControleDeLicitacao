@@ -5,7 +5,7 @@ namespace ControleDeLicitacao.App.DTOs.Itens;
 public class ItemSimplificadoDTO
 {
 
-    public int Id {get;set;}
+    public int ID {get;set;}
     public int Status {get;set;}
     public bool EhCesta {get;set;}
     public string Nome {get;set;}

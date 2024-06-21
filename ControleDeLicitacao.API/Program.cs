@@ -16,9 +16,11 @@ opts.UseSqlServer(connString));
 builder.Services.AddDbContext<ItemContext>(opts =>
 opts.UseSqlServer(connString));
 
-//builder.Services.AddUserDbContext(connString);
+builder.Services.AddDbContext<UsuarioContext>(opts =>
+opts.UseSqlServer(connString));
+
 //falta criar authorization e authentication
-//builder.Services.AddUserConfig();
+builder.Services.AddUserConfig();
 
 //builder.Services.AddUserServices();
 builder.Services.AddAppServices();

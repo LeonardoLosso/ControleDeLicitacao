@@ -20,14 +20,6 @@ public class EntidadeService
 
     }
 
-    public EntidadeDTO ObterPorID(int id)
-    {
-        var entidade = _entidadeRepository.ObterPorID(id);
-
-        if (entidade == null) return null;
-
-        return _mapper.Map<EntidadeDTO>(entidade);
-    }
     public void Adicionar(EntidadeDTO dto)
     {
 
@@ -39,24 +31,16 @@ public class EntidadeService
     }
 
 
-    public void Editar(EntidadeDTO dto, bool edit = false)
+    public void Editar(EntidadeDTO dto, bool validaStatus = true)
     {
-        if (edit) ValidarInativo(dto.Status);
+        if (validaStatus) ValidarInativo(dto.Status);
 
         var entidade = _mapper.Map<Entidade>(dto);
 
         _entidadeRepository.Editar(entidade);
     }
-    public void AlterarStatus(int id)
-    {
-        var entidade = _entidadeRepository.ObterPorID(id);
-        //verificar se a entidade está dentro de algum processo em aberto (para itens tambem)
 
-
-        entidade.Status = entidade.Status == 1 ? 2 : 1;
-
-        _entidadeRepository.Editar(entidade);
-    }
+    //---------------------------[CONSULTAS]-------------------------------
     public ListagemDTO<EntidadeSimplificadaDTO> Listar(int? pagina, int? tipo, int? status, string? cidade, string? search)
     {
         var take = 15;
@@ -78,7 +62,10 @@ public class EntidadeService
             query = query.BuscarPalavraChave(search);
         }
 
+        query = query.OrderByDescending(o => o.Status == 1);
+
         listagemDTO.TotalItems = query.Count();
+
         if (pagina.HasValue)
         {
             listagemDTO.Page = pagina ?? 0;
@@ -105,6 +92,27 @@ public class EntidadeService
 
         return listagemDTO;
     }
+
+    public EntidadeDTO ObterPorID(int id)
+    {
+        var entidade = _entidadeRepository.ObterPorID(id);
+
+        if (entidade == null) return null;
+
+        return _mapper.Map<EntidadeDTO>(entidade);
+    }
+    
+    public EntidadeDTO ObterPorIDParaEdicao(int id)
+    {
+        var entidade = _entidadeRepository.ObterPorID(id);
+
+        if (entidade == null) return null;
+
+        ValidarInativo(entidade.ID);
+
+        return _mapper.Map<EntidadeDTO>(entidade);
+    }
+
 
     private void ValidarNovoCadastro(EntidadeDTO dto)
     {

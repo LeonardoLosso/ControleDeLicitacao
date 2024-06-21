@@ -15,7 +15,7 @@ public class ItemMapping : Profile
 
 
         CreateMap<ItemAssociativo, ItemSimplificadoDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ItemFilhoID))
+            .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.ItemFilhoID))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ItemFilho.Status))
             .ForMember(dest => dest.EhCesta, opt => opt.MapFrom(src => src.ItemFilho.EhCesta))
             .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.ItemFilho.Nome))

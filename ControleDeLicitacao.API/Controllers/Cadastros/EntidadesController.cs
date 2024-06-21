@@ -2,6 +2,7 @@
 using ControleDeLicitacao.App.DTOs.Entidades;
 using ControleDeLicitacao.App.Services;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros;
 
@@ -23,18 +24,49 @@ public class EntidadesController : ControllerBase
         return CreatedAtAction(nameof(ObterPorID), new { id = entidade.ID }, entidade);
     }
 
-    [HttpPut]
-    public IActionResult EditarEntidade([FromBody] EntidadeDTO dto)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> EditarEntidade(int id, [FromBody] JsonPatchDocument<EntidadeDTO> patchDoc)
     {
-       
-        _service.Editar(dto, true);
+        var entidadeDTO = _service.ObterPorIDParaEdicao(id);
+        if (entidadeDTO == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            patchDoc.ApplyTo(entidadeDTO, ModelState);
+        }
+        catch (JsonPatchException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        _service.Editar(entidadeDTO);
+
         return NoContent();
     }
 
-    [HttpPatch("{id}")]
-    public IActionResult AlteraStatus(int id, JsonPatchDocument<EntidadeDTO> patch)
+    [HttpPatch("status/{id}")]
+    public IActionResult AlteraStatus(int id, JsonPatchDocument<EntidadeDTO> patchDoc)
     {
-        _service.AlterarStatus(id);
+        var entidadeDTO = _service.ObterPorID(id);
+        if (entidadeDTO == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            patchDoc.ApplyTo(entidadeDTO, ModelState);
+        }
+        catch (JsonPatchException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        _service.Editar(entidadeDTO, false);
+
         return NoContent();
     }
 

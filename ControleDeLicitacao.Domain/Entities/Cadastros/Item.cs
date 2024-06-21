@@ -1,12 +1,13 @@
-﻿using ControleDeLicitacao.Domain.ValueObjects;
+﻿using ControleDeLicitacao.Domain.Iterfaces;
+using ControleDeLicitacao.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace ControleDeLicitacao.Domain.Entities.Cadastros;
 
-public class Item
+public class Item : IDominio
 {
     [Key]
-    public int Id { get; set; }
+    public int ID { get; set; }
     public int Status { get; set; }
 
     public bool EhCesta { get; set; }

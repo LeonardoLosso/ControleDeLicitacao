@@ -22,18 +22,6 @@ public class ItemService
 
     }
 
-    public ItemDTO ObterPorID(int id)
-    {
-        var item = _itemRepository.Buscar()
-            .Include(item => item.ListaItens)
-                .ThenInclude(associativo => associativo.ItemFilho)
-            .Include(item => item.ListaNomes)
-            .SingleOrDefault(item => item.Id == id);
-
-        if (item == null) return null;
-
-        return _mapper.Map<ItemDTO>(item);
-    }
     public void Adicionar(ItemDTO dto)
     {
 
@@ -46,7 +34,7 @@ public class ItemService
             item.ListaItens = dto.ListaItens.Select(s =>
                 new ItemAssociativo
                 {
-                    ItemFilhoID = s.Id
+                    ItemFilhoID = s.ID
                 }).ToList();
         }
 
@@ -62,9 +50,9 @@ public class ItemService
     }
 
 
-    public void Editar(ItemDTO dto, bool edit = false)
+    public void Editar(ItemDTO dto, bool validarStatus = true)
     {
-        if (edit) ValidarInativo(dto.Status);
+        if (validarStatus) ValidarInativo(dto.Status);
 
         var item = _mapper.Map<Item>(dto);
 
@@ -75,7 +63,7 @@ public class ItemService
             item.ListaItens = dto.ListaItens.Select(s =>
                 new ItemAssociativo
                 {
-                    ItemFilhoID = s.Id
+                    ItemFilhoID = s.ID
                 }).ToList();
         }
 
@@ -90,16 +78,9 @@ public class ItemService
 
         _itemRepository.Editar(item);
     }
-    public void AlterarStatus(int id)
-    {
-        var item = _itemRepository.ObterPorID(id);
-        //verificar se o item está dentro de algum processo em aberto
 
+    //---------------------------[CONSULTAS]-------------------------------
 
-        item.Status = item.Status == 1 ? 2 : 1;
-
-        _itemRepository.Editar(item);
-    }
     public ListagemDTO<ItemSimplificadoDTO> Listar(int? pagina, string? tipo, int? status, string? unidadePrimaria, string? unidadeSecundaria, string? search)
     {
         var take = 15;
@@ -129,7 +110,10 @@ public class ItemService
             query = query.BuscarPalavraChave(search);
         }
 
+        query = query.OrderByDescending(o => o.Status == 1);
+
         listagemDTO.TotalItems = query.Count();
+
         if (pagina.HasValue)
         {
             listagemDTO.Page = pagina ?? 0;
@@ -143,7 +127,7 @@ public class ItemService
         var lista = query.Select(s =>
         new ItemSimplificadoDTO
         {
-            Id = s.Id,
+            ID = s.ID,
             Status = s.Status,
             EhCesta = s.EhCesta,
             Nome = s.Nome,
@@ -156,6 +140,35 @@ public class ItemService
         return listagemDTO;
     }
 
+    public ItemDTO ObterPorID(int id)
+    {
+        var item = RetornarItem(id);
+
+        if (item == null) return null;
+
+        return _mapper.Map<ItemDTO>(item);
+    }
+    
+    public ItemDTO ObterPorIDParaEdicao(int id)
+    {
+        var item = RetornarItem(id);
+
+        if (item == null) return null;
+
+        ValidarInativo(item.Status);
+
+        return _mapper.Map<ItemDTO>(item);
+    }
+    private Item? RetornarItem(int id)
+    {
+        return _itemRepository.Buscar()
+            .AsNoTracking()
+            .Include(item => item.ListaItens)
+                .ThenInclude(associativo => associativo.ItemFilho)
+            .Include(item => item.ListaNomes)
+            .SingleOrDefault(item => item.ID == id);
+
+    }
     private void ValidarInativo(int status)
     {
         if (status == 2) throw new GenericException("Não é possivel editar um cadastro inativo", 501);

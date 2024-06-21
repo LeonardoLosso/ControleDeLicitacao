@@ -1,9 +1,10 @@
-﻿using ControleDeLicitacao.Domain.ValueObjects;
+﻿using ControleDeLicitacao.Domain.Iterfaces;
+using ControleDeLicitacao.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace ControleDeLicitacao.Domain.Entities.Cadastros;
 
-public class Entidade
+public class Entidade : IDominio
 {
     [Key]
     [Required]

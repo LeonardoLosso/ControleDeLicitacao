@@ -1,9 +1,10 @@
-﻿using ControleDeLicitacao.Infrastructure.Persistence.Interface;
+﻿using ControleDeLicitacao.Domain.Iterfaces;
+using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 
-public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IDominio
 {
     private readonly DbContext _context;
     private readonly DbSet<TEntity> _dbSet;
@@ -38,7 +39,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public TEntity ObterPorID(int id)
     {
-        return _dbSet.Find(id);
+        return _dbSet.AsNoTracking().FirstOrDefault(e => e.ID == id);
     }
 
     /* ID PERSONALIZADO

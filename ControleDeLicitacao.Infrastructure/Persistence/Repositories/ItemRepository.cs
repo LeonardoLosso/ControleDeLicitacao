@@ -19,7 +19,7 @@ public class ItemRepository : Repository<Item>
 
     public override void Editar(Item item)
     {
-        RemoverAssociacoes(item.Id, item.EhCesta);
+        RemoverAssociacoes(item.ID, item.EhCesta);
 
         base.Editar(item);
     }
