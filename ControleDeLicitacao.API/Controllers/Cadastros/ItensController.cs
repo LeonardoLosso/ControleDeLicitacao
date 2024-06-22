@@ -1,5 +1,5 @@
 ﻿using ControleDeLicitacao.App.DTOs.Itens;
-using ControleDeLicitacao.App.Services;
+using ControleDeLicitacao.App.Services.Cadastros;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;

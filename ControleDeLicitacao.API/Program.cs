@@ -1,45 +1,31 @@
-//using ControleDeLicitacao.API.Registradores;
 using ControleDeLicitacao.API.Middleware;
 using ControleDeLicitacao.API.Registradores;
-using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//--------------------
+//-----------[BUILDER]------------
 var connString = builder.Configuration.GetConnectionString("Connection");
 
 //conexão com o banco de dados
-builder.Services.AddDbContext<EntidadeContext>(opts =>
-opts.UseSqlServer(connString));
+builder.Services.AddContexts(connString);
 
-builder.Services.AddDbContext<ItemContext>(opts =>
-opts.UseSqlServer(connString));
-
-builder.Services.AddDbContext<UsuarioContext>(opts =>
-opts.UseSqlServer(connString));
-
-//falta criar authorization e authentication
+//configurações de usuario
 builder.Services.AddUserConfig();
 
-//builder.Services.AddUserServices();
+//registro de serviços
 builder.Services.AddAppServices();
-//---------------------
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        });
-});
+//registro de repositorios
+builder.Services.AddInfraRepositories();
 
-builder.Services.AddControllers().AddNewtonsoftJson();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//registro de mapeamentos
+builder.Services.AddMappers();
+
+//configurações gerais da API
+builder.Services.AddOthersConfig();
+
+//-----------[APPLICATION]------------
 
 var app = builder.Build();
 

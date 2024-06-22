@@ -8,7 +8,7 @@ using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace ControleDeLicitacao.App.Services;
+namespace ControleDeLicitacao.App.Services.Cadastros;
 
 public class ItemService
 {
@@ -148,7 +148,7 @@ public class ItemService
 
         return _mapper.Map<ItemDTO>(item);
     }
-    
+
     public ItemDTO ObterPorIDParaEdicao(int id)
     {
         var item = RetornarItem(id);

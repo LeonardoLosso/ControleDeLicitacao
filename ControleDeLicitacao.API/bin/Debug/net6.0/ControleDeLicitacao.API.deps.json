@@ -629,7 +629,9 @@
         "dependencies": {
           "AutoMapper": "13.0.1",
           "ControleDeLicitacao.Common": "1.0.0",
-          "ControleDeLicitacao.Infrastructure": "1.0.0"
+          "ControleDeLicitacao.Infrastructure": "1.0.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.14",
+          "Microsoft.Extensions.Identity.Stores": "6.0.14"
         },
         "runtime": {
           "ControleDeLicitacao.App.dll": {}

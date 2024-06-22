@@ -6,7 +6,7 @@ using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 
-namespace ControleDeLicitacao.App.Services;
+namespace ControleDeLicitacao.App.Services.Cadastros;
 
 public class EntidadeService
 {
@@ -101,7 +101,7 @@ public class EntidadeService
 
         return _mapper.Map<EntidadeDTO>(entidade);
     }
-    
+
     public EntidadeDTO ObterPorIDParaEdicao(int id)
     {
         var entidade = _entidadeRepository.ObterPorID(id);

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ControleDeLicitacao.App.DTOs.Entidades;
-using ControleDeLicitacao.App.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
+using ControleDeLicitacao.App.Services.Cadastros;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros;
 
