@@ -58,6 +58,7 @@ public static class Registradores
     {
         services.AddAutoMapper(typeof(EntidadeMapping).Assembly);
         services.AddAutoMapper(typeof(ItemMapping).Assembly);
+        services.AddAutoMapper(typeof(UsuarioMapping).Assembly);
 
         return services;
     }

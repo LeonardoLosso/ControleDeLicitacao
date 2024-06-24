@@ -14,13 +14,12 @@ public class UsuariosController : ControllerBase
     {
         _service = service;
     }
-    //refazer saporra
     [HttpPost]
     public async Task<IActionResult> CadastraUsuario
             (UsuarioDTO dto)
     {
         await _service.Cadastrar(dto);
-        return Ok("Usuário cadastrado!");
+        return CreatedAtAction(nameof(ObterPorID), new { id = dto.Id }, dto);
     }
 
     [HttpPost("login")]
@@ -28,5 +27,33 @@ public class UsuariosController : ControllerBase
     {
         var token = await _service.Login(dto);
         return Ok(token);
+    }
+    [HttpGet]
+    public IActionResult ListarUsuarios(
+        [FromQuery] int? pagina = null,
+        [FromQuery] int? status = null,
+        [FromQuery] string? search = null
+        )
+    {
+        var lista = _service.Listar(pagina, status, search);
+
+        return Ok(lista);
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult ObterPorID(int id)
+    {
+        var entidade = _service.ObterPorID(id);
+
+        if (entidade == null) return NotFound();
+
+        return Ok(entidade);
+    }
+
+    [HttpGet("recursos")]
+    public IActionResult RetornaPermissoes()
+    {
+        var permissoes = _service.RetornaPermissoes();
+        return Ok(permissoes);
     }
 }

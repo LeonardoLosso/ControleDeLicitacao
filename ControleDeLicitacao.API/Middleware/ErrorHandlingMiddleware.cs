@@ -50,8 +50,8 @@ public class ErrorHandlingMiddleware
             result = JsonConvert.SerializeObject(new
             {
                 StatusCode = code,
-                Message = "Internal Server Error from the custom middleware.",
-                Detailed = exception.Message
+                Message = exception.Message,
+                Detailed = exception.InnerException.Message
             });
         }
 

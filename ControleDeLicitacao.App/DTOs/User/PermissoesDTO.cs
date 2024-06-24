@@ -10,6 +10,7 @@ public class PermissoesDTO
 
 public class RecursosDTO
 {
+    public int Id { get; set; }
     public string NomeRecurso { get; set; }
     public bool PermissaoRecurso { get; set; } = false;
 

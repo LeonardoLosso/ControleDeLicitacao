@@ -25,6 +25,8 @@ public class EntidadeService
 
         ValidarNovoCadastro(dto);
 
+        TrataStrings(dto);
+
         var entidade = _mapper.Map<Entidade>(dto);
 
         _entidadeRepository.Adicionar(entidade);
@@ -33,7 +35,11 @@ public class EntidadeService
 
     public void Editar(EntidadeDTO dto, bool validaStatus = true)
     {
-        if (validaStatus) ValidarInativo(dto.Status);
+        if (validaStatus)
+        {
+            ValidarInativo(dto.Status);
+            TrataStrings(dto);
+        }
 
         var entidade = _mapper.Map<Entidade>(dto);
 
@@ -123,5 +129,12 @@ public class EntidadeService
     private void ValidarInativo(int status)
     {
         if (status == 2) throw new GenericException("Não é possivel editar um cadastro inativo", 501);
+    }
+
+    private void TrataStrings(EntidadeDTO dto)
+    {
+        dto.CNPJ = dto.CNPJ.RemoveNonNumeric();
+        dto.Telefone = dto.Telefone.RemoveNonNumeric();
+        dto.Endereco.CEP = dto.Endereco.CEP.RemoveNonNumeric();
     }
 }

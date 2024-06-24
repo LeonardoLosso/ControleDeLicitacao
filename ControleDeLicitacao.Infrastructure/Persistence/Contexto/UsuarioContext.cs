@@ -24,26 +24,37 @@ public class UsuarioContext : IdentityDbContext<Usuario, IdentityRole<int>, int>
 
             entity.OwnsOne(e => e.Endereco, endereco =>
             {
-                endereco.Property(e => e.Logradouro).HasColumnName("Logradouro");
-                endereco.Property(e => e.Bairro).HasColumnName("Bairro");
-                endereco.Property(e => e.Cidade).HasColumnName("Cidade");
-                endereco.Property(e => e.UF).HasColumnName("UF");
-                endereco.Property(e => e.CEP).HasColumnName("CEP");
-                endereco.Property(e => e.Numero).HasColumnName("Numero");
-                endereco.Property(e => e.Complemento).HasColumnName("Complemento");
+                endereco.Property(e => e.Logradouro).HasColumnName("Logradouro").IsRequired(false);
+                endereco.Property(e => e.Bairro).HasColumnName("Bairro").IsRequired(false);
+                endereco.Property(e => e.Cidade).HasColumnName("Cidade").IsRequired(false);
+                endereco.Property(e => e.UF).HasColumnName("UF").IsRequired(false);
+                endereco.Property(e => e.CEP).HasColumnName("CEP").IsRequired(false);
+                endereco.Property(e => e.Numero).HasColumnName("Numero").IsRequired(false);
+                endereco.Property(e => e.Complemento).HasColumnName("Complemento").IsRequired(false);
             });
 
             entity.HasMany(e => e.Permissoes)
                       .WithOne(p => p.Usuario)
                       .HasForeignKey(p => p.UsuarioId)
                       .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(p => p.Nome)
+            .IsRequired(false)
+            .HasMaxLength(50);
+
+            entity.Property(p => p.CPF)
+            .IsRequired(false)
+            .HasMaxLength(11);
+
+            entity.Property(p => p.Telefone)
+            .IsRequired(false)
+            .HasMaxLength(11);
         });
 
         modelBuilder.Entity<Permissao>(entity =>
         {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Tela).IsRequired();
-            entity.Property(e => e.NomeRecurso).IsRequired();
+            entity.HasKey(p => new { p.RecursoId, p.UsuarioId });
+            entity.Property(e => e.RecursoId).IsRequired();
             entity.Property(e => e.PermissaoRecurso).IsRequired();
         });
     }

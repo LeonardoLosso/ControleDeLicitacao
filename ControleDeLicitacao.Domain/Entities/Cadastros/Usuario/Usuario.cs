@@ -6,10 +6,6 @@ namespace ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
 
 public class Usuario : IdentityUser<int>
 {
-    [Required]
-    [MaxLength(16)]
-    public string UserName {  get; set; }
-
     [MaxLength(50)]
     public string Nome { get; set; }
 

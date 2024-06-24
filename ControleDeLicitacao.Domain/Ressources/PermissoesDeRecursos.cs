@@ -29,6 +29,7 @@ public class Recurso
 }
 public static class PermissoesDeRecursos
 {
+
     public static readonly List<Modulo> 
         Modulos = new List<Modulo>
         {

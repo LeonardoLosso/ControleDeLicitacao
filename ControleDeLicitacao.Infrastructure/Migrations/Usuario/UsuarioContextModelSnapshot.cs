@@ -24,29 +24,16 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Cadastros.Usuario.Permissao", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("RecursoId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("NomeRecurso")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<bool>("PermissaoRecurso")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Tela")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("PermissaoRecurso")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RecursoId", "UsuarioId");
 
                     b.HasIndex("UsuarioId");
 
@@ -65,7 +52,6 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
                         .HasColumnType("int");
 
                     b.Property<string>("CPF")
-                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -87,7 +73,6 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -115,7 +100,6 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
                         .HasColumnType("int");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -123,7 +107,6 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -138,7 +121,8 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("UserName")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -295,43 +279,36 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Usuario
                                 .HasColumnType("int");
 
                             b1.Property<string>("Bairro")
-                                .IsRequired()
                                 .HasMaxLength(30)
                                 .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Bairro");
 
                             b1.Property<string>("CEP")
-                                .IsRequired()
                                 .HasMaxLength(8)
                                 .HasColumnType("nvarchar(8)")
                                 .HasColumnName("CEP");
 
                             b1.Property<string>("Cidade")
-                                .IsRequired()
                                 .HasMaxLength(30)
                                 .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Cidade");
 
                             b1.Property<string>("Complemento")
-                                .IsRequired()
                                 .HasMaxLength(30)
                                 .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Complemento");
 
                             b1.Property<string>("Logradouro")
-                                .IsRequired()
                                 .HasMaxLength(30)
                                 .HasColumnType("nvarchar(30)")
                                 .HasColumnName("Logradouro");
 
                             b1.Property<string>("Numero")
-                                .IsRequired()
                                 .HasMaxLength(10)
                                 .HasColumnType("nvarchar(10)")
                                 .HasColumnName("Numero");
 
                             b1.Property<string>("UF")
-                                .IsRequired()
                                 .HasMaxLength(2)
                                 .HasColumnType("nvarchar(2)")
                                 .HasColumnName("UF");

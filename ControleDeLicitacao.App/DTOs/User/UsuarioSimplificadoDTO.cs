@@ -6,7 +6,7 @@ public class UsuarioSimplificadoDTO
 
     public string Nome { get; set; }
 
-    public string Status {  get; set; }
+    public int Status {  get; set; }
 
     public string UserName { get; set; }
 
