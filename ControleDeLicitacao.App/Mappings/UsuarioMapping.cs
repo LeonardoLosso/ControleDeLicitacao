@@ -17,17 +17,4 @@ public class UsuarioMapping : Profile
             .ForMember(dest => dest.Permissoes, opt => opt.Ignore());
     }
 
-    private List<Permissao> MapPermissoesDTOToListPermissao(PermissoesDTO permissoesDTO, List<Permissao> permissoes, ResolutionContext context)
-    {
-        var permissoesList = new List<Permissao>();
-        foreach (var recursoDTO in permissoesDTO.Recursos)
-        {
-            permissoesList.Add(new Permissao
-            {
-                RecursoId = recursoDTO.Id,
-                PermissaoRecurso = recursoDTO.PermissaoRecurso
-            });
-        }
-        return permissoesList;
-    }
 }

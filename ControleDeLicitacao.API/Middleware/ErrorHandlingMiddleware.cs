@@ -1,7 +1,6 @@
 ﻿using ControleDeLicitacao.App.Error;
 using Newtonsoft.Json;
 using System.Net;
-using System.Text.Json;
 
 namespace ControleDeLicitacao.API.Middleware;
 

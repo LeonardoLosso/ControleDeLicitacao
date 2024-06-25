@@ -1,6 +1,9 @@
 ﻿using ControleDeLicitacao.App.DTOs.User;
 using ControleDeLicitacao.App.Services.Cadastros.User;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using ControleDeLicitacao.App.Error;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros.Usuarios;
 
@@ -22,6 +25,64 @@ public class UsuariosController : ControllerBase
         return CreatedAtAction(nameof(ObterPorID), new { id = dto.Id }, dto);
     }
 
+
+    [HttpPatch("status/{id}")]
+    public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<UsuarioDTO> patchDoc)
+    {
+        var dto = _service.ObterPorID(id);
+        if (dto == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            patchDoc.ApplyTo(dto, ModelState);
+        }
+        catch (JsonPatchException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        try
+        {
+            await _service.EditarAsync(dto);
+            return NoContent();
+        }
+        catch (GenericException ex)
+        {
+            return StatusCode(ex.StatusCode, ex.Message);
+        }
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> EditarEntidade(int id, [FromBody] JsonPatchDocument<UsuarioDTO> patchDoc)
+    {
+        var dto = _service.ObterPorID(id);
+        if (dto == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            patchDoc.ApplyTo(dto, ModelState);
+        }
+        catch (JsonPatchException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        try
+        {
+            await _service.EditarAsync(dto);
+            return NoContent();
+        }
+        catch (GenericException ex)
+        {
+            return StatusCode(ex.StatusCode, ex.Message);
+        }
+    }
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync(LoginUsuarioDTO dto)
     {
@@ -43,11 +104,19 @@ public class UsuariosController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult ObterPorID(int id)
     {
-        var entidade = _service.ObterPorID(id);
+        var usuario = _service.ObterPorID(id);
 
-        if (entidade == null) return NotFound();
+        if (usuario == null) return NotFound();
 
-        return Ok(entidade);
+        return Ok(usuario);
+    }
+
+    [HttpGet("username/{userName}")]
+    public IActionResult ObterUsuario(string userName)
+    {
+        var existe= _service.ObterUsuarioExistente(userName);
+
+        return Ok(existe);
     }
 
     [HttpGet("recursos")]

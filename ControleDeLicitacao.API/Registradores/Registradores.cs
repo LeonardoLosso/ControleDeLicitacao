@@ -30,6 +30,7 @@ public static class Registradores
         services
             .AddIdentity<Usuario, IdentityRole<int>>()
             .AddEntityFrameworkStores<UsuarioContext>()
+            .AddUserStore<CustomUserStore>()
             .AddDefaultTokenProviders();
 
         return services;

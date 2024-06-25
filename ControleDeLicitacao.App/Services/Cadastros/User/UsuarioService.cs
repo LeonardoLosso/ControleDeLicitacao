@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Common;
 using Microsoft.EntityFrameworkCore;
+using ControleDeLicitacao.Infrastructure.Migrations.Usuario;
 
 namespace ControleDeLicitacao.App.Services.Cadastros.User;
 
@@ -38,18 +39,7 @@ public class UsuarioService
         TrataStrings(dto);
         Usuario usuario = _mapper.Map<Usuario>(dto);
 
-        usuario.Permissoes = new List<Permissao>();
-        foreach (var permissao in dto.Permissoes)
-        {
-            foreach (var recurso in permissao.Recursos)
-            {
-                usuario.Permissoes.Add(new Permissao
-                {
-                    PermissaoRecurso = recurso.PermissaoRecurso,
-                    RecursoId = recurso.Id
-                });
-            }
-        }
+        usuario.Permissoes = ConverterPermissoes(dto);
 
         IdentityResult resultado = await _userManager.CreateAsync(usuario, dto.Password);
 
@@ -75,6 +65,52 @@ public class UsuarioService
         var token = _tokenService.GenerateToken(usuario);
 
         return token;
+    }
+
+    public async Task EditarAsync(UsuarioDTO dto)
+    {
+        TrataStrings (dto);
+
+        var usuario = await _userManager.FindByIdAsync(dto.Id.ToString());
+
+        if (usuario == null)
+        {
+            throw new GenericException("Usuário não encontrado!", 404);
+        }
+
+        RemoverTodasPermissoes(usuario.Id);
+
+        usuario.Permissoes = ConverterPermissoes(dto);
+
+        _mapper.Map(dto, usuario);
+
+        if (!string.IsNullOrWhiteSpace(dto.Password))
+        {
+            if (dto.Password.Equals(dto.RePassword))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);
+                var result = await _userManager.ResetPasswordAsync(usuario, token, dto.Password);
+
+                if (!result.Succeeded)
+                {
+                    var errorMessage = string.Join("; ", result.Errors.Select(e => e.Description));
+                    throw new GenericException($"Falha ao alterar senha do usuário: {errorMessage}", 501);
+                }
+            }
+            else
+            {
+                throw new GenericException("A nova senha e a confirmação da senha não coincidem!", 400);
+            }
+        }
+
+        // Atualiza o usuário
+        var updateResult = await _userManager.UpdateAsync(usuario);
+
+        if (!updateResult.Succeeded)
+        {
+            var errorMessage = string.Join("; ", updateResult.Errors.Select(e => e.Description));
+            throw new GenericException($"Falha ao editar usuário: {errorMessage}", 501);
+        }
     }
 
     //---------------------------[CONSULTAS]-------------------------------
@@ -125,25 +161,34 @@ public class UsuarioService
 
     public UsuarioDTO ObterPorID(int id)
     {
-        var usuario = _context.Usuarios.Include(u => u.Permissoes).FirstOrDefault(u => u.Id == id);
+        var usuario = _context.Usuarios
+            .AsNoTracking()
+            .Include(u => u.Permissoes)
+            .FirstOrDefault(u => u.Id == id);
 
         var dto = _mapper.Map<UsuarioDTO>(usuario);
 
         var permissoes = RetornaPermissoes();
 
-        foreach(var permissao in permissoes)
+        foreach (var permissao in permissoes)
         {
-            foreach(var recurso in permissao.Recursos)
+            foreach (var recurso in permissao.Recursos)
             {
                 recurso.PermissaoRecurso = usuario.Permissoes
                     .Where(w => w.RecursoId == recurso.Id)
-                    .Select(s => s.PermissaoRecurso).FirstOrDefault();
+                    .Select(s => s.PermissaoRecurso)
+                    .FirstOrDefault();
             }
         }
 
         dto.Permissoes = permissoes;
 
         return dto;
+    }
+
+    public bool ObterUsuarioExistente(string userName)
+    {
+        return _context.Usuarios.Any(u => u.UserName == userName);
     }
 
     public List<PermissoesDTO> RetornaPermissoes()
@@ -174,6 +219,30 @@ public class UsuarioService
         dto.CPF = dto.CPF.RemoveNonNumeric();
         dto.Telefone = dto.Telefone.RemoveNonNumeric();
         dto.Endereco.CEP = dto.Endereco.CEP.RemoveNonNumeric();
+    }
+
+    private List<Permissao> ConverterPermissoes(UsuarioDTO dto)
+    {
+        var userPerm = new List<Permissao>();
+        foreach (var permissao in dto.Permissoes)
+        {
+            foreach (var recurso in permissao.Recursos)
+            {
+                userPerm.Add(new Permissao
+                {
+                    PermissaoRecurso = recurso.PermissaoRecurso,
+                    RecursoId = recurso.Id
+                });
+            }
+        }
+
+        return userPerm.ToList();
+    }
+    private void RemoverTodasPermissoes(int id)
+    {
+        var permissoesExistentes = _context.Permissoes.Where(p => p.UsuarioId == id).ToList();
+        _context.Permissoes.RemoveRange(permissoesExistentes);
+        _context.SaveChanges();
     }
 }
 
