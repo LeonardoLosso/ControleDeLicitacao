@@ -5,8 +5,10 @@ using ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace ControleDeLicitacao.API.Registradores;
 
@@ -25,7 +27,24 @@ public static class Registradores
 
     public static IServiceCollection AddUserConfig(this IServiceCollection services)
     {
-        //falta criar authorization e authentication
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme =
+                JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes("F4ça)uNã0FaÇ4.4T3n74t1VAnÃO3xI27E")),
+
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
 
         services
             .AddIdentity<Usuario, IdentityRole<int>>()

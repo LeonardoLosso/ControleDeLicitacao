@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Common;
 using Microsoft.EntityFrameworkCore;
-using ControleDeLicitacao.Infrastructure.Migrations.Usuario;
 
 namespace ControleDeLicitacao.App.Services.Cadastros.User;
 
@@ -52,15 +51,15 @@ public class UsuarioService
     public async Task<string> Login(LoginUsuarioDTO dto)
     {
         var resultado = await _signInManager.PasswordSignInAsync
-            (dto.Username, dto.Password, false, false);
+            (dto.UserName, dto.Password, false, false);
 
         if (!resultado.Succeeded)
             throw new GenericException("Usuário não autenticado!", 501);
 
         var usuario = _signInManager
             .UserManager
-            .Users
-            .FirstOrDefault(user => user.NormalizedUserName == dto.Username.ToUpper());
+            .Users.Include(u => u.Permissoes.Where(p => p.PermissaoRecurso == true))
+            .FirstOrDefault(user => user.NormalizedUserName == dto.UserName.ToUpper());
 
         var token = _tokenService.GenerateToken(usuario);
 
