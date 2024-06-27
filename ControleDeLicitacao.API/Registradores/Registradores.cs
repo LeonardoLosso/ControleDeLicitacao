@@ -66,7 +66,7 @@ public static class Registradores
         services.AddScoped<EntidadeService>();
         services.AddScoped<ItemService>();
         services.AddScoped<UsuarioService>();
-        services.AddScoped<TokenService>();
+        services.AddSingleton<TokenService>();
 
         return services;
     }
@@ -99,6 +99,7 @@ public static class Registradores
                     policy.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod();
+                    //.AllowCredentials();
                 });
         });
 
