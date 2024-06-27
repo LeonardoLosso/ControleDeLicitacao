@@ -15,7 +15,10 @@ public class TokenService
         Claim[] claims = new Claim[]
         {
                 new Claim("userName", usuario.UserName),
-                new Claim("recursos", JsonSerializer.Serialize(usuario.Permissoes.Select(p => p.RecursoId).ToList()))
+                new Claim("recursos", 
+                    JsonSerializer
+                        .Serialize(usuario.Permissoes.Select(p => p.RecursoId)), 
+                    JsonClaimValueTypes.JsonArray)
         };
 
         var chave = new SymmetricSecurityKey
