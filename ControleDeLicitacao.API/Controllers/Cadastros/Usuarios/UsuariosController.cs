@@ -29,7 +29,7 @@ public class UsuariosController : ControllerBase
     [HttpPatch("status/{id}")]
     public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<UsuarioDTO> patchDoc)
     {
-        var dto = _service.ObterPorID(id);
+        var dto = await _service.ObterPorID(id);
         if (dto == null)
         {
             return NotFound();
@@ -56,9 +56,9 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> EditarEntidade(int id, [FromBody] JsonPatchDocument<UsuarioDTO> patchDoc)
+    public async Task<IActionResult> EditarUsuario(int id, [FromBody] JsonPatchDocument<UsuarioDTO> patchDoc)
     {
-        var dto = _service.ObterPorID(id);
+        var dto = await _service.ObterPorID(id);
         if (dto == null)
         {
             return NotFound();
@@ -90,21 +90,21 @@ public class UsuariosController : ControllerBase
         return Ok(new { access_token });
     }
     [HttpGet]
-    public IActionResult ListarUsuarios(
+    public async Task<IActionResult> ListarUsuarios(
         [FromQuery] int? pagina = null,
         [FromQuery] int? status = null,
         [FromQuery] string? search = null
         )
     {
-        var lista = _service.Listar(pagina, status, search);
+        var lista = await _service.Listar(pagina, status, search);
 
         return Ok(lista);
     }
 
     [HttpGet("{id}")]
-    public IActionResult ObterPorID(int id)
+    public async Task<IActionResult> ObterPorID(int id)
     {
-        var usuario = _service.ObterPorID(id);
+        var usuario = await _service.ObterPorID(id);
 
         if (usuario == null) return NotFound();
 
@@ -112,15 +112,15 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet("username/{userName}")]
-    public IActionResult ObterUsuario(string userName)
+    public async Task<IActionResult> ObterUsuario(string userName)
     {
-        var existe= _service.ObterUsuarioExistente(userName);
+        var existe= await _service.ObterUsuarioExistente(userName);
 
         return Ok(existe);
     }
 
     [HttpGet("recursos")]
-    public IActionResult RetornaPermissoes()
+    public async Task<IActionResult> RetornaPermissoes()
     {
         var permissoes = _service.RetornaPermissoes();
         return Ok(permissoes);

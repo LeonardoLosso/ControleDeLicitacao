@@ -56,10 +56,10 @@ public class UsuarioService
         if (!resultado.Succeeded)
             throw new GenericException("Usuário não autenticado!", 501);
 
-        var usuario = _signInManager
+        var usuario = await _signInManager
             .UserManager
             .Users.Include(u => u.Permissoes.Where(p => p.PermissaoRecurso == true))
-            .FirstOrDefault(user => user.NormalizedUserName == dto.UserName.ToUpper());
+            .FirstOrDefaultAsync(user => user.NormalizedUserName == dto.UserName.ToUpper());
 
         var token = _tokenService.GenerateToken(usuario);
 
@@ -77,7 +77,7 @@ public class UsuarioService
             throw new GenericException("Usuário não encontrado!", 404);
         }
 
-        RemoverTodasPermissoes(usuario.Id);
+        await RemoverTodasPermissoes(usuario.Id);
 
         usuario.Permissoes = ConverterPermissoes(dto);
 
@@ -113,7 +113,7 @@ public class UsuarioService
     }
 
     //---------------------------[CONSULTAS]-------------------------------
-    public ListagemDTO<UsuarioSimplificadoDTO> Listar(int? pagina, int? status, string? search)
+    public async Task<ListagemDTO<UsuarioSimplificadoDTO>> Listar(int? pagina, int? status, string? search)
     {
         var take = 15;
         var listagemDTO = new ListagemDTO<UsuarioSimplificadoDTO>();
@@ -143,7 +143,7 @@ public class UsuarioService
         }
 
 
-        var lista = query.Select(s =>
+        var lista = await query.Select(s =>
         new UsuarioSimplificadoDTO
         {
             Id = s.Id,
@@ -151,19 +151,19 @@ public class UsuarioService
             Nome = s.Nome,
             UserName = s.UserName,
             CPF = s.CPF
-        }).ToList();
+        }).ToListAsync();
 
         listagemDTO.Lista = lista;
 
         return listagemDTO;
     }
 
-    public UsuarioDTO ObterPorID(int id)
+    public async Task<UsuarioDTO> ObterPorID(int id)
     {
-        var usuario = _context.Usuarios
+        var usuario = await _context.Usuarios
             .AsNoTracking()
             .Include(u => u.Permissoes)
-            .FirstOrDefault(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         var dto = _mapper.Map<UsuarioDTO>(usuario);
 
@@ -185,9 +185,9 @@ public class UsuarioService
         return dto;
     }
 
-    public bool ObterUsuarioExistente(string userName)
+    public async Task<bool> ObterUsuarioExistente(string userName)
     {
-        return _context.Usuarios.Any(u => u.UserName == userName);
+        return await _context.Usuarios.AnyAsync(u => u.UserName == userName);
     }
 
     public List<PermissoesDTO> RetornaPermissoes()
@@ -237,11 +237,11 @@ public class UsuarioService
 
         return userPerm.ToList();
     }
-    private void RemoverTodasPermissoes(int id)
+    private async Task RemoverTodasPermissoes(int id)
     {
         var permissoesExistentes = _context.Permissoes.Where(p => p.UsuarioId == id).ToList();
         _context.Permissoes.RemoveRange(permissoesExistentes);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }
 

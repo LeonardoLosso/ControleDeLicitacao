@@ -17,9 +17,9 @@ public class EntidadesController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult NovaEntidade([FromBody] EntidadeDTO entidade)
+    public async Task<IActionResult> NovaEntidade([FromBody] EntidadeDTO entidade)
     {
-        _service.Adicionar(entidade);
+        await _service.Adicionar(entidade);
 
         return CreatedAtAction(nameof(ObterPorID), new { id = entidade.ID }, entidade);
     }
@@ -27,7 +27,7 @@ public class EntidadesController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<IActionResult> EditarEntidade(int id, [FromBody] JsonPatchDocument<EntidadeDTO> patchDoc)
     {
-        var entidadeDTO = _service.ObterPorIDParaEdicao(id);
+        var entidadeDTO = await _service.ObterPorIDParaEdicao(id);
         if (entidadeDTO == null)
         {
             return NotFound();
@@ -42,15 +42,15 @@ public class EntidadesController : ControllerBase
             return BadRequest(ex.Message);
         }
 
-        _service.Editar(entidadeDTO);
+        await _service.Editar(entidadeDTO);
 
         return NoContent();
     }
 
     [HttpPatch("status/{id}")]
-    public IActionResult AlteraStatus(int id, JsonPatchDocument<EntidadeDTO> patchDoc)
+    public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<EntidadeDTO> patchDoc)
     {
-        var entidadeDTO = _service.ObterPorID(id);
+        var entidadeDTO = await _service.ObterPorID(id);
         if (entidadeDTO == null)
         {
             return NotFound();
@@ -65,13 +65,13 @@ public class EntidadesController : ControllerBase
             return BadRequest(ex.Message);
         }
 
-        _service.Editar(entidadeDTO, false);
+        await _service.Editar(entidadeDTO, false);
 
         return NoContent();
     }
 
     [HttpGet]
-    public IActionResult ListarEntidades(
+    public async Task<IActionResult> ListarEntidades(
         [FromQuery] int? pagina = null,
         [FromQuery] int? tipo = null,
         [FromQuery] int? status = null,
@@ -79,14 +79,14 @@ public class EntidadesController : ControllerBase
         [FromQuery] string? search = null
         )
     {
-        var lista = _service.Listar(pagina, tipo, status, cidade, search);
+        var lista = await _service.Listar(pagina, tipo, status, cidade, search);
 
         return Ok(lista);
     }
     [HttpGet("{id}")]
-    public IActionResult ObterPorID(int id)
+    public async Task<IActionResult> ObterPorID(int id)
     {
-        var entidade = _service.ObterPorID(id);
+        var entidade = await _service.ObterPorID(id);
 
         if (entidade == null) return NotFound();
 

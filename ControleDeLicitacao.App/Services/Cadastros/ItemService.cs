@@ -22,7 +22,7 @@ public class ItemService
 
     }
 
-    public void Adicionar(ItemDTO dto)
+    public async Task Adicionar(ItemDTO dto)
     {
 
         var item = _mapper.Map<Item>(dto);
@@ -46,11 +46,11 @@ public class ItemService
                     Nome = nome
                 }).ToList();
         }
-        _itemRepository.Adicionar(item);
+        await _itemRepository.Adicionar(item);
     }
 
 
-    public void Editar(ItemDTO dto, bool validarStatus = true)
+    public async Task Editar(ItemDTO dto, bool validarStatus = true)
     {
         if (validarStatus) ValidarInativo(dto.Status);
 
@@ -58,7 +58,7 @@ public class ItemService
 
         if (item == null) return;
 
-        if (item.EhCesta)
+        if (item.EhCesta && dto.ListaItens != null)
         {
             item.ListaItens = dto.ListaItens.Select(s =>
                 new ItemAssociativo
@@ -76,12 +76,12 @@ public class ItemService
                 }).ToList();
         }
 
-        _itemRepository.Editar(item);
+        await _itemRepository.Editar(item);
     }
 
     //---------------------------[CONSULTAS]-------------------------------
 
-    public ListagemDTO<ItemSimplificadoDTO> Listar(int? pagina, string? tipo, int? status, string? unidadePrimaria, string? unidadeSecundaria, string? search)
+    public async Task<ListagemDTO<ItemSimplificadoDTO>> Listar(int? pagina, string? tipo, int? status, string? unidadePrimaria, string? unidadeSecundaria, string? search)
     {
         var take = 15;
         var listagemDTO = new ListagemDTO<ItemSimplificadoDTO>();
@@ -124,7 +124,7 @@ public class ItemService
         }
 
 
-        var lista = query.Select(s =>
+        var lista = await query.Select(s =>
         new ItemSimplificadoDTO
         {
             ID = s.ID,
@@ -133,25 +133,25 @@ public class ItemService
             Nome = s.Nome,
             UnidadePrimaria = s.UnidadePrimaria,
             UnidadeSecundaria = s.UnidadeSecundaria
-        }).ToList();
+        }).ToListAsync();
 
         listagemDTO.Lista = lista;
 
         return listagemDTO;
     }
 
-    public ItemDTO ObterPorID(int id)
+    public async Task<ItemDTO?> ObterPorID(int id)
     {
-        var item = RetornarItem(id);
+        var item = await RetornarItem(id);
 
         if (item == null) return null;
 
         return _mapper.Map<ItemDTO>(item);
     }
 
-    public ItemDTO ObterPorIDParaEdicao(int id)
+    public async Task<ItemDTO?> ObterPorIDParaEdicao(int id)
     {
-        var item = RetornarItem(id);
+        var item = await RetornarItem(id);
 
         if (item == null) return null;
 
@@ -159,14 +159,14 @@ public class ItemService
 
         return _mapper.Map<ItemDTO>(item);
     }
-    private Item? RetornarItem(int id)
+    private async Task<Item?> RetornarItem(int id)
     {
-        return _itemRepository.Buscar()
+        return await _itemRepository.Buscar()
             .AsNoTracking()
             .Include(item => item.ListaItens)
                 .ThenInclude(associativo => associativo.ItemFilho)
             .Include(item => item.ListaNomes)
-            .SingleOrDefault(item => item.ID == id);
+            .SingleOrDefaultAsync(item => item.ID == id);
 
     }
     private void ValidarInativo(int status)

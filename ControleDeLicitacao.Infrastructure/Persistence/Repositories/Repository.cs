@@ -25,21 +25,21 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         _context.Dispose();
     }
 
-    public virtual void Editar(TEntity entity)
+    public virtual async Task Editar(TEntity entity)
     {
         _dbSet.Update(entity);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public virtual void Adicionar(TEntity entity)
+    public virtual async Task Adicionar(TEntity entity)
     {
-        _dbSet.Add(entity);
-        _context.SaveChanges();
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
     }
 
-    public TEntity ObterPorID(int id)
+    public async Task<TEntity> ObterPorID(int id)
     {
-        return _dbSet.AsNoTracking().FirstOrDefault(e => e.ID == id);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.ID == id);
     }
 
     /* ID PERSONALIZADO

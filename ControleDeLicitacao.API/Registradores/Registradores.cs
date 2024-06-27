@@ -47,7 +47,13 @@ public static class Registradores
         });
 
         services
-            .AddIdentity<Usuario, IdentityRole<int>>()
+            .AddIdentity<Usuario, IdentityRole<int>>(options =>
+            {
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 3;
+            })
             .AddEntityFrameworkStores<UsuarioContext>()
             .AddUserStore<CustomUserStore>()
             .AddDefaultTokenProviders();

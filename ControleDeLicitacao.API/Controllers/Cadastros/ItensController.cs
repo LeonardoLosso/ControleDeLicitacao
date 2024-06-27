@@ -18,17 +18,17 @@ public class ItensController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult NovoItem([FromBody] ItemDTO item)
+    public async Task<IActionResult> NovoItem([FromBody] ItemDTO item)
     {
-        _service.Adicionar(item);
+        await _service.Adicionar(item);
 
         return CreatedAtAction(nameof(ObterPorID), new { id = item.Id }, item);
     }
 
     [HttpPatch("{id}")]
-    public IActionResult EditarItem(int id, [FromBody] JsonPatchDocument<ItemDTO> patchDoc)
+    public async Task<IActionResult> EditarItem(int id, [FromBody] JsonPatchDocument<ItemDTO> patchDoc)
     {
-        var itemDTO = _service.ObterPorIDParaEdicao(id);
+        var itemDTO = await _service.ObterPorIDParaEdicao(id);
         if (itemDTO == null)
         {
             return NotFound();
@@ -43,15 +43,15 @@ public class ItensController : ControllerBase
             return BadRequest(ex.Message);
         }
 
-        _service.Editar(itemDTO);
+        await _service.Editar(itemDTO);
 
         return NoContent();
     }
 
     [HttpPatch("status/{id}")]
-    public IActionResult AlteraStatus(int id, JsonPatchDocument<ItemDTO> patchDoc)
+    public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<ItemDTO> patchDoc)
     {
-        var itemDTO = _service.ObterPorID(id);
+        var itemDTO = await _service.ObterPorID(id);
         if (itemDTO == null)
         {
             return NotFound();
@@ -66,13 +66,13 @@ public class ItensController : ControllerBase
             return BadRequest(ex.Message);
         }
 
-        _service.Editar(itemDTO, false);
+        await _service.Editar(itemDTO, false);
 
         return NoContent();
     }
 
     [HttpGet]
-    public IActionResult ListarItens(
+    public async Task<IActionResult> ListarItens(
         [FromQuery] int? pagina = null,
         [FromQuery] string? tipo = null,
         [FromQuery] int? status = null,
@@ -81,7 +81,7 @@ public class ItensController : ControllerBase
         [FromQuery] string? search = null
         )
     {
-        var lista = _service.Listar(pagina, tipo, status, unidadePrimaria, unidadeSecundaria, search);
+        var lista = await _service.Listar(pagina, tipo, status, unidadePrimaria, unidadeSecundaria, search);
 
         return Ok(lista);
     }

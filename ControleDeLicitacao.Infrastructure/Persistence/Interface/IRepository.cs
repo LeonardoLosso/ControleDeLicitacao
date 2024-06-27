@@ -2,8 +2,8 @@
 
 public interface IRepository<TEntity> : IDisposable where TEntity : class
 {
-    TEntity ObterPorID(int id);
-    void Adicionar(TEntity entity);
-    void Editar(TEntity entity);
+    Task<TEntity> ObterPorID(int id);
+    Task Adicionar(TEntity entity);
+    Task Editar(TEntity entity);
     IQueryable<TEntity> Buscar();
 }

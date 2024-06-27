@@ -5,6 +5,7 @@ using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeLicitacao.App.Services.Cadastros;
 
@@ -20,20 +21,20 @@ public class EntidadeService
 
     }
 
-    public void Adicionar(EntidadeDTO dto)
+    public async Task Adicionar(EntidadeDTO dto)
     {
 
-        ValidarNovoCadastro(dto);
+        await ValidarNovoCadastro(dto);
 
         TrataStrings(dto);
 
         var entidade = _mapper.Map<Entidade>(dto);
 
-        _entidadeRepository.Adicionar(entidade);
+        await _entidadeRepository.Adicionar(entidade);
     }
 
 
-    public void Editar(EntidadeDTO dto, bool validaStatus = true)
+    public async Task Editar(EntidadeDTO dto, bool validaStatus = true)
     {
         if (validaStatus)
         {
@@ -43,11 +44,11 @@ public class EntidadeService
 
         var entidade = _mapper.Map<Entidade>(dto);
 
-        _entidadeRepository.Editar(entidade);
+        await _entidadeRepository.Editar(entidade);
     }
 
     //---------------------------[CONSULTAS]-------------------------------
-    public ListagemDTO<EntidadeSimplificadaDTO> Listar(int? pagina, int? tipo, int? status, string? cidade, string? search)
+    public async Task<ListagemDTO<EntidadeSimplificadaDTO>> Listar(int? pagina, int? tipo, int? status, string? cidade, string? search)
     {
         var take = 15;
         var listagemDTO = new ListagemDTO<EntidadeSimplificadaDTO>();
@@ -82,7 +83,7 @@ public class EntidadeService
         }
 
 
-        var lista = query.Select(s =>
+        var lista = await query.Select(s =>
         new EntidadeSimplificadaDTO
         {
             ID = s.ID,
@@ -92,25 +93,25 @@ public class EntidadeService
             CNPJ = s.CNPJ,
             Telefone = s.Telefone,
             Email = s.Email
-        }).ToList();
+        }).ToListAsync();
 
         listagemDTO.Lista = lista;
 
         return listagemDTO;
     }
 
-    public EntidadeDTO ObterPorID(int id)
+    public async Task<EntidadeDTO?> ObterPorID(int id)
     {
-        var entidade = _entidadeRepository.ObterPorID(id);
+        var entidade = await _entidadeRepository.ObterPorID(id);
 
         if (entidade == null) return null;
 
         return _mapper.Map<EntidadeDTO>(entidade);
     }
 
-    public EntidadeDTO ObterPorIDParaEdicao(int id)
+    public async Task<EntidadeDTO?> ObterPorIDParaEdicao(int id)
     {
-        var entidade = _entidadeRepository.ObterPorID(id);
+        var entidade = await _entidadeRepository.ObterPorID(id);
 
         if (entidade == null) return null;
 
@@ -119,10 +120,9 @@ public class EntidadeService
         return _mapper.Map<EntidadeDTO>(entidade);
     }
 
-
-    private void ValidarNovoCadastro(EntidadeDTO dto)
+    private async Task ValidarNovoCadastro(EntidadeDTO dto)
     {
-        var cnpjDuplicado = _entidadeRepository.Buscar().Where(w => w.CNPJ.Equals(dto.CNPJ)).Any();
+        var cnpjDuplicado = await _entidadeRepository.Buscar().Where(w => w.CNPJ.Equals(dto.CNPJ)).AnyAsync();
 
         if (cnpjDuplicado) throw new GenericException("CNPJ duplicado no banco de dados", 501);
     }

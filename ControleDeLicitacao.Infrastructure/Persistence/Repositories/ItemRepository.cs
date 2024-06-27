@@ -17,24 +17,24 @@ public class ItemRepository : Repository<Item>
         _dbSetItens = _context.Set<ItemAssociativo>();
     }
 
-    public override void Editar(Item item)
+    public override async Task Editar(Item item)
     {
-        RemoverAssociacoes(item.ID, item.EhCesta);
+        await RemoverAssociacoes(item.ID, item.EhCesta);
 
-        base.Editar(item);
+        await base.Editar(item);
     }
 
-    private void RemoverAssociacoes(int id, bool ehCesta)
+    private async Task RemoverAssociacoes(int id, bool ehCesta)
     {
         if (ehCesta)
         {
-            var itensAssociativos = _dbSetItens.Where(n => n.ItemPaiID == id).ToList();
+            var itensAssociativos = await _dbSetItens.Where(n => n.ItemPaiID == id).ToListAsync();
             _dbSetItens.RemoveRange(itensAssociativos);
         }
 
-        var nomesAssociativos = _dbSetNomes.Where(n => n.ItemID == id).ToList();
+        var nomesAssociativos = await _dbSetNomes.Where(n => n.ItemID == id).ToListAsync();
         _dbSetNomes.RemoveRange(nomesAssociativos);
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }
