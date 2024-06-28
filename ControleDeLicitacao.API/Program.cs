@@ -1,14 +1,17 @@
 using ControleDeLicitacao.API.Middleware;
 using ControleDeLicitacao.API.Registradores;
+using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //-----------[BUILDER]------------
 var connString = builder.Configuration.GetConnectionString("Connection");
+var logConnString = builder.Configuration.GetConnectionString("LogConnection");
 
 //conexão com o banco de dados
 builder.Services.AddContexts(connString);
+builder.Services.AddDbContext<LogContext>(opts => opts.UseSqlServer(logConnString));
 
 //configurações de usuario
 builder.Services.AddUserConfig();

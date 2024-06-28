@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using ControleDeLicitacao.App.Error;
+using ControleDeLicitacao.App.Services.Logger;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros.Usuarios;
 
-[ApiController]
 [Route("[controller]")]
-public class UsuariosController : ControllerBase
+public class UsuariosController : BaseController
 {
     private UsuarioService _service;
 
-    public UsuariosController(UsuarioService service)
+    public UsuariosController(LogInfoService logInfoService, UsuarioService service): base(logInfoService)
     {
         _service = service;
     }
@@ -22,7 +22,10 @@ public class UsuariosController : ControllerBase
             (UsuarioDTO dto)
     {
         await _service.Cadastrar(dto);
-        return CreatedAtAction(nameof(ObterPorID), new { id = dto.Id }, dto);
+        return await RetornaNovo(
+            CreatedAtAction(
+                nameof(ObterPorID), 
+                new { id = dto.Id }, dto));
     }
 
 
@@ -47,7 +50,7 @@ public class UsuariosController : ControllerBase
         try
         {
             await _service.EditarAsync(dto);
-            return NoContent();
+            return await RetornaEdicao(patchDoc);
         }
         catch (GenericException ex)
         {
@@ -76,7 +79,7 @@ public class UsuariosController : ControllerBase
         try
         {
             await _service.EditarAsync(dto);
-            return NoContent();
+            return await RetornaEdicao(patchDoc);
         }
         catch (GenericException ex)
         {

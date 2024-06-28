@@ -1,6 +1,7 @@
 ﻿using ControleDeLicitacao.App.Mappings;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.App.Services.Cadastros.User;
+using ControleDeLicitacao.App.Services.Logger;
 using ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
@@ -67,6 +68,7 @@ public static class Registradores
         services.AddScoped<ItemService>();
         services.AddScoped<UsuarioService>();
         services.AddSingleton<TokenService>();
+        services.AddScoped<LogInfoService>();
 
         return services;
     }

@@ -3,15 +3,15 @@ using ControleDeLicitacao.App.DTOs.Entidades;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using ControleDeLicitacao.App.Services.Cadastros;
+using ControleDeLicitacao.App.Services.Logger;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros;
 
-[ApiController]
 [Route("[controller]")]
-public class EntidadesController : ControllerBase
+public class EntidadesController : BaseController
 {
-    private EntidadeService _service;
-    public EntidadesController(EntidadeService service)
+    private readonly EntidadeService _service;
+    public EntidadesController(LogInfoService logInfoService, EntidadeService service) : base(logInfoService)
     {
         _service = service;
     }
@@ -21,7 +21,10 @@ public class EntidadesController : ControllerBase
     {
         await _service.Adicionar(entidade);
 
-        return CreatedAtAction(nameof(ObterPorID), new { id = entidade.ID }, entidade);
+        return await RetornaNovo(
+            CreatedAtAction(
+                nameof(ObterPorID), 
+                new { id = entidade.ID }, entidade));
     }
 
     [HttpPatch("{id}")]
@@ -44,7 +47,7 @@ public class EntidadesController : ControllerBase
 
         await _service.Editar(entidadeDTO);
 
-        return NoContent();
+        return await RetornaEdicao(patchDoc);
     }
 
     [HttpPatch("status/{id}")]
@@ -67,7 +70,7 @@ public class EntidadesController : ControllerBase
 
         await _service.Editar(entidadeDTO, false);
 
-        return NoContent();
+        return await RetornaEdicao(patchDoc);
     }
 
     [HttpGet]

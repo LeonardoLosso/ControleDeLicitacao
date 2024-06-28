@@ -1,81 +1,75 @@
-﻿using ControleDeLicitacao.App.Services.Cadastros.User;
-using Microsoft.AspNetCore.JsonPatch;
-using Newtonsoft.Json;
+﻿using ControleDeLicitacao.App.Error;
+using ControleDeLicitacao.App.Services.Cadastros.User;
+using ControleDeLicitacao.App.Services.Logger;
+using System.Text;
 
 namespace ControleDeLicitacao.API.Middleware;
 public class LogMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<LogMiddleware> _logger;
     private readonly TokenService _tokenService;
 
     public LogMiddleware(
         RequestDelegate next,
-        ILogger<LogMiddleware> logger,
         TokenService tokenService)
     {
         _next = next;
-        _logger = logger;
-        _tokenService = tokenService;
+        _tokenService = tokenService; ;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
     {
         if (ValidarRequest(context))
         {
-            
-
-            var timestamp = new DateTime();
-
-            var path = context.Request.Path;
-
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-            var user = "";
-
-            if (token != null)
+            try
             {
-                var decodedToken = _tokenService.DecodeToken(token);
-                user = decodedToken.Claims.First().Value;
+                var _logService = serviceProvider.GetRequiredService<LogInfoService>();
+
+                var path = context.Request.Path;
+
+                var method = context.Request.Method;
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+                var userId = "";
+
+                if (token != null)
+                {
+                    var decodedToken = _tokenService.DecodeToken(token);
+                    userId = decodedToken.Claims.First().Value;
+                }
+
+                var requestBodyContent = await ReadRequestBody(context.Request);
+                var requestTime = DateTime.UtcNow;
+
+                var originalBodyStream = context.Response.Body;
+                using (var responseBody = new MemoryStream())
+                {
+                    context.Response.Body = responseBody;
+
+                    await _next(context);
+
+                    var responseBodyContent = await ReadResponseBody(responseBody);
+                    var responseTime = DateTime.UtcNow;
+
+                    var status = context.Response.StatusCode;
+                    // Log the operation
+                    if (status >= 200 && status <= 299)
+                    {
+                        _logService.SetRequestInfo(userId, method, path, requestTime);
+                        await _logService.SalvarLogAsync();
+                    }
+
+                    await responseBody.CopyToAsync(originalBodyStream);
+                }
             }
-
-            var operacao = "";
-
-            if (context.Request.Method.Equals(HttpMethods.Patch))
+            catch (Exception ex)
             {
-                operacao = "Edição";
-                var patchDoc = await context.Request.ReadFromJsonAsync<JsonPatchDocument>();
+                throw new GenericException("Erro com o middleware de auditoria", 501);
             }
-            else
-            {
-                operacao = "Adição";
-
-            }
-            //using var reader = new StreamReader(context.Request.Body);
-            //var requestBody = await reader.ReadToEndAsync();
-            //var alteracoes = JsonConvert.DeserializeObject<Dictionary<string, object>>(requestBody);
-
-            var originalBodyStream = context.Response.Body;
-            using var responseBody = new MemoryStream();
-            context.Response.Body = responseBody;
-
-            // Chamar o próximo middleware
-            await _next(context);
-
-            // Registrar o log da resposta
-            responseBody.Seek(0, SeekOrigin.Begin);
-            var responseBodyText = await new StreamReader(responseBody).ReadToEndAsync();
-            responseBody.Seek(0, SeekOrigin.Begin);
-            await responseBody.CopyToAsync(originalBodyStream);
-
-            _logger.LogInformation($"Resposta - Método: {context.Request.Method}, " +
-                                  $"URL: {context.Request.Path}, " +
-                                  $"Status: {context.Response.StatusCode}, " +
-                                  $"Corpo da Resposta: {responseBodyText}");
         }
         else
         {
-            // Chamar o próximo middleware se não for um método que altera dados
             await _next(context);
         }
     }
@@ -97,5 +91,24 @@ public class LogMiddleware
         return !(method.Equals(HttpMethods.Put)
             || method.Equals(HttpMethods.Post)
             || method.Equals(HttpMethods.Patch));
+    }
+
+    private async Task<string> ReadRequestBody(HttpRequest request)
+    {
+        request.EnableBuffering();
+        using (var streamReader = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true))
+        {
+            var body = await streamReader.ReadToEndAsync();
+            request.Body.Position = 0;
+            return body;
+        }
+    }
+
+    private async Task<string> ReadResponseBody(MemoryStream responseBody)
+    {
+        responseBody.Seek(0, SeekOrigin.Begin);
+        var body = await new StreamReader(responseBody).ReadToEndAsync();
+        responseBody.Seek(0, SeekOrigin.Begin);
+        return body;
     }
 }
