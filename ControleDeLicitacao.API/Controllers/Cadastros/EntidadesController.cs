@@ -19,6 +19,8 @@ public class EntidadesController : BaseController
     [HttpPost]
     public async Task<IActionResult> NovaEntidade([FromBody] EntidadeDTO entidade)
     {
+        await base.ValidaRecurso(102);
+
         await _service.Adicionar(entidade);
 
         return await RetornaNovo(
@@ -30,6 +32,8 @@ public class EntidadesController : BaseController
     [HttpPatch("{id}")]
     public async Task<IActionResult> EditarEntidade(int id, [FromBody] JsonPatchDocument<EntidadeDTO> patchDoc)
     {
+        await base.ValidaRecurso(103);
+
         var entidadeDTO = await _service.ObterPorIDParaEdicao(id);
         if (entidadeDTO == null)
         {
@@ -53,6 +57,7 @@ public class EntidadesController : BaseController
     [HttpPatch("status/{id}")]
     public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<EntidadeDTO> patchDoc)
     {
+        await base.ValidaRecurso(104);
         var entidadeDTO = await _service.ObterPorID(id);
         if (entidadeDTO == null)
         {

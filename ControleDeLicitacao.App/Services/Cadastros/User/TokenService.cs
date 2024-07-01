@@ -9,7 +9,7 @@ namespace ControleDeLicitacao.App.Services.Cadastros.User;
 
 public class TokenService
 {
-    private const string _key = "F4ça)uNã0FaÇ4.4T3n74t1VAnÃO3xI27E";
+    private const string _key = "F4ca)uNa0FaC4.4T3n74t1VAnAO3xI27E";
     public string GenerateToken(Usuario usuario)
     {
         Claim[] claims = new Claim[]

@@ -20,6 +20,8 @@ public class ItensController : BaseController
     [HttpPost]
     public async Task<IActionResult> NovoItem([FromBody] ItemDTO item)
     {
+        await base.ValidaRecurso(202);
+
         await _service.Adicionar(item);
 
         return await RetornaNovo(
@@ -31,6 +33,8 @@ public class ItensController : BaseController
     [HttpPatch("{id}")]
     public async Task<IActionResult> EditarItem(int id, [FromBody] JsonPatchDocument<ItemDTO> patchDoc)
     {
+        await base.ValidaRecurso(203);
+
         var itemDTO = await _service.ObterPorIDParaEdicao(id);
         if (itemDTO == null)
         {
@@ -54,6 +58,8 @@ public class ItensController : BaseController
     [HttpPatch("status/{id}")]
     public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<ItemDTO> patchDoc)
     {
+        await base.ValidaRecurso(204);
+
         var itemDTO = await _service.ObterPorID(id);
         if (itemDTO == null)
         {

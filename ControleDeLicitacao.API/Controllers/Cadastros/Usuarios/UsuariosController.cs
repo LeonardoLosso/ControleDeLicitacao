@@ -21,6 +21,8 @@ public class UsuariosController : BaseController
     public async Task<IActionResult> CadastraUsuario
             (UsuarioDTO dto)
     {
+        await base.ValidaRecurso(602);
+
         await _service.Cadastrar(dto);
         return await RetornaNovo(
             CreatedAtAction(
@@ -32,6 +34,8 @@ public class UsuariosController : BaseController
     [HttpPatch("status/{id}")]
     public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<UsuarioDTO> patchDoc)
     {
+        await base.ValidaRecurso(604);
+
         var dto = await _service.ObterPorID(id);
         if (dto == null)
         {
@@ -61,6 +65,8 @@ public class UsuariosController : BaseController
     [HttpPatch("{id}")]
     public async Task<IActionResult> EditarUsuario(int id, [FromBody] JsonPatchDocument<UsuarioDTO> patchDoc)
     {
+        await base.ValidaRecurso(603);
+
         var dto = await _service.ObterPorID(id);
         if (dto == null)
         {

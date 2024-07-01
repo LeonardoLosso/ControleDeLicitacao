@@ -14,7 +14,7 @@ public class LogMiddleware
         TokenService tokenService)
     {
         _next = next;
-        _tokenService = tokenService; ;
+        _tokenService = tokenService;
     }
 
     public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
@@ -86,7 +86,7 @@ public class LogMiddleware
 
         return true;
     }
-    public bool ValidarMetodo(string method)
+    private bool ValidarMetodo(string method)
     {
         return !(method.Equals(HttpMethods.Put)
             || method.Equals(HttpMethods.Post)

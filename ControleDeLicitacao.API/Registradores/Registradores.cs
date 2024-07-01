@@ -7,8 +7,10 @@ using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace ControleDeLicitacao.API.Registradores;
@@ -29,24 +31,21 @@ public static class Registradores
     public static IServiceCollection AddUserConfig(this IServiceCollection services)
     {
 
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme =
-                JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes("F4ça)uNã0FaÇ4.4T3n74t1VAnÃO3xI27E")),
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes("F4ca)uNa0FaC4.4T3n74t1VAnAO3xI27E")),
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ClockSkew = TimeSpan.Zero
-            };
-        });
-
+        
         services
             .AddIdentity<Usuario, IdentityRole<int>>(options =>
             {
@@ -61,7 +60,6 @@ public static class Registradores
 
         return services;
     }
-
     public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
         services.AddScoped<EntidadeService>();
