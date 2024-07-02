@@ -115,7 +115,7 @@ public class EntidadeService
 
         if (entidade == null) return null;
 
-        ValidarInativo(entidade.ID);
+        ValidarInativo(entidade.Status);
 
         return _mapper.Map<EntidadeDTO>(entidade);
     }

@@ -49,7 +49,7 @@ public abstract class BaseController : ControllerBase
             {
                 var validade = decoded.ValidTo;
 
-                if(validade > DateTime.Now)
+                if(validade < DateTime.Now)
                 {
                     throw new GenericException("Token expirado", 512);
                 }

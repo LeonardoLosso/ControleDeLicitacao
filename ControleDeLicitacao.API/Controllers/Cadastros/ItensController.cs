@@ -96,9 +96,9 @@ public class ItensController : BaseController
     }
 
     [HttpGet("{id}")]
-    public IActionResult ObterPorID(int id)
+    public async Task<IActionResult> ObterPorID(int id)
     {
-        var item = _service.ObterPorID(id);
+        var item = await _service.ObterPorID(id);
 
         if (item == null) return NotFound();
 
