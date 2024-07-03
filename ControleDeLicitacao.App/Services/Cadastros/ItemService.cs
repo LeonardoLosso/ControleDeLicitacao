@@ -22,12 +22,12 @@ public class ItemService
 
     }
 
-    public async Task Adicionar(ItemDTO dto)
+    public async Task <Item> Adicionar(ItemDTO dto)
     {
 
         var item = _mapper.Map<Item>(dto);
 
-        if (item == null) return;
+        if (item == null) return null;
 
         if (item.EhCesta)
         {
@@ -46,7 +46,7 @@ public class ItemService
                     Nome = nome
                 }).ToList();
         }
-        await _itemRepository.Adicionar(item);
+        return await _itemRepository.Adicionar(item);
     }
 
 

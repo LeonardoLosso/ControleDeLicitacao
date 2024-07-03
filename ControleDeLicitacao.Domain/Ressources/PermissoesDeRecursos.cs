@@ -49,16 +49,16 @@ public static class PermissoesDeRecursos
         {
             //-------------------------[Entidades]-------------------------
               new Recurso(id: 101, moduloId: 1, nome: "Visualizar")
-            , new Recurso(id: 102, moduloId: 1, nome: "Novo Cadastro")
-            , new Recurso(id: 103, moduloId: 1, nome: "Editar Cadastro")
-            , new Recurso(id: 104, moduloId: 1, nome: "Inativar Cadastro")
+            , new Recurso(id: 102, moduloId: 1, nome: "Nova Entidade")
+            , new Recurso(id: 103, moduloId: 1, nome: "Editar Entidade")
+            , new Recurso(id: 104, moduloId: 1, nome: "Inativar Entidade")
             //-------------------------------------------------------------
 
             //---------------------------[Itens]---------------------------
             , new Recurso(id: 201, moduloId: 2, nome: "Visualizar")
-            , new Recurso(id: 202, moduloId: 2, nome: "Novo Cadastro")
-            , new Recurso(id: 203, moduloId: 2, nome: "Editar Cadastro")
-            , new Recurso(id: 204, moduloId: 2, nome: "Inativar Cadastro")
+            , new Recurso(id: 202, moduloId: 2, nome: "Novo Item")
+            , new Recurso(id: 203, moduloId: 2, nome: "Editar Item")
+            , new Recurso(id: 204, moduloId: 2, nome: "Inativar Item")
             //-------------------------------------------------------------
             
             //-----------------------[Ata Licitação]-----------------------
@@ -79,9 +79,9 @@ public static class PermissoesDeRecursos
 
             //--------------------------[Usuarios]-------------------------
             , new Recurso(id: 601, moduloId: 6, nome: "Visualizar")
-            , new Recurso(id: 602, moduloId: 6, nome: "Novo Cadastro")
-            , new Recurso(id: 603, moduloId: 6, nome: "Editar Cadastro")
-            , new Recurso(id: 604, moduloId: 6, nome: "Inativar Cadastro")
+            , new Recurso(id: 602, moduloId: 6, nome: "Novo Usuário")
+            , new Recurso(id: 603, moduloId: 6, nome: "Editar Usuário")
+            , new Recurso(id: 604, moduloId: 6, nome: "Inativar Usuário")
             //-------------------------------------------------------------
 
             //-------------------------[Auditoria]-------------------------

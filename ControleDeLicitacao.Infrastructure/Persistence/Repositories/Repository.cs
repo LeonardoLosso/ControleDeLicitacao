@@ -31,10 +31,11 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         await _context.SaveChangesAsync();
     }
 
-    public virtual async Task Adicionar(TEntity entity)
+    public virtual async Task<TEntity> Adicionar(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
+        return entity;
     }
 
     public async Task<TEntity> ObterPorID(int id)

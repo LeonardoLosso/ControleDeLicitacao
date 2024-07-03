@@ -21,12 +21,9 @@ public class EntidadesController : BaseController
     {
         await base.ValidaRecurso(102);
 
-        await _service.Adicionar(entidade);
+        var novo = await _service.Adicionar(entidade);
 
-        return await RetornaNovo(
-            CreatedAtAction(
-                nameof(ObterPorID), 
-                new { id = entidade.ID }, entidade));
+        return await RetornaNovo(novo);
     }
 
     [HttpPatch("{id}")]

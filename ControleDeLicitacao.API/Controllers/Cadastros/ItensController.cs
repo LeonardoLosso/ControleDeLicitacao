@@ -22,12 +22,9 @@ public class ItensController : BaseController
     {
         await base.ValidaRecurso(202);
 
-        await _service.Adicionar(item);
+        var novo = await _service.Adicionar(item);
 
-        return await RetornaNovo(
-            CreatedAtAction(
-                nameof(ObterPorID),
-                new { id = item.Id }, item));
+        return await RetornaNovo(novo);
     }
 
     [HttpPatch("{id}")]

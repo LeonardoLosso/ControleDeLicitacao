@@ -24,10 +24,7 @@ public class UsuariosController : BaseController
         await base.ValidaRecurso(602);
 
         await _service.Cadastrar(dto);
-        return await RetornaNovo(
-            CreatedAtAction(
-                nameof(ObterPorID), 
-                new { id = dto.Id }, dto));
+        return await RetornaNovo(dto);
     }
 
 
