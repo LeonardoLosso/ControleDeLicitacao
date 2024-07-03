@@ -30,11 +30,10 @@ public class AtaController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorID(int id)
     {
-        //var ata = await _service.ObterPorID(id);
+        var ata = await _service.ObterPorID(id);
 
-        //if (ata == null) return NotFound();
+        if (ata == null) return NotFound();
 
-        //return Ok(ata);
-        return Ok();
+        return Ok(ata);
     }
 }

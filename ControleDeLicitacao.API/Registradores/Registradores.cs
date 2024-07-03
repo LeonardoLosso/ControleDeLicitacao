@@ -78,6 +78,7 @@ public static class Registradores
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<DbContext, EntidadeContext>();
         services.AddScoped<ItemRepository>();
+        services.AddScoped<AtaRepository>();
 
         return services;
     }
