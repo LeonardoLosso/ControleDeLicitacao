@@ -16,9 +16,9 @@ public class AtaLicitacao : IDominio
     public int Unidade { get; set; }
     public int EmpresaID { get; set; }
     public int OrgaoID { get; set;}
-    public DateTime DataLicitacao {  get; set; }
-    public DateTime DataAta { get; set; }
-    public DateTime Vigencia { get; set; }
+    public DateTime? DataLicitacao {  get; set; }
+    public DateTime? DataAta { get; set; }
+    public DateTime? Vigencia { get; set; }
     public double TotalLicitado { get; set; }
     public ICollection<ItemDeAta> Itens { get; set; }
     public int TotalReajustes { get; set; }

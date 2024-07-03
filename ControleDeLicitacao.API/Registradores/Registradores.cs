@@ -8,10 +8,8 @@ using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Text;
 
 namespace ControleDeLicitacao.API.Registradores;
@@ -25,6 +23,8 @@ public static class Registradores
         services.AddDbContext<ItemContext>(opts => opts.UseSqlServer(connString));
 
         services.AddDbContext<UsuarioContext>(opts => opts.UseSqlServer(connString));
+
+        services.AddDbContext<AtaContext>(opts => opts.UseSqlServer(connString));
 
         return services;
     }
@@ -87,6 +87,7 @@ public static class Registradores
         services.AddAutoMapper(typeof(EntidadeMapping).Assembly);
         services.AddAutoMapper(typeof(ItemMapping).Assembly);
         services.AddAutoMapper(typeof(UsuarioMapping).Assembly);
+        services.AddAutoMapper(typeof(AtaMapping).Assembly);
 
         return services;
     }

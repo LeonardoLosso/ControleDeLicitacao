@@ -11,9 +11,9 @@ public class AtaDTO
     public int Unidade { get; set; }
     public int Empresa { get; set; }
     public int Orgao { get; set; }
-    public DateTime DataLicitacao { get; set; }
-    public DateTime DataAta { get; set; }
-    public DateTime Vigencia { get; set; }
+    public DateTime? DataLicitacao { get; set; }
+    public DateTime? DataAta { get; set; }
+    public DateTime? Vigencia { get; set; }
     public double TotalLicitado { get; set; }
     public List<ItemDeAtaDTO> Itens { get; set; }
     public int TotalReajustes { get; set; }

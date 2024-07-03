@@ -13,7 +13,7 @@ public class AtaService
 
         //TrataStrings(dto);
 
-        //var entidade = _mapper.Map<Entidade>(dto);
+        var entidade = _mapper.Map<Entidade>(dto);
 
         //await _entidadeRepository.Adicionar(entidade);
 
