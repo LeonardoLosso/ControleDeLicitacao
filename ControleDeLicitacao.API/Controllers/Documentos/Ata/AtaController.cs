@@ -36,4 +36,24 @@ public class AtaController : BaseController
 
         return Ok(ata);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ListarEntidades(
+        [FromQuery] int? pagina = null,
+        [FromQuery] int? tipo = null,
+        [FromQuery] int? status = null,
+        [FromQuery] int? unidade = null,
+        [FromQuery] DateTime? dataInicial = null,
+        [FromQuery] DateTime? dataFinal = null,
+        [FromQuery] DateTime? dataAtaInicial = null,
+        [FromQuery] DateTime? dataAtaFinal = null,
+        [FromQuery] string? search = null
+        )
+    {
+        var lista = await _service.Listar(
+            pagina, tipo, status, unidade, dataInicial, 
+            dataFinal, dataAtaInicial, dataAtaFinal, search);
+
+        return Ok(lista);
+    }
 }

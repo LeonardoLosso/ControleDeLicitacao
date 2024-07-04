@@ -88,6 +88,7 @@ public class EntidadesController : BaseController
 
         return Ok(lista);
     }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorID(int id)
     {
