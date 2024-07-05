@@ -67,9 +67,7 @@ public class EntidadeService
             query = query.Where(w => w.Endereco.Cidade.Contains(cidade.Trim()));
 
         if (!string.IsNullOrWhiteSpace(search))
-        {
             query = query.BuscarPalavraChave(search);
-        }
 
         query = query.OrderByDescending(o => o.Status == 1);
 

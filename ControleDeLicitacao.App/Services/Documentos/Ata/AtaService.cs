@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using ControleDeLicitacao.App.DTOs;
 using ControleDeLicitacao.App.DTOs.Ata;
+using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Documentos.Ata;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeLicitacao.App.Services.Documentos.Ata;
@@ -66,6 +66,9 @@ public class AtaService
 
         if (dataAtaFinal.HasValue)
             query = query.Where(w => w.DataAta <= dataAtaFinal);
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.BuscarPalavraChave(search);
 
         query = query.OrderByDescending(o => o.Status == 1);
 
