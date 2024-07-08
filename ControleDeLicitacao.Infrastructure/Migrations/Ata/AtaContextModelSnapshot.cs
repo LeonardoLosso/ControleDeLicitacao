@@ -107,11 +107,13 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Ata
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Ata.ItemDeAta", b =>
                 {
-                    b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Ata.AtaLicitacao", null)
+                    b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Ata.AtaLicitacao", "Ata")
                         .WithMany("Itens")
                         .HasForeignKey("AtaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ata");
                 });
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Ata.AtaLicitacao", b =>

@@ -120,6 +120,15 @@ public class EntidadeService
         return _mapper.Map<EntidadeDTO>(entidade);
     }
 
+    public string ObterNome(int id)
+    {
+        if (id == 0) return "";
+
+        var entidade = _entidadeRepository.ObterPorID(id).Result.Fantasia;
+        return entidade;
+    }
+    //---------------------------------------------------------------------
+
     private async Task ValidarNovoCadastro(EntidadeDTO dto)
     {
         var cnpjDuplicado = await _entidadeRepository.Buscar().Where(w => w.CNPJ.Equals(dto.CNPJ)).AnyAsync();

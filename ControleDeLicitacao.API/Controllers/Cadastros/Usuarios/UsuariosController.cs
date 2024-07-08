@@ -102,6 +102,8 @@ public class UsuariosController : BaseController
         [FromQuery] string? search = null
         )
     {
+        await base.ValidaRecurso(601);
+
         var lista = await _service.Listar(pagina, status, search);
 
         return Ok(lista);
@@ -110,6 +112,8 @@ public class UsuariosController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorID(int id)
     {
+        await base.ValidaRecurso(601);
+
         var usuario = await _service.ObterPorID(id);
 
         if (usuario == null) return NotFound();
@@ -120,7 +124,9 @@ public class UsuariosController : BaseController
     [HttpGet("username/{userName}")]
     public async Task<IActionResult> ObterUsuario(string userName)
     {
-        var existe= await _service.ObterUsuarioExistente(userName);
+        await base.ValidaRecurso(601);
+
+        var existe = await _service.ObterUsuarioExistente(userName);
 
         return Ok(existe);
     }
@@ -128,6 +134,8 @@ public class UsuariosController : BaseController
     [HttpGet("recursos")]
     public async Task<IActionResult> RetornaPermissoes()
     {
+        await base.ValidaRecurso(601);
+
         var permissoes = _service.RetornaPermissoes();
         return Ok(permissoes);
     }

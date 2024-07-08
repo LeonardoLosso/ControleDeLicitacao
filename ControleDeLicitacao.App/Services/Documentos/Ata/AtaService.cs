@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ControleDeLicitacao.App.DTOs;
 using ControleDeLicitacao.App.DTOs.Ata;
+using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Common;
+using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Ata;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,12 @@ public class AtaService
 {
     private readonly IMapper _mapper;
     private readonly AtaRepository _ataRepository;
-    public AtaService(IMapper mapper, AtaRepository ataRepository)
+    private readonly EntidadeService _entidadeService;
+    public AtaService(IMapper mapper, AtaRepository ataRepository, EntidadeService entidadeService)
     {
         _mapper = mapper;
         _ataRepository = ataRepository;
+        _entidadeService = entidadeService;
     }
 
     public async Task<AtaLicitacao> Adicionar(AtaDTO dto)
@@ -28,6 +32,20 @@ public class AtaService
         var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
 
         return await _ataRepository.Adicionar(ataLicitacao);
+    }
+    public async Task Editar(AtaDTO dto, bool validaStatus = true)
+    {
+        if (validaStatus)
+        {
+            //ValidarInativo(dto.Status);
+            //TrataStrings(dto);
+        }
+
+        var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
+
+        if (ataLicitacao == null) return;
+
+        await _ataRepository.Editar(ataLicitacao);
     }
 
     //---------------------------[CONSULTAS]-------------------------------
@@ -92,8 +110,8 @@ public class AtaService
             Status = s.Status,
             DataAta = s.DataAta,
             DataLicitacao = s.DataLicitacao,
-            Empresa = s.EmpresaID,
-            Orgao = s.OrgaoID,
+            Empresa = $"{s.EmpresaID} - {_entidadeService.ObterNome(s.EmpresaID)}",
+            Orgao = $"{s.OrgaoID} - {_entidadeService.ObterNome(s.OrgaoID)}",
             TotalLicitado = s.TotalLicitado,
             Unidade = s.Unidade
         }).ToListAsync();
@@ -107,6 +125,7 @@ public class AtaService
     {
         var ataLicitacao = await _ataRepository
             .Buscar()
+            .AsNoTracking()
             .Where(w => w.ID == id)
             .Include(i => i.Itens)
             .FirstOrDefaultAsync();

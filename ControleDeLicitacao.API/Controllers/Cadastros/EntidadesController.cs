@@ -84,6 +84,8 @@ public class EntidadesController : BaseController
         [FromQuery] string? search = null
         )
     {
+        await base.ValidaRecurso(101);
+
         var lista = await _service.Listar(pagina, tipo, status, cidade, search);
 
         return Ok(lista);
@@ -92,6 +94,8 @@ public class EntidadesController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorID(int id)
     {
+        await base.ValidaRecurso(101);
+
         var entidade = await _service.ObterPorID(id);
 
         if (entidade == null) return NotFound();

@@ -6,8 +6,8 @@ public class AtaSimplificadaDTO
     public string Edital { get; set; }
     public int Status { get; set; }
     public int Unidade { get; set; }
-    public int Empresa { get; set; }
-    public int Orgao { get; set; }
+    public string Empresa { get; set; }
+    public string Orgao { get; set; }
     public DateTime? DataLicitacao { get; set; }
     public DateTime? DataAta { get; set; }
     public double TotalLicitado { get; set; }

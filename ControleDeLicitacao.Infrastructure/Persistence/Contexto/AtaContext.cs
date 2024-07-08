@@ -15,8 +15,9 @@ public class AtaContext : DbContext
     {
         modelBuilder.Entity<AtaLicitacao>()
             .HasMany(i => i.Itens)
-            .WithOne()
-            .HasForeignKey(i => i.AtaID);
+            .WithOne(p => p.Ata)
+            .HasForeignKey(i => i.AtaID)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<ItemDeAta>()
             .HasKey(i => new { i.AtaID, i.ID});

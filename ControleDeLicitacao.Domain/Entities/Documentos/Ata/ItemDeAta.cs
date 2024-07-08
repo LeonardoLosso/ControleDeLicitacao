@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleDeLicitacao.Domain.Entities.Documentos.Ata;
 
@@ -27,4 +28,7 @@ public class ItemDeAta
     public double ValorTotal { get; set; }
 
     public double Desconto { get;set; }
+
+    [ForeignKey(nameof(AtaID))]
+    public AtaLicitacao Ata { get; set; }
 }

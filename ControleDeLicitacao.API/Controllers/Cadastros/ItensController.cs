@@ -87,6 +87,8 @@ public class ItensController : BaseController
         [FromQuery] string? search = null
         )
     {
+        await base.ValidaRecurso(201);
+
         var lista = await _service.Listar(pagina, tipo, status, unidadePrimaria, unidadeSecundaria, search);
 
         return Ok(lista);
@@ -95,6 +97,8 @@ public class ItensController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorID(int id)
     {
+        await base.ValidaRecurso(201);
+
         var item = await _service.ObterPorID(id);
 
         if (item == null) return NotFound();
