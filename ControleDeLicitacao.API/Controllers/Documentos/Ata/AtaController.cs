@@ -122,15 +122,15 @@ public class AtaController : BaseController
         return Ok(reajustes);
     }
 
-    [HttpDelete("reajuste/{id}")]
-    public async Task<IActionResult> ExcluirReajuste(int id)
+    [HttpDelete("reajuste")]
+    public async Task<IActionResult> ExcluirReajuste([FromQuery]int ataId, int reajusteId)
     {
         await base.ValidaRecurso(307);
 
-        await _service.ExcluirReajuste(id);
-        return Ok(id);
+        await _service.ExcluirReajuste(reajusteId);
+        return Ok(reajusteId);
     }
-
+    //METODO LOG DELETE
     [HttpPost("reajuste")]
     public async Task<IActionResult> NovoReajuste([FromBody] ReajusteDTO dto)
     {

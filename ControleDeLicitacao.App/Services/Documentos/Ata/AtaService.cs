@@ -4,7 +4,6 @@ using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Common;
-using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Ata;
 using ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
@@ -77,10 +76,10 @@ public class AtaService
             .AsNoTracking()
             .Where(w => w.ID == id)
             .Include(i => i.Itens)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        _ataRepository.ExcluirReajuste(reajuste);
-
+        await _ataRepository.ExcluirReajuste(reajuste);
 
     }
 
