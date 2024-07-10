@@ -35,7 +35,7 @@ public class AtaController : BaseController
         await base.ValidaRecurso(304);
 
         var dto = await _service.ObterPorID(id);
-        if (dto == null)
+        if (dto is null)
         {
             return NotFound();
         }
@@ -60,7 +60,7 @@ public class AtaController : BaseController
     {
         await base.ValidaRecurso(305);
         var dto = await _service.ObterPorID(id);
-        if (dto == null)
+        if (dto is null)
         {
             return NotFound();
         }
@@ -86,7 +86,7 @@ public class AtaController : BaseController
 
         var ata = await _service.ObterPorID(id);
 
-        if (ata == null) return NotFound();
+        if (ata is null) return NotFound();
 
         return Ok(ata);
     }
@@ -111,5 +111,33 @@ public class AtaController : BaseController
             dataFinal, dataAtaInicial, dataAtaFinal, search);
 
         return Ok(lista);
+    }
+
+    [HttpGet("reajuste/{id}")]
+    public async Task<IActionResult> ObterReajuste(int id)
+    {
+        await base.ValidaRecurso(301);
+
+        var reajustes = await _service.ListarReajuste(id);
+        return Ok(reajustes);
+    }
+
+    [HttpDelete("reajuste/{id}")]
+    public async Task<IActionResult> ExcluirReajuste(int id)
+    {
+        await base.ValidaRecurso(307);
+
+        await _service.ExcluirReajuste(id);
+        return Ok(id);
+    }
+
+    [HttpPost("reajuste")]
+    public async Task<IActionResult> NovoReajuste([FromBody] ReajusteDTO dto)
+    {
+        await base.ValidaRecurso(306);
+
+        var novo = await _service.AdicionarReajuste(dto);
+
+        return await RetornaNovo(novo);
     }
 }

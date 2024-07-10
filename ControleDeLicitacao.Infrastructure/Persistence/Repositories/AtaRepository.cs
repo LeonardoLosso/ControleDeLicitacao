@@ -1,4 +1,5 @@
 ﻿using ControleDeLicitacao.Domain.Entities.Documentos.Ata;
+using ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,12 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 public class AtaRepository : Repository<AtaLicitacao>
 {
     private readonly AtaContext _context;
+    private readonly DbSet<Reajuste> _dbSetReajuste;
 
     public AtaRepository(AtaContext context) : base(context)
     {
         _context = context;
+        _dbSetReajuste = _context.Set<Reajuste>();
     }
 
     public async Task Editar(AtaLicitacao updatedAta)
@@ -18,7 +21,7 @@ public class AtaRepository : Repository<AtaLicitacao>
         var existingAta = await _context.Set<AtaLicitacao>()
             .Include(a => a.Itens)
             .FirstOrDefaultAsync(a => a.ID == updatedAta.ID);
-        if (existingAta == null)
+        if (existingAta is null)
         {
             throw new InvalidOperationException("AtaLicitacao not found.");
         }
@@ -28,7 +31,7 @@ public class AtaRepository : Repository<AtaLicitacao>
             var updatedItem = updatedAta.Itens
                                         .FirstOrDefault(i => i.AtaID == existingItem.AtaID && i.ID == existingItem.ID);
 
-            if (updatedItem == null)
+            if (updatedItem is null)
             {
                 _context.ItemDeAta.Remove(existingItem);
             }
@@ -46,6 +49,22 @@ public class AtaRepository : Repository<AtaLicitacao>
             }
         }
 
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AdicionarReajuste(Reajuste reajuste)
+    {
+        _dbSetReajuste.Add(reajuste);
+        await _context.SaveChangesAsync();
+    }
+    public IQueryable<Reajuste> BuscarReajuste()
+    {
+        return _dbSetReajuste.AsQueryable();
+    }
+
+    public async Task ExcluirReajuste(Reajuste reajuste)
+    {
+        _dbSetReajuste.Remove(reajuste);
         await _context.SaveChangesAsync();
     }
 }

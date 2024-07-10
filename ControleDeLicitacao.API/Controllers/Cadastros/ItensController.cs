@@ -33,7 +33,7 @@ public class ItensController : BaseController
         await base.ValidaRecurso(203);
 
         var itemDTO = await _service.ObterPorIDParaEdicao(id);
-        if (itemDTO == null)
+        if (itemDTO is null)
         {
             return NotFound();
         }
@@ -58,7 +58,7 @@ public class ItensController : BaseController
         await base.ValidaRecurso(204);
 
         var itemDTO = await _service.ObterPorID(id);
-        if (itemDTO == null)
+        if (itemDTO is null)
         {
             return NotFound();
         }
@@ -101,7 +101,7 @@ public class ItensController : BaseController
 
         var item = await _service.ObterPorID(id);
 
-        if (item == null) return NotFound();
+        if (item is null) return NotFound();
 
         return Ok(item);
     }

@@ -22,12 +22,12 @@ public class ItemService
 
     }
 
-    public async Task <Item> Adicionar(ItemDTO dto)
+    public async Task <ItemDTO> Adicionar(ItemDTO dto)
     {
 
         var item = _mapper.Map<Item>(dto);
 
-        if (item == null) return null;
+        if (item is null) return null;
 
         if (item.EhCesta)
         {
@@ -46,7 +46,8 @@ public class ItemService
                     Nome = nome
                 }).ToList();
         }
-        return await _itemRepository.Adicionar(item);
+        await _itemRepository.Adicionar(item);
+        return _mapper.Map<ItemDTO>(item);
     }
 
 
@@ -56,7 +57,7 @@ public class ItemService
 
         var item = _mapper.Map<Item>(dto);
 
-        if (item == null) return;
+        if (item is null) return;
 
         if (item.EhCesta && dto.ListaItens != null)
         {
@@ -144,7 +145,7 @@ public class ItemService
     {
         var item = await RetornarItem(id);
 
-        if (item == null) return null;
+        if (item is null) return null;
 
         return _mapper.Map<ItemDTO>(item);
     }
@@ -153,7 +154,7 @@ public class ItemService
     {
         var item = await RetornarItem(id);
 
-        if (item == null) return null;
+        if (item is null) return null;
 
         ValidarInativo(item.Status);
 

@@ -81,7 +81,7 @@ public class LogMiddleware
         if (context.Request.Path == "/usuarios/login") return false;
 
         if (context.Request.Headers["Authorization"]
-            .FirstOrDefault()?.Split(" ").Last() == null) return false;
+            .FirstOrDefault()?.Split(" ").Last() is null) return false;
 
 
         return true;

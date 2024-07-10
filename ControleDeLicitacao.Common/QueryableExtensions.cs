@@ -26,7 +26,7 @@ public static class QueryableExtensions
             var searchValue = Expression.Constant(search);
             var containsExpression = Expression.Call(propertyAccess, containsMethod, searchValue);
 
-            if (searchExpression == null)
+            if (searchExpression is null)
             {
                 searchExpression = containsExpression;
             }

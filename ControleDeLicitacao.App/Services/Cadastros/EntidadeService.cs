@@ -21,7 +21,7 @@ public class EntidadeService
 
     }
 
-    public async Task <Entidade> Adicionar(EntidadeDTO dto)
+    public async Task <EntidadeDTO> Adicionar(EntidadeDTO dto)
     {
 
         await ValidarNovoCadastro(dto);
@@ -32,7 +32,9 @@ public class EntidadeService
 
         if (entidade is null) return null;
 
-        return await _entidadeRepository.Adicionar(entidade);
+        await _entidadeRepository.Adicionar(entidade);
+
+        return _mapper.Map<EntidadeDTO>(entidade);
     }
 
 
@@ -104,7 +106,7 @@ public class EntidadeService
     {
         var entidade = await _entidadeRepository.ObterPorID(id);
 
-        if (entidade == null) return null;
+        if (entidade is null) return null;
 
         return _mapper.Map<EntidadeDTO>(entidade);
     }
@@ -113,7 +115,7 @@ public class EntidadeService
     {
         var entidade = await _entidadeRepository.ObterPorID(id);
 
-        if (entidade == null) return null;
+        if (entidade is null) return null;
 
         ValidarInativo(entidade.Status);
 

@@ -72,7 +72,7 @@ public class UsuarioService
 
         var usuario = await _userManager.FindByIdAsync(dto.Id.ToString());
 
-        if (usuario == null)
+        if (usuario is null)
         {
             throw new GenericException("Usuário não encontrado!", 404);
         }

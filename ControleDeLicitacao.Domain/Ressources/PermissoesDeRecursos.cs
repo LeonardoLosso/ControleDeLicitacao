@@ -67,6 +67,8 @@ public static class PermissoesDeRecursos
             , new Recurso(id: 303, moduloId: 3, nome: "Importar Ata")
             , new Recurso(id: 304, moduloId: 3, nome: "Editar Ata")
             , new Recurso(id: 305, moduloId: 3, nome: "Inativar Ata")
+            , new Recurso(id: 306, moduloId: 3, nome: "Criar Reajuste")
+            , new Recurso(id: 307, moduloId: 3, nome: "Excluir Reajuste")
             //-------------------------------------------------------------
 
             //---------------------------[Baixa]---------------------------

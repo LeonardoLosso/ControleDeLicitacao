@@ -32,7 +32,7 @@ public class EntidadesController : BaseController
         await base.ValidaRecurso(103);
 
         var entidadeDTO = await _service.ObterPorIDParaEdicao(id);
-        if (entidadeDTO == null)
+        if (entidadeDTO is null)
         {
             return NotFound();
         }
@@ -56,7 +56,7 @@ public class EntidadesController : BaseController
     {
         await base.ValidaRecurso(104);
         var entidadeDTO = await _service.ObterPorID(id);
-        if (entidadeDTO == null)
+        if (entidadeDTO is null)
         {
             return NotFound();
         }
@@ -98,7 +98,7 @@ public class EntidadesController : BaseController
 
         var entidade = await _service.ObterPorID(id);
 
-        if (entidade == null) return NotFound();
+        if (entidade is null) return NotFound();
 
         return Ok(entidade);
     }

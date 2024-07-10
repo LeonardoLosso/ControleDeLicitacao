@@ -34,7 +34,7 @@ public class UsuariosController : BaseController
         await base.ValidaRecurso(604);
 
         var dto = await _service.ObterPorID(id);
-        if (dto == null)
+        if (dto is null)
         {
             return NotFound();
         }
@@ -65,7 +65,7 @@ public class UsuariosController : BaseController
         await base.ValidaRecurso(603);
 
         var dto = await _service.ObterPorID(id);
-        if (dto == null)
+        if (dto is null)
         {
             return NotFound();
         }
@@ -116,7 +116,7 @@ public class UsuariosController : BaseController
 
         var usuario = await _service.ObterPorID(id);
 
-        if (usuario == null) return NotFound();
+        if (usuario is null) return NotFound();
 
         return Ok(usuario);
     }

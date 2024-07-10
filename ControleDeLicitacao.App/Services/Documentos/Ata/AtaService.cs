@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using ControleDeLicitacao.App.DTOs;
 using ControleDeLicitacao.App.DTOs.Ata;
+using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Ata;
+using ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +24,7 @@ public class AtaService
         _entidadeService = entidadeService;
     }
 
-    public async Task<AtaLicitacao> Adicionar(AtaDTO dto)
+    public async Task<AtaDTO> Adicionar(AtaDTO dto)
     {
 
         //await ValidarNovoCadastro(dto);
@@ -31,21 +33,55 @@ public class AtaService
 
         var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
 
-        return await _ataRepository.Adicionar(ataLicitacao);
+        await _ataRepository.Adicionar(ataLicitacao);
+
+        return _mapper.Map<AtaDTO>(ataLicitacao);
+    }
+    public async Task<ReajusteDTO> AdicionarReajuste(ReajusteDTO dto)
+    {
+        if (dto.Itens.Count == 0) throw new GenericException("Adicione itens antes de criar historico", 512);
+
+        var status = await _ataRepository.Buscar()
+            .AsNoTracking()
+            .Where(w => w.ID == dto.AtaID)
+            .Select(s => s.Status).FirstOrDefaultAsync();
+
+
+        ValidarInativo(status);
+
+
+        var reajuste = _mapper.Map<Reajuste>(dto);
+
+        await _ataRepository.AdicionarReajuste(reajuste);
+
+        return _mapper.Map<ReajusteDTO>(reajuste);
     }
     public async Task Editar(AtaDTO dto, bool validaStatus = true)
     {
         if (validaStatus)
         {
-            //ValidarInativo(dto.Status);
-            //TrataStrings(dto);
+            ValidarInativo(dto.Status);
         }
 
         var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
 
-        if (ataLicitacao == null) return;
+        if (ataLicitacao is null) return;
 
         await _ataRepository.Editar(ataLicitacao);
+    }
+
+    public async Task ExcluirReajuste(int id)
+    {
+        var reajuste = await _ataRepository
+            .BuscarReajuste()
+            .AsNoTracking()
+            .Where(w => w.ID == id)
+            .Include(i => i.Itens)
+            .FirstOrDefaultAsync();
+
+        _ataRepository.ExcluirReajuste(reajuste);
+
+
     }
 
     //---------------------------[CONSULTAS]-------------------------------
@@ -130,9 +166,38 @@ public class AtaService
             .Include(i => i.Itens)
             .FirstOrDefaultAsync();
 
-        if (ataLicitacao == null) return null;
+        if (ataLicitacao is null) return null;
 
         return _mapper.Map<AtaDTO>(ataLicitacao);
     }
 
+    public async Task<List<ReajusteDTO>> ListarReajuste(int id)
+    {
+        var reajustes = await _ataRepository
+            .BuscarReajuste()
+            .AsNoTracking()
+            .Where(w => w.AtaID == id)
+            .Include(i => i.Itens)
+            .ToListAsync();
+
+        if (reajustes.Count == 0) return null;
+
+        var lista = new List<ReajusteDTO>();
+
+        foreach (var item in reajustes)
+        {
+            var reajuste = _mapper.Map<ReajusteDTO>(item);
+
+            if (reajuste is not null)
+            {
+                lista.Add(reajuste);
+            }
+        }
+        return lista;
+    }
+
+    private void ValidarInativo(int status)
+    {
+        if (status == 2) throw new GenericException("Não é possivel editar um documento inativo", 501);
+    }
 }
