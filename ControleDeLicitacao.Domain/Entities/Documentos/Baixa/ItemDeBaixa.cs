@@ -40,5 +40,5 @@ public class ItemDeBaixa
     public double ValorUnitario { get; set; }
 
     [ForeignKey(nameof(BaixaID))]
-    public Baixa Baixa { get; set; }
+    public BaixaLicitacao Baixa { get; set; }
 }

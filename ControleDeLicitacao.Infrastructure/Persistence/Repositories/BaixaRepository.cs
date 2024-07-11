@@ -3,7 +3,7 @@ using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 
 namespace ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 
-public class BaixaRepository : Repository<Baixa>
+public class BaixaRepository : Repository<BaixaLicitacao>
 {
     private readonly BaixaContext _context;
 
