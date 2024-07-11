@@ -20,7 +20,7 @@ public class AtaController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> NovaEntidade([FromBody] AtaDTO ata)
+    public async Task<IActionResult> Novo([FromBody] AtaDTO ata)
     {
         await base.ValidaRecurso(302);
 
@@ -30,7 +30,7 @@ public class AtaController : BaseController
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> EditarEntidade(int id, [FromBody] JsonPatchDocument<AtaDTO> patchDoc)
+    public async Task<IActionResult> Editar(int id, [FromBody] JsonPatchDocument<AtaDTO> patchDoc)
     {
         await base.ValidaRecurso(304);
 
@@ -92,7 +92,7 @@ public class AtaController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> ListarEntidades(
+    public async Task<IActionResult> Listar(
         [FromQuery] int? pagina = null,
         [FromQuery] int? tipo = null,
         [FromQuery] int? status = null,
