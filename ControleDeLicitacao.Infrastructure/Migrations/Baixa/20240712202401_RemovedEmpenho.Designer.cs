@@ -4,6 +4,7 @@ using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
 {
     [DbContext(typeof(BaixaContext))]
-    partial class BaixaContextModelSnapshot : ModelSnapshot
+    [Migration("20240712202401_RemovedEmpenho")]
+    partial class RemovedEmpenho
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -19,7 +19,7 @@ public abstract class BaseController : ControllerBase
 
     protected async Task<IActionResult> RetornaEdicao<T>(JsonPatchDocument<T> patchDoc) where T : class
     {
-        var patch = string.Empty;
+        string patch = ".";
 
         foreach (var operacao in patchDoc.Operations)
         {
@@ -27,7 +27,7 @@ public abstract class BaseController : ControllerBase
         }
 
         _logInfoService.SetOperacao(patch);
-        return NoContent();
+        return Ok(true);
     }
 
     protected async Task<IActionResult> RetornaNovo<T>(T entidade)

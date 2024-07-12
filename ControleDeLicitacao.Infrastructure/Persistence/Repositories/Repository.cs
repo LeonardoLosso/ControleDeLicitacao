@@ -33,6 +33,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
 
     public virtual async Task Adicionar(TEntity entity)
     {
+        entity.Status = 1;
         await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
     }

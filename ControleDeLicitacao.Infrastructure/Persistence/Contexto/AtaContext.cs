@@ -23,7 +23,7 @@ public class AtaContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<ItemDeAta>()
-            .HasKey(i => new { i.AtaID, i.ID});
+            .HasKey(i => new { i.AtaID, i.ID, i.ValorUnitario});
 
         modelBuilder.Entity<Reajuste>()
             .HasMany(r => r.Itens)

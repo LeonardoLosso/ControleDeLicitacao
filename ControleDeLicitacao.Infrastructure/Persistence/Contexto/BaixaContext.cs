@@ -19,14 +19,8 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto
                 .HasForeignKey(p => p.BaixaID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<BaixaLicitacao>()
-                .HasMany(i => i.Empenhos)
-                .WithOne(p => p.Baixa)
-                .HasForeignKey(p => p.BaixaID)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<ItemDeBaixa>()
-                .HasKey(p => new { p.BaixaID, p.ID});
+                .HasKey(p => new { p.BaixaID, p.ID, p.ValorUnitario});
 
         }
     }

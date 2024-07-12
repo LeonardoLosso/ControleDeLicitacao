@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ControleDeLicitacao.App.DTOs.Baixa;
+using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
@@ -29,18 +30,14 @@ public class BaixaService
             .Where(w => w.ID == id)
                 .Include(w => w.Itens)
                 .AsNoTracking()
-                .Include(w => w.Empenhos)
-                .AsNoTracking()
             .FirstOrDefaultAsync();
-
-        if (baixaLicitacao is null) baixaLicitacao = await CriarBaixa(id);
 
         if (baixaLicitacao is null) return null;
 
         return _mapper.Map<BaixaDTO>(baixaLicitacao);
     }
 
-    private async Task<BaixaLicitacao> CriarBaixa(int id)
+    public async Task<BaixaDTO> Adicionar(int id)
     {
         var ata = await _ataService.ObterPorID(id);
 
@@ -56,7 +53,6 @@ public class BaixaService
             EmpresaID = ata.Empresa,
             OrgaoID = ata.Orgao,
             Status = ata.Status,
-            Empenhos = new List<Empenho>(),
             Itens = new List<ItemDeBaixa>()
         };
         foreach (var item in ata.Itens)
@@ -80,6 +76,72 @@ public class BaixaService
 
         await _baixaRepository.Adicionar(baixa);
 
-        return baixa;
+        return _mapper.Map<BaixaDTO>(baixa);
+    }
+
+    public async Task Editar(int id)
+    {
+        var possuiEmpenho = false;
+        try
+        {
+            var ata = await _ataService.ObterPorID(id);
+
+            var dto = await ObterPorID(id);
+
+            if (dto is not null && ata is not null)
+            {
+                dto.DataAta = ata.DataAta;
+                dto.DataLicitacao = ata.DataLicitacao;
+                dto.Vigencia = ata.Vigencia;
+                dto.Edital = ata.Edital;
+                dto.Empresa = ata.Empresa;
+                dto.Orgao = ata.Orgao;
+
+
+
+                dto.Itens = new List<ItemDeBaixaDTO>();
+                foreach (var item in ata.Itens)
+                {
+                    var itemBaixa = new ItemDeBaixaDTO()
+                    {
+                        ID = item.ID,
+                        BaixaID = dto.ID,
+                        Nome = item.Nome,
+                        Unidade = item.Unidade,
+                        QtdeEmpenhada = 0,
+                        QtdeLicitada = item.Quantidade,
+                        QtdeAEmpenhar = item.Quantidade,
+                        ValorEmpenhado = 0,
+                        ValorLicitado = item.ValorTotal,
+                        Saldo = item.ValorTotal,
+                        ValorUnitario = item.ValorUnitario,
+                    };
+                    dto.Itens.Add(itemBaixa);
+                }
+                //else
+                //{
+                //    foreach(var item in dto.Itens)
+                //    {
+                //        var itemAta = ata.Itens
+                //            .Where(i => i.ID == item.ID && i.AtaID == ata.ID)
+                //            .FirstOrDefault();
+
+                //        if(itemAta is not null)
+                //        {
+                //            item.ValorUnitario = itemAta.ValorUnitario;
+                //            item.ValorLicitado = itemAta.ValorTotal;
+                //            item.Saldo = itemAta.ValorTotal - item.ValorEmpenhado;
+                //        }
+                //    }
+                //}
+
+                var baixa = _mapper.Map<BaixaLicitacao>(dto);
+                await _baixaRepository.Editar(baixa);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new GenericException("Erro ao editar Baixa!", 513, ex);
+        }
     }
 }

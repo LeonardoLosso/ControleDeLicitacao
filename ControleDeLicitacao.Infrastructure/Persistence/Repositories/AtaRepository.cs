@@ -29,7 +29,10 @@ public class AtaRepository : Repository<AtaLicitacao>
         foreach (var existingItem in existingAta.Itens.ToList())
         {
             var updatedItem = updatedAta.Itens
-                                        .FirstOrDefault(i => i.AtaID == existingItem.AtaID && i.ID == existingItem.ID);
+                                        .FirstOrDefault(
+                                            i => i.AtaID == existingItem.AtaID 
+                                            && i.ID == existingItem.ID 
+                                            && i.ValorUnitario == existingItem.ValorUnitario);
 
             if (updatedItem is null)
             {
@@ -43,7 +46,8 @@ public class AtaRepository : Repository<AtaLicitacao>
 
         foreach (var newItem in updatedAta.Itens)
         {
-            if (!existingAta.Itens.Any(i => i.AtaID == newItem.AtaID && i.ID == newItem.ID))
+            if (!existingAta.Itens
+                .Any(i => i.AtaID == newItem.AtaID && i.ID == newItem.ID && i.ValorUnitario == newItem.ValorUnitario))
             {
                 existingAta.Itens.Add(newItem);
             }

@@ -95,6 +95,7 @@ public static class Registradores
         services.AddAutoMapper(typeof(UsuarioMapping).Assembly);
         services.AddAutoMapper(typeof(AtaMapping).Assembly);
         services.AddAutoMapper(typeof(ReajusteMapping).Assembly);
+        services.AddAutoMapper(typeof(BaixaMapping).Assembly);
 
         return services;
     }

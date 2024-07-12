@@ -21,5 +21,4 @@ public class BaixaLicitacao : IDominio
     public DateTime? Vigencia { get; set; }
 
     public ICollection<ItemDeBaixa> Itens { get; set; }
-    public ICollection<Empenho> Empenhos { get; set; }
 }

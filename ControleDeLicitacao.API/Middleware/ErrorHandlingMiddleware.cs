@@ -40,7 +40,9 @@ public class ErrorHandlingMiddleware
             result = JsonConvert.SerializeObject(new
             {
                 StatusCode = customException.StatusCode,
-                Message = customException.Message
+                Message = customException.Message,
+                Exception2 = customException.Exception2
+                
             });
         }
         else
@@ -55,7 +57,7 @@ public class ErrorHandlingMiddleware
         }
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = code;
+        context.Response.StatusCode = code == 500 ? 515 : code;
         return context.Response.WriteAsync(result);
     }
 }
