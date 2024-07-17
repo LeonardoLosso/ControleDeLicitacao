@@ -1,0 +1,81 @@
+﻿using AutoMapper;
+using ControleDeLicitacao.App.DTOs.Baixa;
+using ControleDeLicitacao.App.Error;
+using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
+using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace ControleDeLicitacao.App.Services.Documentos.Baixa;
+
+public class EmpenhoService
+{
+    private readonly IMapper _mapper;
+    private readonly BaixaRepository _baixaRepository;
+
+    public EmpenhoService(IMapper mapper, BaixaRepository baixaRepository)
+    {
+        _mapper = mapper;
+        _baixaRepository = baixaRepository;
+    }
+
+    public async Task<List<EmpenhoSimplificadoDTO>?> Listar(int idBaixa)
+    {
+        var empenhos = await _baixaRepository
+            .BuscarEmpenho()
+            .AsNoTracking()
+            .Where(w => w.BaixaID == idBaixa)
+            .ToListAsync();
+
+        if(empenhos.Count == 0) return null;
+
+        var lista = new List<EmpenhoSimplificadoDTO>();
+
+        foreach (var item in empenhos)
+        {
+            var empenho = _mapper.Map<EmpenhoSimplificadoDTO>(item);
+
+            if(empenho is not null)
+            {
+                lista.Add(empenho);
+            }
+        }
+
+        return lista;
+    }
+
+    public async Task<EmpenhoSimplificadoDTO> Adicionar(BaixaDTO dto)
+    {
+        Empenho empenho = new Empenho()
+        {
+            ID = 0,
+            Status = dto.Status,
+            BaixaID = dto.ID,
+            DataEmpenho = DateTime.Now,
+            Edital = dto.Edital,
+            OrgaoID = dto.Orgao,
+            Unidade = dto.Orgao,
+            Saldo = 0,
+            Valor = 0,
+            Itens = new List<ItemDeEmpenho>()
+        };
+
+        await _baixaRepository.AdicionarEmpenho(empenho);
+
+        return _mapper.Map<EmpenhoSimplificadoDTO>(empenho);
+    }
+
+    public async Task Excluir(int id)
+    {
+        var empenho = await _baixaRepository
+            .BuscarEmpenho()
+            .AsNoTracking()
+            .Where(x => x.ID == id)
+            .Include(i => i.Itens)
+                .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (empenho is null) throw new GenericException("Não foi possivel excluir", 501);
+
+        await _baixaRepository.ExcluirEmpenho(empenho);
+    }
+}

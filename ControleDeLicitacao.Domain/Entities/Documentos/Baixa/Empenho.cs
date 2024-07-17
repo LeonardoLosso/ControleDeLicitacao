@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 
@@ -14,6 +13,12 @@ public class Empenho
     [Required]
     [MaxLength(10)]
     public string Edital { get; set; }
+    
+    [Required]
+    public int Unidade { get; set; }
+
+    [Required]
+    public int OrgaoID { get; set; }
     public int Status { get; set; }
     public DateTime? DataEmpenho { get; set; }
 
@@ -23,9 +28,5 @@ public class Empenho
     [Required]
     public double Valor { get; set; }
 
-    //public ICollection<ItemDeBaixa> Itens { get; set; }
-    //public ICollection<Notas> Notas { get; set; }
-
-    [ForeignKey(nameof(BaixaID))]
-    public BaixaLicitacao Baixa { get; set; }
+    public ICollection<ItemDeEmpenho> Itens { get; set; }
 }

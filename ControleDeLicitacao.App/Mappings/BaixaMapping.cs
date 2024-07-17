@@ -16,6 +16,16 @@ public class BaixaMapping : Profile
 
         CreateMap<ItemDeBaixa, ItemDeBaixaDTO>().ReverseMap();
 
-        CreateMap<Empenho, EmpenhoDTO>().ReverseMap();
+        //--------------------------------------------------------------------------------
+
+        CreateMap<Empenho, EmpenhoDTO>()
+            .ForMember(dest => dest.Orgao, opt => opt.MapFrom(src => src.OrgaoID))
+            .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.Itens))
+            .ReverseMap();
+
+        CreateMap<ItemDeEmpenho, ItemDeEmpenhoDTO>().ReverseMap();
+
+        CreateMap<Empenho, EmpenhoSimplificadoDTO>()
+            .ForMember(dest => dest.Orgao, opt => opt.MapFrom(src => src.OrgaoID));
     }
 }

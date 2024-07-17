@@ -78,6 +78,9 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Ata
                     b.Property<int>("ID")
                         .HasColumnType("int");
 
+                    b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
+
                     b.Property<double>("Desconto")
                         .HasColumnType("float");
 
@@ -97,10 +100,7 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Ata
                     b.Property<double>("ValorTotal")
                         .HasColumnType("float");
 
-                    b.Property<double>("ValorUnitario")
-                        .HasColumnType("float");
-
-                    b.HasKey("AtaID", "ID");
+                    b.HasKey("AtaID", "ID", "ValorUnitario");
 
                     b.ToTable("ItemDeAta");
                 });

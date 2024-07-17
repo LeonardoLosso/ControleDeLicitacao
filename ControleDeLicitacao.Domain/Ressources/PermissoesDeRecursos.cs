@@ -73,6 +73,12 @@ public static class PermissoesDeRecursos
 
             //---------------------------[Baixa]---------------------------
             , new Recurso(id: 401, moduloId: 4, nome: "Visualizar")
+            , new Recurso(id: 407, moduloId: 4, nome: "Visualizar Empenho")
+            , new Recurso(id: 402, moduloId: 4, nome: "Novo Empenho")
+            , new Recurso(id: 406, moduloId: 4, nome: "Editar Empenho")
+            , new Recurso(id: 403, moduloId: 4, nome: "Excluir Empenho")
+            , new Recurso(id: 404, moduloId: 4, nome: "Importar Empenho")
+            , new Recurso(id: 405, moduloId: 4, nome: "Inativar Empenho")
             //-------------------------------------------------------------
 
             //---------------------------[Notas]---------------------------

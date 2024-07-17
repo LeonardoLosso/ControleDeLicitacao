@@ -7,10 +7,12 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 public class BaixaRepository : Repository<BaixaLicitacao>
 {
     private readonly BaixaContext _context;
+    private readonly DbSet<Empenho> _dbSetEmpenho;
 
     public BaixaRepository(BaixaContext context) : base(context)
     {
         _context = context;
+        _dbSetEmpenho = _context.Set<Empenho>();
     }
 
     public override async Task Adicionar(BaixaLicitacao entity)
@@ -36,7 +38,6 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             }
         }
     }
-
     public override async Task Editar(BaixaLicitacao updatedBaixa)
     {
         var existingAta = await _context.Set<BaixaLicitacao>()
@@ -80,4 +81,21 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         await _context.SaveChangesAsync();
 
     }
+
+    public async Task AdicionarEmpenho(Empenho entity)
+    {
+        _dbSetEmpenho.Add(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ExcluirEmpenho(Empenho entity)
+    {
+        _dbSetEmpenho.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+    public IQueryable<Empenho> BuscarEmpenho()
+    {
+        return _dbSetEmpenho.AsQueryable();
+    }
+
 }

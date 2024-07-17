@@ -78,10 +78,18 @@ public class BaixaService
 
         return _mapper.Map<BaixaDTO>(baixa);
     }
+    public async Task AlterarStatus(BaixaDTO dto)
+    {
+        //VALIDAR EMPENHOS ATIVOS
+        var baixa = _mapper.Map<BaixaLicitacao>(dto);
 
+        if(baixa is not null)
+        {
+            await _baixaRepository.Editar(baixa);
+        }
+    }
     public async Task Editar(int id)
     {
-        var possuiEmpenho = false;
         try
         {
             var ata = await _ataService.ObterPorID(id);

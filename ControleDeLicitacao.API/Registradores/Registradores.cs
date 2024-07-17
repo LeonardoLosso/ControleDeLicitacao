@@ -73,6 +73,7 @@ public static class Registradores
         services.AddScoped<LogInfoService>();
         services.AddScoped<AtaService>();
         services.AddScoped<BaixaService>();
+        services.AddScoped<EmpenhoService>();
 
         return services;
     }

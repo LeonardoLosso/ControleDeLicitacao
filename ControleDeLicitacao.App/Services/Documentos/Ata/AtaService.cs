@@ -171,7 +171,7 @@ public class AtaService
         return _mapper.Map<AtaDTO>(ataLicitacao);
     }
 
-    public async Task<List<ReajusteDTO>> ListarReajuste(int id)
+    public async Task<List<ReajusteDTO>?> ListarReajuste(int id)
     {
         var reajustes = await _ataRepository
             .BuscarReajuste()

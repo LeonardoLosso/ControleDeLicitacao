@@ -74,18 +74,22 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<int>("OrgaoID")
+                        .HasColumnType("int");
+
                     b.Property<double>("Saldo")
                         .HasColumnType("float");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int>("Unidade")
+                        .HasColumnType("int");
+
                     b.Property<double>("Valor")
                         .HasColumnType("float");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("BaixaID");
 
                     b.ToTable("Empenho");
                 });
@@ -134,15 +138,48 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.ToTable("ItemDeBaixa");
                 });
 
-            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.Empenho", b =>
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.ItemDeEmpenho", b =>
                 {
-                    b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", "Baixa")
-                        .WithMany()
-                        .HasForeignKey("BaixaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("EmpenhoID")
+                        .HasColumnType("int");
 
-                    b.Navigation("Baixa");
+                    b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BaixaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<double>("QtdeAEntregar")
+                        .HasColumnType("float");
+
+                    b.Property<double>("QtdeEmpenhada")
+                        .HasColumnType("float");
+
+                    b.Property<double>("QtdeEntregue")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Unidade")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<double>("ValorEntregue")
+                        .HasColumnType("float");
+
+                    b.HasKey("EmpenhoID", "ValorUnitario", "ID");
+
+                    b.ToTable("ItemDeEmpenho");
                 });
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.ItemDeBaixa", b =>
@@ -156,7 +193,23 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.Navigation("Baixa");
                 });
 
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.ItemDeEmpenho", b =>
+                {
+                    b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.Empenho", "Empenho")
+                        .WithMany("Itens")
+                        .HasForeignKey("EmpenhoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empenho");
+                });
+
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", b =>
+                {
+                    b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.Empenho", b =>
                 {
                     b.Navigation("Itens");
                 });
