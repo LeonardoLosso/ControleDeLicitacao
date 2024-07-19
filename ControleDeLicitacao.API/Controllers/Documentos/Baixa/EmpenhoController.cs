@@ -1,6 +1,8 @@
 ﻿using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleDeLicitacao.API.Controllers.Documentos.Baixa;
@@ -12,6 +14,18 @@ public class EmpenhoController : BaseController
     public EmpenhoController(LogInfoService logInfoService, EmpenhoService service) : base(logInfoService)
     {
         _service = service;
+    }
+
+    [HttpGet("obter/{id}")]
+    public async Task<IActionResult> ObterPorID(int id)
+    {
+        await base.ValidaRecurso(407);
+
+        var dto = await _service.ObterPorID(id);
+
+        if (dto is null) return NotFound();
+
+        return Ok(dto);
     }
 
     [HttpGet("{id}")]
@@ -38,5 +52,54 @@ public class EmpenhoController : BaseController
 
         await _service.Excluir(id);
         return Ok(id);
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Editar(int id, [FromBody] JsonPatchDocument<EmpenhoDTO> patchDoc)
+    {
+        await base.ValidaRecurso(406);
+
+        var dto = await _service.ObterPorID(id);
+        if(dto is null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            patchDoc.ApplyTo(dto, ModelState);
+        }
+        catch (JsonPatchException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        await _service.Editar(dto);
+
+        return await RetornaEdicao(patchDoc);
+    }
+
+    [HttpPatch("status/{id}")]
+    public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<EmpenhoDTO> patchDoc)
+    {
+        await base.ValidaRecurso(405);
+        var dto = await _service.ObterPorID(id);
+        if (dto is null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            patchDoc.ApplyTo(dto, ModelState);
+        }
+        catch (JsonPatchException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        await _service.Editar(dto);
+
+        return await RetornaEdicao(patchDoc);
     }
 }

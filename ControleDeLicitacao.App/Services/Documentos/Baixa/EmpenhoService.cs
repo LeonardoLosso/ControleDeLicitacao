@@ -18,6 +18,17 @@ public class EmpenhoService
         _baixaRepository = baixaRepository;
     }
 
+    public async Task<EmpenhoDTO?> ObterPorID(int id)
+    {
+        var empenho = await _baixaRepository.BuscarEmpenhoPorID(id);
+
+        if (empenho is null) return null;
+
+        var dto = _mapper.Map<EmpenhoDTO>(empenho);
+
+        return dto;
+    }
+
     public async Task<List<EmpenhoSimplificadoDTO>?> Listar(int idBaixa)
     {
         var empenhos = await _baixaRepository
@@ -77,5 +88,15 @@ public class EmpenhoService
         if (empenho is null) throw new GenericException("Não foi possivel excluir", 501);
 
         await _baixaRepository.ExcluirEmpenho(empenho);
+    }
+
+    public async Task Editar(EmpenhoDTO dto)
+    {
+        var empenho = _mapper.Map<Empenho>(dto);
+
+        if(empenho is not null)
+        {
+            await _baixaRepository.EditarEmpenho(empenho);
+        }
     }
 }

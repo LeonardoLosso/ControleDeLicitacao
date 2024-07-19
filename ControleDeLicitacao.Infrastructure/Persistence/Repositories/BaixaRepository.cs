@@ -97,5 +97,55 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     {
         return _dbSetEmpenho.AsQueryable();
     }
+    public async Task<Empenho?> BuscarEmpenhoPorID(int id)
+    {
+        return await _dbSetEmpenho
+            .AsNoTracking()
+            .Include(i => i.Itens)
+                .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.ID == id);
+    }
 
+    public async Task EditarEmpenho(Empenho updatedEmpenho)
+    {
+        var existingEmpenho = await _dbSetEmpenho
+            .Include(a => a.Itens)
+            .FirstOrDefaultAsync(a => a.ID == updatedEmpenho.ID);
+
+        if (existingEmpenho is null)
+        {
+            throw new InvalidOperationException("Empenho not found.");
+        }
+
+        _context.Entry(existingEmpenho).CurrentValues.SetValues(updatedEmpenho);
+
+        foreach (var existingItem in existingEmpenho.Itens.ToList())
+        {
+            var updatedItem = updatedEmpenho.Itens
+                                        .FirstOrDefault(
+                                            i => i.EmpenhoID == existingItem.EmpenhoID
+                                            && i.ID == existingItem.ID
+                                            && i.ValorUnitario == existingItem.ValorUnitario);
+
+            if (updatedItem is null)
+            {
+                _context.ItemDeEmpenho.Remove(existingItem);
+            }
+            else
+            {
+                _context.Entry(existingItem).CurrentValues.SetValues(updatedItem);
+            }
+        }
+
+        foreach (var newItem in updatedEmpenho.Itens)
+        {
+            if (!existingEmpenho.Itens
+                .Any(i => i.EmpenhoID == newItem.EmpenhoID && i.ID == newItem.ID && i.ValorUnitario == i.ValorUnitario))
+            {
+                existingEmpenho.Itens.Add(newItem);
+            }
+        }
+
+        await _context.SaveChangesAsync();
+    }
 }
