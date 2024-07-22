@@ -2,6 +2,7 @@
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Documentos.Ata;
+using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,22 @@ public class BaixaService
         if (baixaLicitacao is null) return null;
 
         return _mapper.Map<BaixaDTO>(baixaLicitacao);
+    }
+
+    public async Task<List<ItemDeBaixaDTO>> ObterItensPorID(int id, string? search = null)
+    {
+        var query = _baixaRepository
+            .BuscarItens()
+            .AsNoTracking()
+            .Where(w => w.BaixaID == id);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.BuscarPalavraChave(search);
+        }
+        var itens = await query.Select(s => _mapper.Map<ItemDeBaixaDTO>(s)).ToListAsync();
+
+        return itens;
     }
 
     public async Task<BaixaDTO> Adicionar(int id)

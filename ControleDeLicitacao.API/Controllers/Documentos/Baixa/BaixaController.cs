@@ -30,6 +30,15 @@ public class BaixaController : BaseController
 
         return Ok(dto);
     }
+    [HttpGet("itens/{id}")]
+    public async Task<IActionResult> ObterItensPorID(int id, [FromQuery] string? search = null)
+    {
+        var dto = await _service.ObterItensPorID(id, search);
+
+        if (dto is null) return NotFound();
+
+        return Ok(dto);
+    }
 
     [HttpPost]
     public async Task<IActionResult> Novo([FromBody] int id)

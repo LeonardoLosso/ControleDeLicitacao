@@ -8,11 +8,13 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 {
     private readonly BaixaContext _context;
     private readonly DbSet<Empenho> _dbSetEmpenho;
+    private readonly DbSet<ItemDeBaixa> _dbSetItens;
 
     public BaixaRepository(BaixaContext context) : base(context)
     {
         _context = context;
         _dbSetEmpenho = _context.Set<Empenho>();
+        _dbSetItens = _context.Set<ItemDeBaixa>();
     }
 
     public override async Task Adicionar(BaixaLicitacao entity)
@@ -96,6 +98,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public IQueryable<Empenho> BuscarEmpenho()
     {
         return _dbSetEmpenho.AsQueryable();
+    }
+    public IQueryable<ItemDeBaixa> BuscarItens()
+    {
+        return _dbSetItens.AsQueryable();
     }
     public async Task<Empenho?> BuscarEmpenhoPorID(int id)
     {
