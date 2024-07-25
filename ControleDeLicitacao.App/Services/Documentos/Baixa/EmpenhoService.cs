@@ -98,8 +98,10 @@ public class EmpenhoService
         {
             if (empenho.Itens.Any())
             {
-                empenho.Saldo = empenho.Valor - empenho.Itens.Sum(x => x.ValorEntregue);
-
+                var entregue = empenho.Itens.Sum(x => x.ValorEntregue);
+                
+                empenho.Valor = empenho.Status == 2? entregue : empenho.Valor;
+                empenho.Saldo = empenho.Valor - entregue;
             }
             await _baixaRepository.EditarEmpenho(empenho);
         }

@@ -91,9 +91,6 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         }
 
         await _context.SaveChangesAsync();
-
-        await AtualizarEmpenho(updatedBaixa);
-
     }
     public async Task AdicionarEmpenho(Empenho entity)
     {
@@ -125,6 +122,8 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
     public async Task EditarEmpenho(Empenho updatedEmpenho)
     {
+        var inativo = updatedEmpenho.Status == 2;
+
         var existingEmpenho = await _dbSetEmpenho
             .Include(a => a.Itens)
             .FirstOrDefaultAsync(a => a.ID == updatedEmpenho.ID);
@@ -150,6 +149,12 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             }
             else
             {
+                if(inativo)
+                {
+                    updatedItem.QtdeEmpenhada = updatedItem.QtdeEntregue;
+                    updatedItem.QtdeAEntregar = 0;
+                    updatedItem.Total = updatedItem.ValorEntregue;
+                }
                 _context.Entry(existingItem).CurrentValues.SetValues(updatedItem);
             }
         }
@@ -216,31 +221,31 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             .ToListAsync();
     }
 
-    public async Task AtualizarEmpenho(BaixaLicitacao baixa)
-    {
-        var empenhos = await ObterEmpenhosPorBaixa(baixa.ID);
+    //public async Task AtualizarEmpenho(BaixaLicitacao baixa)
+    //{
+    //    var empenhos = await ObterEmpenhosPorBaixa(baixa.ID);
 
-        if (empenhos is null) return;
+    //    if (empenhos is null) return;
 
-        foreach (var empenho in empenhos)
-        {
-            empenho.OrgaoID = baixa.OrgaoID;
+    //    foreach (var empenho in empenhos)
+    //    {
+    //        empenho.OrgaoID = baixa.OrgaoID;
             
-            foreach(var item in empenho.Itens)
-            {
-                var itemBaixa = baixa.Itens
-                    .FirstOrDefault(x =>
-                    x.BaixaID == item.BaixaID &&
-                    x.ID == item.ID);
+    //        foreach(var item in empenho.Itens)
+    //        {
+    //            var itemBaixa = baixa.Itens
+    //                .FirstOrDefault(x =>
+    //                x.BaixaID == item.BaixaID &&
+    //                x.ID == item.ID);
 
-                if(itemBaixa is not null)
-                {
-                    item.ValorUnitario = itemBaixa.ValorUnitario;
-                }
-            }
-        }
+    //            if(itemBaixa is not null)
+    //            {
+    //                item.ValorUnitario = itemBaixa.ValorUnitario;
+    //            }
+    //        }
+    //    }
 
-        _dbSetEmpenho.UpdateRange(empenhos);
-        await _context.SaveChangesAsync();
-    }
+    //    _dbSetEmpenho.UpdateRange(empenhos);
+    //    await _context.SaveChangesAsync();
+    //}
 }
