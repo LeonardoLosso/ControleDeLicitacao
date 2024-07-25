@@ -58,6 +58,7 @@ public class AtaService
     public async Task Editar(AtaDTO dto, bool validaStatus = true)
     {
         //VALIDAR EDIÇÃO DOCUMENTOS SUBSEQUENTES (EMPENHO)
+        //AO NOVO E EDITAR AGRUPAR REPETIDOS
         if (validaStatus)
         {
             ValidarInativo(dto.Status);

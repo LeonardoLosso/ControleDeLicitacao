@@ -12,5 +12,6 @@ public class ItemDeEmpenhoDTO
     public double QtdeAEntregar { get; set; }
     public double ValorEntregue { get; set; }
     public double ValorUnitario { get; set; }
+    public bool ItemDeBaixa { get; set; }
     public double Total { get; set; }
 }

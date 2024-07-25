@@ -37,7 +37,7 @@ public class EmpenhoService
             .Where(w => w.BaixaID == idBaixa)
             .ToListAsync();
 
-        if(empenhos.Count == 0) return null;
+        if (empenhos.Count == 0) return null;
 
         var lista = new List<EmpenhoSimplificadoDTO>();
 
@@ -45,7 +45,7 @@ public class EmpenhoService
         {
             var empenho = _mapper.Map<EmpenhoSimplificadoDTO>(item);
 
-            if(empenho is not null)
+            if (empenho is not null)
             {
                 lista.Add(empenho);
             }
@@ -94,9 +94,15 @@ public class EmpenhoService
     {
         var empenho = _mapper.Map<Empenho>(dto);
 
-        if(empenho is not null)
+        if (empenho is not null)
         {
+            if (empenho.Itens.Any())
+            {
+                empenho.Saldo = empenho.Valor - empenho.Itens.Sum(x => x.ValorEntregue);
+
+            }
             await _baixaRepository.EditarEmpenho(empenho);
         }
     }
+
 }

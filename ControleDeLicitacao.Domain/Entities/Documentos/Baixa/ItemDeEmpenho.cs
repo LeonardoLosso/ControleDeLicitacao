@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
@@ -18,6 +19,10 @@ public class ItemDeEmpenho
     [Required]
     [MaxLength(100)]
     public string Nome { get; set; }
+
+    [DefaultValue(false)]
+    public bool ItemDeBaixa { get; set; }
+
 
     [MaxLength(10)]
     public string Unidade { get; set; }

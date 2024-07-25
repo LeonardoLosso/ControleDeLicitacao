@@ -31,8 +31,7 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ItemDeEmpenho>()
-                .HasKey(p => new { p.EmpenhoID, p.ValorUnitario, p.ID});
-
+                .HasKey(p => new { p.EmpenhoID, p.ID});
         }
     }
 }

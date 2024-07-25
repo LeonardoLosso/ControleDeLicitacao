@@ -25,13 +25,7 @@ public class BaixaService
     public async Task<BaixaDTO?> ObterPorID(int id)
     {
 
-        var baixaLicitacao = await _baixaRepository
-            .Buscar()
-            .AsNoTracking()
-            .Where(w => w.ID == id)
-                .Include(w => w.Itens)
-                .AsNoTracking()
-            .FirstOrDefaultAsync();
+        var baixaLicitacao = await _baixaRepository.ObterBaixaCompletaPorID(id);
 
         if (baixaLicitacao is null) return null;
 
@@ -43,7 +37,7 @@ public class BaixaService
         var query = _baixaRepository
             .BuscarItens()
             .AsNoTracking()
-            .Where(w => w.BaixaID == id);
+            .Where(w => w.BaixaID == id && w.QtdeAEmpenhar > 0);
 
         if (!string.IsNullOrWhiteSpace(search))
         {

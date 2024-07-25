@@ -143,14 +143,14 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.Property<int>("EmpenhoID")
                         .HasColumnType("int");
 
-                    b.Property<double>("ValorUnitario")
-                        .HasColumnType("float");
-
                     b.Property<int>("ID")
                         .HasColumnType("int");
 
                     b.Property<int>("BaixaID")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ItemDeBaixa")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -177,7 +177,10 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.Property<double>("ValorEntregue")
                         .HasColumnType("float");
 
-                    b.HasKey("EmpenhoID", "ValorUnitario", "ID");
+                    b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
+
+                    b.HasKey("EmpenhoID", "ID");
 
                     b.ToTable("ItemDeEmpenho");
                 });
