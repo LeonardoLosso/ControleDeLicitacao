@@ -28,6 +28,16 @@ public class EmpenhoService
 
         return dto;
     }
+    public async Task<bool> PossuiEmpenho(int id)
+    {
+        var possui = await _baixaRepository
+            .BuscarEmpenho()
+            .Where(w => w.BaixaID == id)
+            .AsNoTracking()
+            .AnyAsync();
+
+        return possui;
+    }
 
     public async Task<List<EmpenhoSimplificadoDTO>?> Listar(int idBaixa)
     {

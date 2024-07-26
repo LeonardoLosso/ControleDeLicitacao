@@ -92,6 +92,14 @@ public class BaixaService
     public async Task AlterarStatus(BaixaDTO dto)
     {
         //VALIDAR EMPENHOS ATIVOS
+
+        var possuiEmpenhoAtivo = await _baixaRepository
+            .BuscarEmpenho()
+            .Where(w => w.BaixaID == dto.ID && w.Status == 1)
+            .AnyAsync();
+        if (possuiEmpenhoAtivo)
+            throw new GenericException("O Documento possui Empenhos ativos!", 501);
+
         var baixa = _mapper.Map<BaixaLicitacao>(dto);
 
         if(baixa is not null)

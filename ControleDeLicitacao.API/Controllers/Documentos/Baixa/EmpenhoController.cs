@@ -28,6 +28,14 @@ public class EmpenhoController : BaseController
         return Ok(dto);
     }
 
+    [HttpGet("existe/{id}")]
+    public async Task<IActionResult> VerificaExistencia(int id)
+    {
+        var possui = await _service.PossuiEmpenho(id);
+
+        return Ok(possui);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> Listar(int id)
     {
