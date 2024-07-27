@@ -9,7 +9,8 @@ C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.
 C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.AssemblyInfoInputs.cache
 C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.AssemblyInfo.cs
 C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.csproj.CoreCompileInputs.cache
-C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.csproj.CopyComplete
+C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.sourcelink.json
+C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\Controle.89E4E99A.Up2Date
 C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.dll
 C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\refint\ControleDeLicitacao.Infrastructure.dll
 C:\GitHub\ControleDeLicitacao\ControleDeLicitacao.Infrastructure\obj\Debug\net6.0\ControleDeLicitacao.Infrastructure.pdb
