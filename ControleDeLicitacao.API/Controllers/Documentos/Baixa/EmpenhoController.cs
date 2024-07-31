@@ -42,6 +42,12 @@ public class EmpenhoController : BaseController
         var lista = await _service.Listar(id);
         return Ok(lista);
     }
+    [HttpGet("itens/{id}")]
+    public async Task<IActionResult> ListarItens(int id)
+    {
+        var lista = await _service.ListarItens(id);
+        return Ok(lista);
+    }
 
     [HttpPost]
     public async Task<IActionResult> Novo([FromBody] BaixaDTO dto)

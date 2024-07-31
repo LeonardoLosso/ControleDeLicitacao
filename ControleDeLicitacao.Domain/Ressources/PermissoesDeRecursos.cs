@@ -83,9 +83,9 @@ public static class PermissoesDeRecursos
 
             //---------------------------[Notas]---------------------------
             , new Recurso(id: 501, moduloId: 5, nome: "Visualizar")
-            , new Recurso(id: 501, moduloId: 5, nome: "Visualizar")
-            , new Recurso(id: 501, moduloId: 5, nome: "Visualizar")
-            , new Recurso(id: 501, moduloId: 5, nome: "Visualizar")
+            , new Recurso(id: 502, moduloId: 5, nome: "Nova Nota")
+            , new Recurso(id: 503, moduloId: 5, nome: "Editar Nota")
+            , new Recurso(id: 504, moduloId: 5, nome: "Excluir Nota")
             //-------------------------------------------------------------
 
             //--------------------------[Usuarios]-------------------------

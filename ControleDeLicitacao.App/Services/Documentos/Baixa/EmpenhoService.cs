@@ -64,6 +64,28 @@ public class EmpenhoService
         return lista;
     }
 
+    public async Task<List<ItemDeEmpenhoDTO>?> ListarItens(int id)
+    {
+        var empenho = await _baixaRepository.BuscarEmpenhoPorID(id);
+
+        if (empenho is null) return null;
+
+        var lista = new List<ItemDeEmpenhoDTO>();
+
+        foreach (var item in empenho.Itens)
+        {
+            var dto = _mapper.Map<ItemDeEmpenhoDTO>(item);
+
+            if (empenho is not null)
+            {
+                lista.Add(dto);
+            }
+        }
+
+        return lista;
+    }
+
+
     public async Task<EmpenhoSimplificadoDTO> Adicionar(BaixaDTO dto)
     {
         Empenho empenho = new Empenho()
@@ -109,8 +131,8 @@ public class EmpenhoService
             if (empenho.Itens.Any())
             {
                 var entregue = empenho.Itens.Sum(x => x.ValorEntregue);
-                
-                empenho.Valor = empenho.Status == 2? entregue : empenho.Valor;
+
+                empenho.Valor = empenho.Status == 2 ? entregue : empenho.Valor;
                 empenho.Saldo = empenho.Valor - entregue;
             }
             await _baixaRepository.EditarEmpenho(empenho);
