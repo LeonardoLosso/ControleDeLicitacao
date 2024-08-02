@@ -74,6 +74,7 @@ public static class Registradores
         services.AddScoped<AtaService>();
         services.AddScoped<BaixaService>();
         services.AddScoped<EmpenhoService>();
+        services.AddScoped<NotaService>();
 
         return services;
     }

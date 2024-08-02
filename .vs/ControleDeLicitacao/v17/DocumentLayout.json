@@ -3,20 +3,52 @@
   "WorkspaceRootPath": "C:\\GitHub\\ControleDeLicitacao\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\services\\documentos\\baixa\\empenhoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\services\\documentos\\baixa\\empenhoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72B037A4-50F5-4204-B65E-441331B75C59}|ControleDeLicitacao.API\\ControleDeLicitacao.API.csproj|c:\\github\\controledelicitacao\\controledelicitacao.api\\controllers\\documentos\\baixa\\notacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72B037A4-50F5-4204-B65E-441331B75C59}|ControleDeLicitacao.API\\ControleDeLicitacao.API.csproj|solutionrelative:controledelicitacao.api\\controllers\\documentos\\baixa\\notacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\services\\documentos\\baixa\\notaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\services\\documentos\\baixa\\notaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D7D4E4FB-00EA-4004-BE7A-5C0299868255}|ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj|c:\\github\\controledelicitacao\\controledelicitacao.infrastructure\\persistence\\repositories\\baixarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D7D4E4FB-00EA-4004-BE7A-5C0299868255}|ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj|solutionrelative:controledelicitacao.infrastructure\\persistence\\repositories\\baixarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|c:\\github\\controledelicitacao\\controledelicitacao.domain\\ressources\\permissoesderecursos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|solutionrelative:controledelicitacao.domain\\ressources\\permissoesderecursos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\mappings\\baixamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\mappings\\baixamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\services\\documentos\\baixa\\empenhoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\services\\documentos\\baixa\\empenhoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72B037A4-50F5-4204-B65E-441331B75C59}|ControleDeLicitacao.API\\ControleDeLicitacao.API.csproj|c:\\github\\controledelicitacao\\controledelicitacao.api\\controllers\\documentos\\baixa\\empenhocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72B037A4-50F5-4204-B65E-441331B75C59}|ControleDeLicitacao.API\\ControleDeLicitacao.API.csproj|solutionrelative:controledelicitacao.api\\controllers\\documentos\\baixa\\empenhocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|c:\\github\\controledelicitacao\\controledelicitacao.domain\\ressources\\permissoesderecursos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|solutionrelative:controledelicitacao.domain\\ressources\\permissoesderecursos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|c:\\github\\controledelicitacao\\controledelicitacao.domain\\entities\\documentos\\baixa\\notasempenho\\itemdenota.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|solutionrelative:controledelicitacao.domain\\entities\\documentos\\baixa\\notasempenho\\itemdenota.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\dtos\\baixa\\notasempenhos\\notasimplificadadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\dtos\\baixa\\notasempenhos\\notasimplificadadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\dtos\\baixa\\notasempenhos\\notadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\dtos\\baixa\\notasempenhos\\notadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|c:\\github\\controledelicitacao\\controledelicitacao.app\\dtos\\baixa\\notasempenhos\\itemdenotadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60E994D2-695D-4959-A765-F47B1174A0B3}|ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj|solutionrelative:controledelicitacao.app\\dtos\\baixa\\notasempenhos\\itemdenotadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|c:\\github\\controledelicitacao\\controledelicitacao.domain\\entities\\documentos\\baixa\\notasempenho\\nota.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73058537-CFD9-4C2D-9736-8BB2E3D84519}|ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj|solutionrelative:controledelicitacao.domain\\entities\\documentos\\baixa\\notasempenho\\nota.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,54 +66,165 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BaixaRepository.cs",
-              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
-              "RelativeDocumentMoniker": "ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
-              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
-              "RelativeToolTip": "ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
-              "ViewState": "AQIAAEgAAAAAAAAAAAAiwHYAAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T22:55:27.085Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EmpenhoService.cs",
-              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
-              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
-              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
-              "RelativeToolTip": "ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
-              "ViewState": "AQIAADgAAAAAAAAAAAAgwFQAAAAVAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T22:42:00.562Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "EmpenhoController.cs",
-              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
-              "RelativeDocumentMoniker": "ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
-              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
-              "RelativeToolTip": "ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
-              "ViewState": "AQIAABUAAAAAAAAAAAAowC8AAAAzAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T22:36:40.665Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "PermissoesDeRecursos.cs",
               "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\Ressources\\PermissoesDeRecursos.cs",
               "RelativeDocumentMoniker": "ControleDeLicitacao.Domain\\Ressources\\PermissoesDeRecursos.cs",
               "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\Ressources\\PermissoesDeRecursos.cs",
               "RelativeToolTip": "ControleDeLicitacao.Domain\\Ressources\\PermissoesDeRecursos.cs",
-              "ViewState": "AQIAABQAAAAAAAAAAAAAwFIAAAAAAAAA",
+              "ViewState": "AQIAADkAAAAAAAAAAAAkwFAAAABJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T16:14:32.544Z",
+              "WhenOpened": "2024-08-01T18:04:13.306Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "NotaController.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\NotaController.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\NotaController.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\NotaController.cs",
+              "RelativeToolTip": "ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\NotaController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACIAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T17:59:51.42Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NotaService.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\NotaService.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\NotaService.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\NotaService.cs",
+              "RelativeToolTip": "ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\NotaService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADUAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T17:41:12.12Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BaixaMapping.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Mappings\\BaixaMapping.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\Mappings\\BaixaMapping.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Mappings\\BaixaMapping.cs",
+              "RelativeToolTip": "ControleDeLicitacao.App\\Mappings\\BaixaMapping.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACgAAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T17:33:50.011Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "NotaDTO.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaDTO.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaDTO.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaDTO.cs",
+              "RelativeToolTip": "ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T16:51:52.778Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ItemDeNota.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\ItemDeNota.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\ItemDeNota.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\ItemDeNota.cs",
+              "RelativeToolTip": "ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\ItemDeNota.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB0AAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T16:50:41.081Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ItemDeNotaDTO.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\ItemDeNotaDTO.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\ItemDeNotaDTO.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\ItemDeNotaDTO.cs",
+              "RelativeToolTip": "ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\ItemDeNotaDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T16:50:00.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "NotaSimplificadaDTO.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaSimplificadaDTO.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaSimplificadaDTO.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaSimplificadaDTO.cs",
+              "RelativeToolTip": "ControleDeLicitacao.App\\DTOs\\Baixa\\NotasEmpenhos\\NotaSimplificadaDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T16:48:08.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Nota.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\Nota.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\Nota.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\Nota.cs",
+              "RelativeToolTip": "ControleDeLicitacao.Domain\\Entities\\Documentos\\Baixa\\NotasEmpenho\\Nota.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAUAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T16:33:10.562Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BaixaRepository.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
+              "RelativeToolTip": "ControleDeLicitacao.Infrastructure\\Persistence\\Repositories\\BaixaRepository.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAUwG4AAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T18:12:11.268Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmpenhoService.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
+              "RelativeToolTip": "ControleDeLicitacao.App\\Services\\Documentos\\Baixa\\EmpenhoService.cs",
+              "ViewState": "AQIAAEYAAAAAAAAAAAAcwCMAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T17:40:59.298Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EmpenhoController.cs",
+              "DocumentMoniker": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
+              "RelativeDocumentMoniker": "ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
+              "ToolTip": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
+              "RelativeToolTip": "ControleDeLicitacao.API\\Controllers\\Documentos\\Baixa\\EmpenhoController.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAAAwwDkAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T18:00:01.756Z",
               "EditorCaption": ""
             }
           ]

@@ -69,10 +69,12 @@ public class EmpenhoService
         var empenho = await _baixaRepository.BuscarEmpenhoPorID(id);
 
         if (empenho is null) return null;
+        
+        var itens = empenho.Itens.Where(i => i.QtdeAEntregar > 0).ToList();
 
         var lista = new List<ItemDeEmpenhoDTO>();
 
-        foreach (var item in empenho.Itens)
+        foreach (var item in itens)
         {
             var dto = _mapper.Map<ItemDeEmpenhoDTO>(item);
 

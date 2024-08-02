@@ -1,4 +1,5 @@
 ﻿using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
+using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +8,11 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 public class BaixaRepository : Repository<BaixaLicitacao>
 {
     private readonly BaixaContext _context;
-    private readonly DbSet<Empenho> _dbSetEmpenho;
     private readonly DbSet<ItemDeBaixa> _dbSetItens;
+
+    private readonly DbSet<Empenho> _dbSetEmpenho;
+
+    private readonly DbSet<Nota> _dbSetNota;
 
     public BaixaRepository(BaixaContext context) : base(context)
     {
@@ -97,7 +101,16 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetEmpenho.Add(entity);
         await _context.SaveChangesAsync();
     }
+    public async Task AdicionarNota(Nota entity)
+    {
+        _dbSetNota.Add(entity);
+        await _context.SaveChangesAsync();
 
+        if(entity.Itens.Count > 0)
+        {
+            //await AtualizarEmpenho();
+        }
+    }
     public async Task ExcluirEmpenho(Empenho entity)
     {
         _dbSetEmpenho.Remove(entity);
@@ -106,6 +119,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public IQueryable<Empenho> BuscarEmpenho()
     {
         return _dbSetEmpenho.AsQueryable();
+    }
+    public IQueryable<Nota> BuscarNota()
+    {
+        return _dbSetNota.AsQueryable();
     }
     public IQueryable<ItemDeBaixa> BuscarItens()
     {
@@ -119,7 +136,14 @@ public class BaixaRepository : Repository<BaixaLicitacao>
                 .AsNoTracking()
             .FirstOrDefaultAsync(e => e.ID == id);
     }
-
+    public async Task<Nota?> BuscarNotaPorID(int id)
+    {
+        return await _dbSetNota
+            .AsNoTracking()
+            .Include(i => i.Itens)
+                .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.ID == id);
+    }
     public async Task EditarEmpenho(Empenho updatedEmpenho)
     {
         var inativo = updatedEmpenho.Status == 2;
@@ -149,7 +173,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             }
             else
             {
-                if(inativo)
+                if (inativo)
                 {
                     updatedItem.QtdeEmpenhada = updatedItem.QtdeEntregue;
                     updatedItem.QtdeAEntregar = 0;
@@ -172,7 +196,6 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         await AtualizarBaixa(updatedEmpenho.BaixaID);
     }
-
     public async Task AtualizarBaixa(int id)
     {
         var baixa = await ObterBaixaCompletaPorID(id);
@@ -212,7 +235,6 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _context.Update(baixa);
         _context.SaveChanges();
     }
-
     public async Task<List<Empenho>> ObterEmpenhosPorBaixa(int id)
     {
         return await BuscarEmpenho()
@@ -221,31 +243,4 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             .ToListAsync();
     }
 
-    //public async Task AtualizarEmpenho(BaixaLicitacao baixa)
-    //{
-    //    var empenhos = await ObterEmpenhosPorBaixa(baixa.ID);
-
-    //    if (empenhos is null) return;
-
-    //    foreach (var empenho in empenhos)
-    //    {
-    //        empenho.OrgaoID = baixa.OrgaoID;
-            
-    //        foreach(var item in empenho.Itens)
-    //        {
-    //            var itemBaixa = baixa.Itens
-    //                .FirstOrDefault(x =>
-    //                x.BaixaID == item.BaixaID &&
-    //                x.ID == item.ID);
-
-    //            if(itemBaixa is not null)
-    //            {
-    //                item.ValorUnitario = itemBaixa.ValorUnitario;
-    //            }
-    //        }
-    //    }
-
-    //    _dbSetEmpenho.UpdateRange(empenhos);
-    //    await _context.SaveChangesAsync();
-    //}
 }

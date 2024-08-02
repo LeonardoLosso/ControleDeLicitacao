@@ -13,7 +13,10 @@ public class Empenho
     [Required]
     [MaxLength(10)]
     public string Edital { get; set; }
-    
+
+    [MaxLength(10)]
+    public string NumEmpenho { get; set; }
+
     [Required]
     public int Unidade { get; set; }
 

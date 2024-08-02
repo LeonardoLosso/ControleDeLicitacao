@@ -42,6 +42,7 @@ public class EmpenhoController : BaseController
         var lista = await _service.Listar(id);
         return Ok(lista);
     }
+
     [HttpGet("itens/{id}")]
     public async Task<IActionResult> ListarItens(int id)
     {

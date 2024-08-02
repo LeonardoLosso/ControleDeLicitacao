@@ -21,7 +21,7 @@ public class EntidadeService
 
     }
 
-    public async Task <EntidadeDTO> Adicionar(EntidadeDTO dto)
+    public async Task <EntidadeDTO?> Adicionar(EntidadeDTO dto)
     {
 
         await ValidarNovoCadastro(dto);

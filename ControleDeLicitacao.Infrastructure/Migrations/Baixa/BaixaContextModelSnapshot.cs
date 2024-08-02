@@ -74,6 +74,11 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<string>("NumEmpenho")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<int>("OrgaoID")
                         .HasColumnType("int");
 
@@ -185,6 +190,79 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.ToTable("ItemDeEmpenho");
                 });
 
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho.ItemDeNota", b =>
+                {
+                    b.Property<int>("NotaID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpenhoID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantidade")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Unidade")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<double>("ValorTotal")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
+
+                    b.HasKey("NotaID", "ID");
+
+                    b.ToTable("ItemDeNota");
+                });
+
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho.Nota", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int>("BaixaID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DataEmissao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataEntrega")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Edital")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("EmpenhoID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NumEmpenho")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("NumNota")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("Unidade")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Nota");
+                });
+
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.ItemDeBaixa", b =>
                 {
                     b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", "Baixa")
@@ -207,12 +285,28 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.Navigation("Empenho");
                 });
 
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho.ItemDeNota", b =>
+                {
+                    b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho.Nota", "Nota")
+                        .WithMany("Itens")
+                        .HasForeignKey("NotaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Nota");
+                });
+
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", b =>
                 {
                     b.Navigation("Itens");
                 });
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.Empenho", b =>
+                {
+                    b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho.Nota", b =>
                 {
                     b.Navigation("Itens");
                 });

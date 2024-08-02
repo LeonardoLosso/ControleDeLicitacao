@@ -7,6 +7,7 @@ public class EmpenhoDTO
     public int ID { get; set; }
     public int BaixaID { get; set; }
     public string Edital { get; set; }
+    public string NumEmpenho { get; set; }
     public int Unidade { get; set; }
     public int Orgao { get; set; }
     public int Status { get; set; }
