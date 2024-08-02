@@ -6,8 +6,8 @@ public class EmpenhoSimplificadoDTO
     public int BaixaID { get; set; }
     public string Edital { get; set; }
     public string NumEmpenho { get; set; }
-    public int Unidade { get; set; }
-    public int Orgao { get; set; }
+    public string Unidade { get; set; }
+    public string Orgao { get; set; }
     public int Status { get; set; }
     public DateTime? DataEmpenho { get; set; }
     public double Saldo { get; set; }

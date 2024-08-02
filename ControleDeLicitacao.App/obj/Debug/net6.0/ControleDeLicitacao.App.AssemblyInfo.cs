@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControleDeLicitacao.App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46117df80ce6e47516bcfbcdc1ec555600f3cca3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c476075588d0370518b2057c630405711ec30572")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControleDeLicitacao.App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControleDeLicitacao.App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

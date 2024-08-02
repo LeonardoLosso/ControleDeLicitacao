@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Error;
+using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,14 @@ public class EmpenhoService
 {
     private readonly IMapper _mapper;
     private readonly BaixaRepository _baixaRepository;
+    private readonly EntidadeService _entidadeService;
 
-    public EmpenhoService(IMapper mapper, BaixaRepository baixaRepository)
+
+    public EmpenhoService(IMapper mapper, BaixaRepository baixaRepository, EntidadeService entidadeService)
     {
         _mapper = mapper;
         _baixaRepository = baixaRepository;
+        _entidadeService = entidadeService;
     }
 
     public async Task<EmpenhoDTO?> ObterPorID(int id)
@@ -57,6 +61,12 @@ public class EmpenhoService
 
             if (empenho is not null)
             {
+                if (item.OrgaoID != 0)
+                    empenho.Orgao = $"{item.OrgaoID} - {_entidadeService.ObterNome(item.OrgaoID)}";
+
+                if (item.Unidade != 0)
+                    empenho.Unidade = $"{item.Unidade} - {_entidadeService.ObterNome(item.Unidade)}";
+
                 lista.Add(empenho);
             }
         }
@@ -69,7 +79,7 @@ public class EmpenhoService
         var empenho = await _baixaRepository.BuscarEmpenhoPorID(id);
 
         if (empenho is null) return null;
-        
+
         var itens = empenho.Itens.Where(i => i.QtdeAEntregar > 0).ToList();
 
         var lista = new List<ItemDeEmpenhoDTO>();

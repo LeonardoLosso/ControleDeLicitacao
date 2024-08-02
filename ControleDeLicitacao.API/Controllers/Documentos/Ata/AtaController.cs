@@ -128,7 +128,7 @@ public class AtaController : BaseController
         await base.ValidaRecurso(307);
 
         await _service.ExcluirReajuste(reajusteId);
-        return Ok(reajusteId);
+        return await RetornaDelete(reajusteId);
     }
     //METODO LOG DELETE
     [HttpPost("reajuste")]

@@ -37,6 +37,12 @@ public abstract class BaseController : ControllerBase
 
         return Ok(entidade);
     }
+    protected async Task<IActionResult> RetornaDelete<T>(T id)
+    {
+        _logInfoService.SetOperacao(id.ToString());
+
+        return Ok(id);
+    }
 
     protected async Task<bool> ValidaRecurso(int recurso)
     {

@@ -90,7 +90,8 @@ public class LogMiddleware
     {
         return !(method.Equals(HttpMethods.Put)
             || method.Equals(HttpMethods.Post)
-            || method.Equals(HttpMethods.Patch));
+            || method.Equals(HttpMethods.Patch)
+            || method.Equals(HttpMethods.Delete));
     }
 
     private async Task<string> ReadRequestBody(HttpRequest request)

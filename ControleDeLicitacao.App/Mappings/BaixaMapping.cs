@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
+using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 
@@ -8,8 +9,10 @@ namespace ControleDeLicitacao.App.Mappings;
 
 public class BaixaMapping : Profile
 {
+
     public BaixaMapping()
     {
+
         CreateMap<BaixaLicitacao, BaixaDTO>()
             .ForMember(dest => dest.Empresa, opt => opt.MapFrom(src => src.EmpresaID))
             .ForMember(dest => dest.Orgao, opt => opt.MapFrom(src => src.OrgaoID))
@@ -28,7 +31,8 @@ public class BaixaMapping : Profile
         CreateMap<ItemDeEmpenho, ItemDeEmpenhoDTO>().ReverseMap();
 
         CreateMap<Empenho, EmpenhoSimplificadoDTO>()
-            .ForMember(dest => dest.Orgao, opt => opt.MapFrom(src => src.OrgaoID));
+            .ForMember(dest => dest.Orgao, opt => opt.Ignore())
+            .ForMember(dest => dest.Unidade, opt => opt.Ignore());
 
         //--------------------------------------------------------------------------------
 
@@ -39,6 +43,7 @@ public class BaixaMapping : Profile
         CreateMap<ItemDeNota, ItemDeNotaDTO>().ReverseMap();
 
         CreateMap<Nota, NotaSimplificadaDTO>()
-            .ForMember(dest => dest.ValorEntregue, opt => opt.MapFrom(src => src.Itens.Sum(i => i.ValorTotal)));
+            .ForMember(dest => dest.ValorEntregue, opt => opt.MapFrom(src => src.Itens.Sum(i => i.ValorTotal)))
+            .ForMember(dest => dest.Unidade, opt => opt.Ignore());
     }
 }

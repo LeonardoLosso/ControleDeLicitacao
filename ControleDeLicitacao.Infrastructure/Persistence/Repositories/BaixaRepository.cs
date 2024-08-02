@@ -17,8 +17,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public BaixaRepository(BaixaContext context) : base(context)
     {
         _context = context;
-        _dbSetEmpenho = _context.Set<Empenho>();
         _dbSetItens = _context.Set<ItemDeBaixa>();
+
+        _dbSetEmpenho = _context.Set<Empenho>();
+        _dbSetNota = _context.Set<Nota>();
     }
 
     public async Task<BaixaLicitacao?> ObterBaixaCompletaPorID(int id)
@@ -30,26 +32,25 @@ public class BaixaRepository : Repository<BaixaLicitacao>
                 .AsNoTracking()
             .FirstOrDefaultAsync();
     }
-
     public override async Task Adicionar(BaixaLicitacao entity)
     {
 
-        using (var transaction = _context.Database.BeginTransaction())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
-                _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [BaixaLicitacao] ON");
+                await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [BaixaLicitacao] ON");
 
-                _context.BaixaLicitacao.Add(entity);
-                _context.SaveChanges();
+                await _context.BaixaLicitacao.AddAsync(entity);
+                await _context.SaveChangesAsync();
 
-                _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [BaixaLicitacao] OFF");
+                await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [BaixaLicitacao] OFF");
 
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 throw;
             }
         }
@@ -106,15 +107,22 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetNota.Add(entity);
         await _context.SaveChangesAsync();
 
-        if(entity.Itens.Count > 0)
+        if (entity.Itens.Count > 0)
         {
-            //await AtualizarEmpenho();
+            await AtualizarEmpenho(entity.EmpenhoID);
         }
     }
     public async Task ExcluirEmpenho(Empenho entity)
     {
         _dbSetEmpenho.Remove(entity);
         await _context.SaveChangesAsync();
+    }
+    public async Task ExcluirNota(Nota entity)
+    {
+        _dbSetNota.Remove(entity);
+        await _context.SaveChangesAsync();
+
+        await AtualizarEmpenho(entity.EmpenhoID);
     }
     public IQueryable<Empenho> BuscarEmpenho()
     {
@@ -196,7 +204,59 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         await AtualizarBaixa(updatedEmpenho.BaixaID);
     }
-    public async Task AtualizarBaixa(int id)
+    public async Task EditarNota(Nota updatedNota)
+    {
+        var existingNota = await _dbSetNota
+            .Include(a => a.Itens)
+            .FirstOrDefaultAsync(a => a.ID == updatedNota.ID);
+
+        if (existingNota is null)
+        {
+            throw new InvalidOperationException("Nota not found.");
+        }
+
+        _context.Entry(existingNota).CurrentValues.SetValues(updatedNota);
+
+        foreach (var existingItem in existingNota.Itens.ToList())
+        {
+            var updatedItem = updatedNota.Itens
+                                        .FirstOrDefault(
+                                            i => i.NotaID == existingItem.NotaID
+                                            && i.ID == existingItem.ID
+                                            && i.ValorUnitario == existingItem.ValorUnitario);
+
+            if (updatedItem is null)
+                _context.ItemDeNota.Remove(existingItem);
+            else
+                _context.Entry(existingItem).CurrentValues.SetValues(updatedItem);
+        }
+
+        foreach (var newItem in updatedNota.Itens)
+        {
+            if (!existingNota.Itens
+                .Any(i => i.NotaID == newItem.NotaID && i.ID == newItem.ID && i.ValorUnitario == i.ValorUnitario))
+            {
+                existingNota.Itens.Add(newItem);
+            }
+        }
+
+        await _context.SaveChangesAsync();
+
+        if (updatedNota.Itens.Count > 0)
+        {
+            await AtualizarEmpenho(updatedNota.EmpenhoID);
+        }
+    }
+
+    //---------------------[PRIVATE]--------------------------
+    private async Task<List<Empenho>> ObterEmpenhosPorBaixa(int id)
+    {
+        return await BuscarEmpenho()
+            .Where(e => e.BaixaID == id)
+            .Include(i => i.Itens)
+            .ToListAsync();
+    }
+    private async Task AtualizarBaixa(int id)
     {
         var baixa = await ObterBaixaCompletaPorID(id);
 
@@ -220,11 +280,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
                     x.ValorUnitario == item.ValorUnitario &&
                     x.ItemDeBaixa == true);
 
-                if (itemEmpenho is not null)
-                {
-                    valorEntregue += itemEmpenho.ValorEntregue;
-                    qtdeEmpenhada += itemEmpenho.QtdeEmpenhada;
-                }
+                if (itemEmpenho is null) continue;
+
+                valorEntregue += itemEmpenho.ValorEntregue;
+                qtdeEmpenhada += itemEmpenho.QtdeEmpenhada;
             }
             item.QtdeEmpenhada = qtdeEmpenhada;
             item.ValorEmpenhado = qtdeEmpenhada * item.ValorUnitario;
@@ -233,14 +292,42 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         }
 
         _context.Update(baixa);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
-    public async Task<List<Empenho>> ObterEmpenhosPorBaixa(int id)
+    private async Task AtualizarEmpenho(int empenhoID)
     {
-        return await BuscarEmpenho()
-            .Where(e => e.BaixaID == id)
-            .Include(i => i.Itens)
-            .ToListAsync();
-    }
+        var empenho = await BuscarEmpenhoPorID(empenhoID);
 
+        if (empenho is null) return;
+
+        var notas = await BuscarNota().Where(n => n.EmpenhoID == empenhoID).ToListAsync();
+
+        if (!notas.Any()) return;
+
+        foreach (var item in empenho.Itens)
+        {
+            double quantidade = 0;
+
+            foreach (var nota in notas)
+            {
+                var itemNota = nota.Itens
+                    .FirstOrDefault(
+                        x => x.ID == item.ID &&
+                        x.ValorUnitario == item.ValorUnitario);
+
+                if (itemNota is null) continue;
+
+                quantidade += itemNota.Quantidade;
+            }
+
+            item.QtdeEntregue = quantidade;
+            item.QtdeAEntregar = item.QtdeEmpenhada - item.QtdeEntregue;
+            item.ValorEntregue = item.QtdeEntregue * item.ValorUnitario;
+        }
+
+        empenho.Saldo = empenho.Valor - empenho.Itens.Sum(i => i.ValorEntregue);
+
+        _context.Update(empenho);
+        await _context.SaveChangesAsync();
+    }
 }

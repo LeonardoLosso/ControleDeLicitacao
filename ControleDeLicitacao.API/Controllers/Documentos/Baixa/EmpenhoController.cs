@@ -61,12 +61,12 @@ public class EmpenhoController : BaseController
     }
 
     [HttpDelete]
-    public async Task<IActionResult> ExcluirReajuste([FromQuery] int id)
+    public async Task<IActionResult> Excluir([FromQuery] int id)
     {
         await base.ValidaRecurso(403);
 
         await _service.Excluir(id);
-        return Ok(id);
+        return await RetornaDelete(id);
     }
 
     [HttpPatch("{id}")]
