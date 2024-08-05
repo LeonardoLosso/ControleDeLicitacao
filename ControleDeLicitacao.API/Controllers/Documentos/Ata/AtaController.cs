@@ -54,6 +54,18 @@ public class AtaController : BaseController
         return await RetornaEdicao(patchDoc);
     }
 
+    [HttpPost("upload")]
+    public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("Nenhum arquivo enviado.");
+        }
+
+        //await _service.Upload(file);
+
+        return Ok("Arquivo enviado com sucesso!");
+    }
 
     [HttpPatch("status/{id}")]
     public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<AtaDTO> patchDoc)
@@ -107,7 +119,7 @@ public class AtaController : BaseController
         await base.ValidaRecurso(301);
 
         var lista = await _service.Listar(
-            pagina, tipo, status, unidade, dataInicial, 
+            pagina, tipo, status, unidade, dataInicial,
             dataFinal, dataAtaInicial, dataAtaFinal, search);
 
         return Ok(lista);
@@ -123,7 +135,7 @@ public class AtaController : BaseController
     }
 
     [HttpDelete("reajuste")]
-    public async Task<IActionResult> ExcluirReajuste([FromQuery]int ataId, int reajusteId)
+    public async Task<IActionResult> ExcluirReajuste([FromQuery] int ataId, int reajusteId)
     {
         await base.ValidaRecurso(307);
 

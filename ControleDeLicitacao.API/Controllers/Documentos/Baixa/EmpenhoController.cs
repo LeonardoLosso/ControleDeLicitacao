@@ -113,7 +113,7 @@ public class EmpenhoController : BaseController
             return BadRequest(ex.Message);
         }
 
-        await _service.Editar(dto);
+        await _service.Editar(dto, true);
 
         return await RetornaEdicao(patchDoc);
     }

@@ -114,7 +114,9 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     }
     public async Task ExcluirEmpenho(Empenho entity)
     {
+        var baixaID = entity.BaixaID;
         _dbSetEmpenho.Remove(entity);
+        await AtualizarBaixa(baixaID);
         await _context.SaveChangesAsync();
     }
     public async Task ExcluirNota(Nota entity)
@@ -242,10 +244,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         await _context.SaveChangesAsync();
 
-        if (updatedNota.Itens.Count > 0)
-        {
-            await AtualizarEmpenho(updatedNota.EmpenhoID);
-        }
+        await AtualizarEmpenho(updatedNota.EmpenhoID);
     }
 
     //---------------------[PRIVATE]--------------------------

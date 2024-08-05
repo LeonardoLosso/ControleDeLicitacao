@@ -25,10 +25,7 @@ public class AtaService
 
     public async Task<AtaDTO> Adicionar(AtaDTO dto)
     {
-
-        //await ValidarNovoCadastro(dto);
-
-        //TrataStrings(dto);
+        AgruparItens(dto);
 
         var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
 
@@ -36,6 +33,7 @@ public class AtaService
 
         return _mapper.Map<AtaDTO>(ataLicitacao);
     }
+
     public async Task<ReajusteDTO> AdicionarReajuste(ReajusteDTO dto)
     {
         if (dto.Itens.Count == 0) throw new GenericException("Adicione itens antes de criar historico", 512);
@@ -57,8 +55,8 @@ public class AtaService
     }
     public async Task Editar(AtaDTO dto, bool validaStatus = true)
     {
-        //VALIDAR EDIÇÃO DOCUMENTOS SUBSEQUENTES (EMPENHO)
-        //AO NOVO E EDITAR AGRUPAR REPETIDOS
+        dto.Itens = AgruparItens(dto);
+
         if (validaStatus)
         {
             ValidarInativo(dto.Status);
@@ -70,7 +68,10 @@ public class AtaService
 
         await _ataRepository.Editar(ataLicitacao);
     }
+    //public async Task Upload(IFormFile file)
+    //{
 
+    //}
     public async Task ExcluirReajuste(int id)
     {
         var reajuste = await _ataRepository
@@ -200,5 +201,26 @@ public class AtaService
     private void ValidarInativo(int status)
     {
         if (status == 2) throw new GenericException("Não é possivel editar um documento inativo", 501);
+    }
+    private List<ItemDeAtaDTO> AgruparItens(AtaDTO dto)
+    {
+        var itens = dto.Itens;
+
+        var groupedItens = itens
+            .GroupBy(i => i.ID)
+            .Select(g => new ItemDeAtaDTO
+            {
+                ID = g.Key,
+                AtaID = g.First().AtaID,
+                Nome = g.First().Nome,
+                Unidade = g.First().Unidade,
+                Quantidade = g.Sum(i => i.Quantidade),
+                ValorUnitario = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario,
+                ValorTotal = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario * g.Sum(i => i.Quantidade),
+                Desconto = g.OrderBy(i => i.ValorUnitario).First().Desconto
+            })
+            .ToList();
+
+        return groupedItens;
     }
 }

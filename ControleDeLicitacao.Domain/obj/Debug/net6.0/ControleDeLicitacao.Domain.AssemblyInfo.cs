@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControleDeLicitacao.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46117df80ce6e47516bcfbcdc1ec555600f3cca3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4974aafe65014db2d832acbc3906562ee7f3d6d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControleDeLicitacao.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControleDeLicitacao.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

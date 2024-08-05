@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
@@ -100,9 +101,11 @@ public class EmpenhoService
 
     public async Task<EmpenhoSimplificadoDTO> Adicionar(BaixaDTO dto)
     {
+        ValidarAdicao(dto);
         Empenho empenho = new Empenho()
         {
             ID = 0,
+            NumEmpenho = "",
             Status = dto.Status,
             BaixaID = dto.ID,
             DataEmpenho = DateTime.Now,
@@ -131,11 +134,16 @@ public class EmpenhoService
 
         if (empenho is null) throw new GenericException("Não foi possivel excluir", 501);
 
+        await ValidarEmpenhoParaExclusao(empenho);
+
         await _baixaRepository.ExcluirEmpenho(empenho);
     }
 
-    public async Task Editar(EmpenhoDTO dto)
+    public async Task Editar(EmpenhoDTO dto, bool status = false)
     {
+        dto.Itens = AgruparItens(dto);
+        await ValidaEdicao(dto, status);
+
         var empenho = _mapper.Map<Empenho>(dto);
 
         if (empenho is not null)
@@ -151,4 +159,86 @@ public class EmpenhoService
         }
     }
 
+    private async Task ValidaEdicao(EmpenhoDTO dto, bool status)
+    {
+        if (!status)
+        {
+            if (dto.Status == 2)
+                throw new GenericException("Não é possivel editar um empenho encerrado", 501);
+        }
+        else
+        {
+            if (dto.Status == 2)
+            {
+                var baixaInativa = await _baixaRepository
+                .Buscar()
+                .AsNoTracking()
+                .Where(
+                    b => b.ID == dto.BaixaID &&
+                    b.Status == 2
+                ).AnyAsync();
+
+                if (baixaInativa)
+                    throw new GenericException("Não é possivel abrir empenho. Baixa inativa", 501);
+            }
+        }
+    }
+
+    private async Task ValidarEmpenhoParaExclusao(Empenho empenho)
+    {
+        if (empenho.Status == 2)
+            throw new GenericException("Não é possivel excluir um empenho encerrado", 501);
+
+        var possuiNota = await _baixaRepository
+            .BuscarNota()
+            .AsNoTracking()
+            .Where(n => n.EmpenhoID == empenho.ID)
+            .AnyAsync();
+
+        if (possuiNota)
+            throw new GenericException("Não é possivel excluir um empenho que possua nota", 501);
+
+        var baixaInativa = await _baixaRepository
+            .Buscar()
+            .AsNoTracking()
+            .Where(
+                b => b.ID == empenho.BaixaID &&
+                b.Status == 2
+            ).AnyAsync();
+
+        if (baixaInativa)
+            throw new GenericException("Não é possivel excluir. Baixa inativa", 501);
+    }
+
+    private void ValidarAdicao(BaixaDTO dto)
+    {
+        if (dto.Status == 2)
+            throw new GenericException("Baixa está inativa", 501);
+    }
+
+    private List<ItemDeEmpenhoDTO> AgruparItens(EmpenhoDTO dto)
+    {
+        var itens = dto.Itens;
+
+        var groupedItens = itens
+            .GroupBy(i => i.ID)
+            .Select(g => new ItemDeEmpenhoDTO
+            {
+                ID = g.Key,
+                BaixaID = g.First().BaixaID,
+                EmpenhoID = g.First().EmpenhoID,
+                ItemDeBaixa = g.First().ItemDeBaixa,
+                QtdeAEntregar = g.First().QtdeAEntregar,
+                QtdeEmpenhada = g.First().QtdeEmpenhada,
+                QtdeEntregue = g.First().QtdeAEntregar,
+                Total = g.First().Total,
+                ValorEntregue = g.First().ValorEntregue,
+                ValorUnitario = g.First().ValorUnitario,
+                Nome = g.First().Nome,
+                Unidade = g.First().Unidade
+            })
+            .ToList();
+
+        return groupedItens;
+    }
 }

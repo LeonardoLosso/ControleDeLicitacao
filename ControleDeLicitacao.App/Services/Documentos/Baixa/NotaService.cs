@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
@@ -62,7 +63,10 @@ public class NotaService
     }
     public async Task<NotaDTO?> Adicionar(NotaDTO dto)
     {
-        //VALIDAR EMPENHO INATIVO (EDITAR ALSO)
+        dto.Itens = AgruparItens(dto);
+
+        await ValidarEmpenhoInativo(dto.EmpenhoID);
+
         var nota = _mapper.Map<Nota>(dto);
 
         if (nota is null) return null;
@@ -73,7 +77,9 @@ public class NotaService
     }
     public async Task Editar(NotaDTO dto)
     {
-        //VALIDAR EMPENHO INATIVO (EDITAR ALSO)
+        dto.Itens = AgruparItens(dto);
+        await ValidarEmpenhoInativo(dto.EmpenhoID);
+
         var nota = _mapper.Map<Nota>(dto);
 
         if (nota is not null)
@@ -81,11 +87,45 @@ public class NotaService
     }
     public async Task Excluir(int id)
     {
-        //VALIDAR EMPENHO INATIVO (EDITAR ALSO)
         var nota = await _baixaRepository.BuscarNotaPorID(id);
 
         if (nota is null) throw new GenericException("Não foi possivel excluir", 501);
 
+        await ValidarEmpenhoInativo(nota.EmpenhoID);
+
         await _baixaRepository.ExcluirNota(nota);
+    }
+    private async Task ValidarEmpenhoInativo(int empenhoID)
+    {
+        var empenhoInativo = await _baixaRepository
+            .BuscarEmpenho()
+            .AsNoTracking()
+            .Where(
+                e => e.ID == empenhoID &&
+                e.Status == 2
+            ).AnyAsync();
+
+        if (empenhoInativo) throw new GenericException("O empenho está encerrado", 501);
+    }
+    private List<ItemDeNotaDTO> AgruparItens(NotaDTO dto)
+    {
+        var itens = dto.Itens;
+
+        var groupedItens = itens
+            .GroupBy(i => i.ID)
+            .Select(g => new ItemDeNotaDTO
+            {
+                ID = g.Key,
+                EmpenhoID = g.First().EmpenhoID,
+                NotaID = g.First().NotaID,
+                Nome = g.First().Nome,
+                Unidade = g.First().Unidade,
+                Quantidade = g.Sum(i => i.Quantidade),
+                ValorUnitario = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario,
+                ValorTotal = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario * g.Sum(i => i.Quantidade)
+            })
+            .ToList();
+
+        return groupedItens;
     }
 }

@@ -3,6 +3,7 @@
 public class ItemDeNotaDTO
 {
     public int ID { get; set; }
+    public string Nome { get; set; }
     public int NotaID { get; set; }
     public int EmpenhoID { get; set; }
     public string Unidade { get; set; }

@@ -116,7 +116,16 @@ public static class Registradores
                 });
         });
 
-        services.AddControllers().AddNewtonsoftJson();
+        services.AddControllers(options =>
+        {
+            options.RespectBrowserAcceptHeader = true;
+            options.ReturnHttpNotAcceptable = true;
+        }).AddXmlSerializerFormatters()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        })
+        .AddNewtonsoftJson();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 

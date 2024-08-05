@@ -9,6 +9,10 @@ public class ItemDeNota
     public int ID { get; set; }
 
     [Required]
+    [MaxLength(100)]
+    public string Nome { get; set; }
+
+    [Required]
     public int NotaID { get; set; }
 
     [Required]
