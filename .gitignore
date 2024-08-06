@@ -37,3 +37,17 @@ bower_components/
 *.ipynb
 *.DS_Store?
 Thumbs.db
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build configuration
+**/launchSettings.json
+
+# NuGet intermediate files
+**/[Bb]in/**/*.*
+**/[Oo]bj/**/*.*
