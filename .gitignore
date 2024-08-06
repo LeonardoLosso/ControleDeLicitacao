@@ -51,3 +51,4 @@ Thumbs.db
 # NuGet intermediate files
 **/[Bb]in/**/*.*
 **/[Oo]bj/**/*.*
+/ControleDeLicitacao.API/appsettings.json
