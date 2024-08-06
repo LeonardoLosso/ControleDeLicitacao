@@ -1,5 +1,39 @@
-﻿################################################################################
-# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
-################################################################################
+# Build output
+bin/
+obj/
 
-/ControleDeLicitacao.sln
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific settings
+*.settings
+*.cache
+*.vs/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.lock
+*.pid
+*.seed
+*.pid
+*.suo
+*.tlog
+
+# Output directories for the build process
+publish/
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Miscellaneous
+*.dbmdl
+*.sqlite3
+*.ipynb
+*.DS_Store?
+Thumbs.db
