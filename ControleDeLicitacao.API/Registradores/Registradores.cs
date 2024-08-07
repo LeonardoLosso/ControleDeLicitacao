@@ -5,6 +5,7 @@ using ControleDeLicitacao.App.Services.Documentos;
 using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
+using ControleDeLicitacao.App.Upload.Services;
 using ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
@@ -77,6 +78,8 @@ public static class Registradores
         services.AddScoped<EmpenhoService>();
         services.AddScoped<NotaService>();
         services.AddScoped<UploadService>();
+        //services.AddScoped<RequestService>();
+        services.AddHttpClient<RequestService>();
 
         return services;
     }
@@ -106,6 +109,7 @@ public static class Registradores
 
     public static IServiceCollection AddOthersConfig(this IServiceCollection services)
     {
+
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(
