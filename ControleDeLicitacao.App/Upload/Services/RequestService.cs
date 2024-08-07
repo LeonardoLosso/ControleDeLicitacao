@@ -1,8 +1,8 @@
-﻿using ControleDeLicitacao.App.Upload.Models;
+﻿using ControleDeLicitacao.App.Error;
+using ControleDeLicitacao.App.Upload.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace ControleDeLicitacao.App.Upload.Services;
 
@@ -15,29 +15,44 @@ public class RequestService
         _httpClient = httpClient;
     }
 
-    public async Task BuildRequest(string document, string template)
+    public async Task<RootResponse> BuildRequest(string document, string template)
     {
         var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}";
         var request = new HttpRequestMessage(HttpMethod.Post, url);
 
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        var body = RetornaBody(document, template);
+        var body = RetornaRequestBody(document, template);
 
-        var json = RetornaJSON(body);
+        var json = RequestToJSON(body);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         request.Content = content;
 
         var response = await _httpClient.SendAsync(request);
 
-        if (response.IsSuccessStatusCode)
-        {
-            var responseContent = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) 
+            throw new GenericException("ERRO COM O REQUEST", 666);
 
-        }
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        var retorno = RetornaResponseBody(responseContent);
+
+        return retorno;
     }
-    private RootRequest RetornaBody(string document, string template)
+    private RootResponse RetornaResponseBody(string json)
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+
+        var body = JsonSerializer.Deserialize<RootResponse>(json, options);
+
+        return body;
+    }
+    private RootRequest RetornaRequestBody(string document, string template)
     {
         var root = new RootRequest();
         root.Contents[0].Parts.Add(new Part(document));
@@ -47,7 +62,7 @@ public class RequestService
         return root;
     }
 
-    private string RetornaJSON(RootRequest body)
+    private string RequestToJSON(RootRequest body)
     {
         var options = new JsonSerializerOptions
         {

@@ -16,20 +16,11 @@ public class RootRequest
         GenerationConfig = new GenerationConfig();
     }
 }
+
 public class RootResponse
 {
-    public List<Content> Contents { get; set; }
-    public Content SystemInstruction { get; set; }
-    public GenerationConfig GenerationConfig { get; set; }
-
-    public RootResponse()
-    {
-        Contents = new List<Content>();
-        Contents.Add(new Content(Roles.User));
-
-        SystemInstruction = new Content(Roles.User);
-        GenerationConfig = new GenerationConfig();
-    }
+    public List<Candidates> Candidates { get; set; }
+    public UsageMetadata UsageMetadata { get; set; }
 }
 
 public class Content
@@ -60,4 +51,25 @@ public class GenerationConfig
     public double TopP { get; set; } = 0.95;
     public int MaxOutputTokens { get; set; } = 8192;
     public string ResponseMimeType { get; set; } = ResponseType.Json;
+}
+
+public class Candidates
+{
+    public Content Content { get; set; }
+    public string FinishReason { get; set; }
+    public int Index { get; set; }
+    public List<SafetyRatings> SafetyRatings { get; set; }
+}
+
+public class SafetyRatings
+{
+    public string Category { get; set; }
+    public string Probability { get; set; }
+}
+
+public class UsageMetadata
+{
+    public int PromptTokenCount { get; set; }
+    public int CandidatesTokenCount { get; set; }
+    public int TotalTokenCount { get; set; }
 }
