@@ -1,6 +1,7 @@
 ﻿using ControleDeLicitacao.App.Mappings;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.App.Services.Cadastros.User;
+using ControleDeLicitacao.App.Services.Documentos;
 using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
@@ -75,6 +76,7 @@ public static class Registradores
         services.AddScoped<BaixaService>();
         services.AddScoped<EmpenhoService>();
         services.AddScoped<NotaService>();
+        services.AddScoped<UploadService>();
 
         return services;
     }

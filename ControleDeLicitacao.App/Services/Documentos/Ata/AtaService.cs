@@ -68,10 +68,7 @@ public class AtaService
 
         await _ataRepository.Editar(ataLicitacao);
     }
-    //public async Task Upload(IFormFile file)
-    //{
-
-    //}
+    
     public async Task ExcluirReajuste(int id)
     {
         var reajuste = await _ataRepository

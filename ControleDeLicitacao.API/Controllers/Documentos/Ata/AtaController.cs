@@ -54,19 +54,6 @@ public class AtaController : BaseController
         return await RetornaEdicao(patchDoc);
     }
 
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("Nenhum arquivo enviado.");
-        }
-
-        //await _service.Upload(file);
-
-        return Ok("Arquivo enviado com sucesso!");
-    }
-
     [HttpPatch("status/{id}")]
     public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<AtaDTO> patchDoc)
     {
