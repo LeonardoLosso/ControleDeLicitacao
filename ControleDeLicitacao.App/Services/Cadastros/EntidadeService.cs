@@ -6,6 +6,7 @@ using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using Microsoft.EntityFrameworkCore;
+using static ControleDeLicitacao.App.Services.Documentos.UploadService;
 
 namespace ControleDeLicitacao.App.Services.Cadastros;
 
@@ -21,7 +22,7 @@ public class EntidadeService
 
     }
 
-    public async Task <EntidadeDTO?> Adicionar(EntidadeDTO dto)
+    public async Task<EntidadeDTO?> Adicionar(EntidadeDTO dto)
     {
 
         await ValidarNovoCadastro(dto);
@@ -128,6 +129,21 @@ public class EntidadeService
 
         var entidade = _entidadeRepository.ObterPorID(id).Result.Fantasia;
         return entidade;
+    }
+
+    public async Task<EntidadeDTO?> BuscaEntidadesPorCNPJ(string cnpj)
+    {
+        cnpj = cnpj.RemoveNonNumeric();
+
+        var entidade = await _entidadeRepository.Buscar()
+            .Where(e => e.CNPJ == cnpj)
+            .FirstOrDefaultAsync();
+
+        if (entidade is null) return null;
+
+        var dto = _mapper.Map<EntidadeDTO>(entidade);
+
+        return dto;
     }
     //---------------------------------------------------------------------
 
