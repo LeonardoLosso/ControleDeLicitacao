@@ -1,9 +1,9 @@
 ﻿using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Entidades;
+using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Upload.Services;
-using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Common.Enum;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
@@ -16,17 +16,21 @@ public class UploadService
     private readonly RequestService _requestService;
     private readonly AtaService _ataService;
     private readonly EntidadeService _entidadeService;
-    public UploadService(RequestService requestService, AtaService ataService, EntidadeService entidadeService)
+    private readonly ItemService _itemService;
+    public UploadService
+        (RequestService requestService, AtaService ataService,
+        EntidadeService entidadeService, ItemService itemService)
     {
         _requestService = requestService;
         _ataService = ataService;
         _entidadeService = entidadeService;
+        _itemService = itemService;
     }
-    public async Task UploadAta(IFormFile file)
+    public async Task<AtaDTO> UploadAta(IFormFile file)
     {
         var documento = await PdfToString(file);
 
-        if (string.IsNullOrWhiteSpace(documento)) return;
+        if (string.IsNullOrWhiteSpace(documento)) throw new GenericException("Não foi possivel ler o documento", 501);
 
         var template = GeraTemplate();
 
@@ -34,9 +38,9 @@ public class UploadService
 
         var retorno = response.Candidates[0].Content.Parts[0].Text;
 
-        var ataExtraida = JsonToAtaLicitacao(retorno);
+        var ataExtraida = await JsonToAtaLicitacao(retorno);
 
-
+        return await _ataService.Adicionar(ataExtraida);
     }
 
     private async Task<string> PdfToString(IFormFile file)
@@ -143,55 +147,86 @@ public class UploadService
         if (lista is null) return null;
 
         var ata = new AtaDTO();
+        ata.ID = 0;
         ata.Status = 1;
         ata.Edital = lista.DocumentoExtraido.NumAta;
+        ata.TotalReajustes = 0;
         if (lista.DocumentoExtraido.DataAta is not null)
         {
             ata.DataAta = lista.DocumentoExtraido.DataAta;
             ata.Vigencia = ata.DataAta?.AddYears(1);
         }
-        var licitante = await RetornaEntidade(lista.DocumentoExtraido.Licitante, 2);
-        var empresa = await RetornaEntidade(lista.DocumentoExtraido.Empresa);
-        var itens = await RetornaItens(lista.DocumentoExtraido.Itens);
+        try
+        {
+            var itens = await RetornaItens(lista.DocumentoExtraido.Itens);
+            ata.TotalLicitado = itens.Sum(i => i.ValorTotal);
+            ata.Itens = itens;
+        }
+        catch { throw new GenericException("Erro ao extrair Itens", 501); }
 
-        ata.Unidade = licitante.Tipo;
-        ata.Orgao = licitante.ID;
-        ata.Empresa = empresa.ID;
+        try
+        {
+            var licitante = await RetornaEntidade(lista.DocumentoExtraido.Licitante, 2);
+            ata.Orgao = licitante.ID;
+            ata.Unidade = licitante.Tipo;
+        }
+        catch { throw new GenericException("Erro ao extrair Órgão", 501); }
+
+        try
+        {
+            var empresa = await RetornaEntidade(lista.DocumentoExtraido.Empresa);
+            ata.Empresa = empresa.ID;
+        }
+        catch { throw new GenericException("Erro ao extrair Empresa", 501); }
 
         return ata;
     }
 
-    private async Task<ItemDeAtaDTO> RetornaItens(List<ItemDeRetorno> itens)
+    private async Task<List<ItemDeAtaDTO>> RetornaItens(List<ItemDeRetorno> itens)
     {
-        var listaAuxiliar = new List<ItemDeRetorno>();
+        var itensAta = new List<ItemDeAtaDTO>();
 
         foreach (var item in itens)
         {
-            //SE NÃO ENCONTRAR ADICIONA A LISTA DOS NÃO ENCONTRADOS (criar um item chamado não encontrado1)
+            var itemAta = new ItemDeAtaDTO()
+            {
+                ID = 0,
+                AtaID = 0,
+                Desconto = 0,
+                Nome = item.Nome ?? "",
+                Quantidade = item.Quantidade,
+                Unidade = item.Unidade ?? "",
+                ValorUnitario = item.ValorUnitario,
+                ValorTotal = item.ValorTotal
+            };
+
+            itensAta.Add(itemAta);
         }
 
-        throw new NotImplementedException();
+        itensAta = await _itemService.PreencherExtracao(itensAta);
+
+        return itensAta;
     }
 
     private async Task<EntidadeDTO> RetornaEntidade(EntidadeDeRetorno retorno, int tipo = 1)
     {
-
-        var entidade = await _entidadeService.BuscaEntidadesPorCNPJ(retorno.CNPJ);
-
-        if (entidade is not null) return entidade;
-
-        entidade = new EntidadeDTO();
-        entidade.CNPJ = retorno.CNPJ;
-        entidade.Telefone = retorno.Telefone;
-        entidade.Email = retorno.Email;
-        entidade.Nome = retorno.Nome;
-        entidade.Fantasia = retorno.Nome;
-        entidade.Endereco.Logradouro = retorno.Logradouro;
-        entidade.Endereco.Numero = retorno.Numero;
-        entidade.Endereco.Cidade = retorno.Cidade;
+        var entidade = new EntidadeDTO();
+        entidade.CNPJ = retorno.CNPJ ?? "";
+        entidade.Telefone = retorno.Telefone ?? "";
+        entidade.Email = retorno.Email ?? "";
+        entidade.Nome = retorno.Nome ?? "";
+        entidade.Fantasia = retorno.Nome ?? "";
+        entidade.Endereco = new EnderecoDTO();
+        entidade.Endereco.Logradouro = retorno.Logradouro ?? "";
+        entidade.Endereco.Numero = retorno.Numero ?? "";
+        entidade.Endereco.Cidade = retorno.Cidade ?? "";
         entidade.Endereco.UF = RetornaUF(retorno.Estado);
         entidade.Tipo = entidade.Tipo == 1 ? 1 : RetornaTipo(entidade.Nome);
-        entidade = await _entidadeService.Adicionar(entidade);
+        entidade.ID = 0;
+        entidade.IE = "";
+        entidade.Status = 1;
+
+        entidade = await _entidadeService.BuscaEntidadesPorCNPJ(entidade);
 
         return entidade;
     }
@@ -202,7 +237,7 @@ public class UploadService
 
         string[] tipoPref = { "PREFEITURA", "MUNICIPIO", "MUNICÍPIO", "CIDADE" };
 
-        var prefeitura = tipoPref.Contains(nomeFormatado);
+        bool prefeitura = tipoPref.Any(tipo => nomeFormatado.Contains(tipo));
 
         if (prefeitura) return 2;
 

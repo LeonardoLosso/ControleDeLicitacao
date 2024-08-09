@@ -23,8 +23,8 @@ public class UploadController : BaseController
             return BadRequest("Nenhum arquivo enviado.");
         }
 
-        await _service.UploadAta(file);
+        var result = await _service.UploadAta(file);
 
-        return Ok();
+        return await RetornaNovo(result);
     }
 }

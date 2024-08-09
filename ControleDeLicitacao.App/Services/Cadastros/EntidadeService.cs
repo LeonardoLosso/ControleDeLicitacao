@@ -24,10 +24,10 @@ public class EntidadeService
 
     public async Task<EntidadeDTO?> Adicionar(EntidadeDTO dto)
     {
+        TrataStrings(dto);
 
         await ValidarNovoCadastro(dto);
 
-        TrataStrings(dto);
 
         var entidade = _mapper.Map<Entidade>(dto);
 
@@ -131,19 +131,18 @@ public class EntidadeService
         return entidade;
     }
 
-    public async Task<EntidadeDTO?> BuscaEntidadesPorCNPJ(string cnpj)
+    public async Task<EntidadeDTO?> BuscaEntidadesPorCNPJ(EntidadeDTO entidade)
     {
-        cnpj = cnpj.RemoveNonNumeric();
+        string cnpj = entidade.CNPJ.RemoveNonNumeric();
 
-        var entidade = await _entidadeRepository.Buscar()
+        var retorno = _entidadeRepository.Buscar()
+            .AsNoTracking()
             .Where(e => e.CNPJ == cnpj)
-            .FirstOrDefaultAsync();
+            .FirstOrDefault();
 
-        if (entidade is null) return null;
+        if (retorno is not null) return _mapper.Map<EntidadeDTO>(retorno);
 
-        var dto = _mapper.Map<EntidadeDTO>(entidade);
-
-        return dto;
+        return await Adicionar(entidade);
     }
     //---------------------------------------------------------------------
 

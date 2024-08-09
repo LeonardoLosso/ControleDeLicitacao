@@ -7,6 +7,8 @@ using ControleDeLicitacao.App.DTOs.Itens;
 using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using ControleDeLicitacao.App.DTOs.Ata;
+using System.ComponentModel;
 
 namespace ControleDeLicitacao.App.Services.Cadastros;
 
@@ -22,7 +24,7 @@ public class ItemService
 
     }
 
-    public async Task <ItemDTO> Adicionar(ItemDTO dto)
+    public async Task<ItemDTO> Adicionar(ItemDTO dto)
     {
 
         var item = _mapper.Map<Item>(dto);
@@ -160,6 +162,120 @@ public class ItemService
 
         return _mapper.Map<ItemDTO>(item);
     }
+    //------------------------------------------------------------------------------
+    public async Task<ItemDTO> ObterParaExtracao(string nome)
+    {
+        nome = nome.Trim();
+
+        var busca = await ObterPorNome(nome);
+
+        if (busca is not null) return _mapper.Map<ItemDTO>(busca);
+
+        if (nome.Contains("/"))
+            return await ObterComTratamentoDeNome(nome, '/');
+
+        if (nome.Contains(" "))
+            return await ObterComTratamentoDeNome(nome, ' ');
+
+
+        return new ItemDTO()
+        {
+            Id = 0,
+            EhCesta = false,
+            ListaItens = null,
+            ListaNomes = new List<string>(),
+            Status = 1,
+            UnidadePrimaria = " ",
+            UnidadeSecundaria = " ",
+            Nome = $@"NÃO ENCONTRADO:{nome}"
+        };
+    }
+
+    private async Task<Item?> ObterPorNome(string nome)
+    {
+        var busca = await _itemRepository
+            .Buscar()
+            .AsNoTracking()
+            .Where(i => i.Nome == nome)
+            .FirstOrDefaultAsync();
+
+        return busca;
+    }
+
+    private async Task<List<Item>> ListarPorNome(string nome)
+    {
+        var busca = await _itemRepository
+            .Buscar()
+            .AsNoTracking()
+            .Where(i => i.Nome.Contains(nome))
+            .ToListAsync();
+
+        return busca;
+    }
+
+    private async Task<ItemDTO> ObterComTratamentoDeNome(string nome, char separador = ' ')
+    {
+        var nomeComposto = nome.Split(separador).ToList();
+        var nomesDistinct = nomeComposto.Distinct().ToList();
+
+        if (separador == '/')
+        {
+            var aux = new List<string>();
+            foreach (var name in nomeComposto)
+            {
+                aux.AddRange(name.Trim().Split(' '));
+            }
+            nomeComposto.Clear();
+            nomeComposto = aux;
+
+            nomesDistinct.Clear();
+            nomesDistinct = nomeComposto.Distinct().ToList();
+
+
+            for (var i = 1; i < nomesDistinct.Count; i++)
+            {
+                var item = await ListarPorNome(string.Concat(nomesDistinct[0], ' ', nomesDistinct[i]));
+                if (item.Count == 1)
+                    return _mapper.Map<ItemDTO>(item.First());
+            }
+        }
+
+        var busca = await ListarPorNome(nomesDistinct[0]);
+        if (busca.Count == 1)
+            return _mapper.Map<ItemDTO>(busca.First());
+
+        return new ItemDTO()
+        {
+            Id = 0,
+            EhCesta = false,
+            ListaItens = null,
+            ListaNomes = new List<string>(),
+            Status = 1,
+            UnidadePrimaria = " ",
+            UnidadeSecundaria = " ",
+            Nome = $@"NÃO ENCONTRADO:{nome}"
+        };
+    }
+    public async Task<List<ItemDeAtaDTO>> PreencherExtracao(List<ItemDeAtaDTO> itensAta)
+    {
+        var idAux = 100000;
+        foreach (var item in itensAta)
+        {
+            var itemExtract = await ObterParaExtracao(item.Nome);
+            if (itemExtract.Id == 0) itemExtract.Id = idAux++;
+
+            item.ID = itemExtract.Id;
+            item.Unidade = 
+                !item.Unidade.Contains(" ") ? 
+                    item.Unidade : item.Unidade.Split(' ')[0];
+            item.Nome = itemExtract.Nome;
+        }
+
+        return itensAta;
+    }
+
+    //------------------------------------------------------------------------------
+
     private async Task<Item?> RetornarItem(int id)
     {
         return await _itemRepository.Buscar()
@@ -174,4 +290,5 @@ public class ItemService
     {
         if (status == 2) throw new GenericException("Não é possivel editar um cadastro inativo", 501);
     }
+
 }

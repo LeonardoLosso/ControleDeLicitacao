@@ -25,7 +25,7 @@ public class AtaService
 
     public async Task<AtaDTO> Adicionar(AtaDTO dto)
     {
-        AgruparItens(dto);
+        dto.Itens = AgruparItens(dto);
 
         var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
 
