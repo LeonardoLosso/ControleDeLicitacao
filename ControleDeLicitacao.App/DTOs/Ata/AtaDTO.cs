@@ -1,6 +1,4 @@
-﻿using ControleDeLicitacao.App.DTOs.Entidades;
-
-namespace ControleDeLicitacao.App.DTOs.Ata;
+﻿namespace ControleDeLicitacao.App.DTOs.Ata;
 
 public class AtaDTO
 {

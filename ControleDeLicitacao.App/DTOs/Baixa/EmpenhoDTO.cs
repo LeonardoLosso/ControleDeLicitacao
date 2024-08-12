@@ -1,6 +1,4 @@
-﻿
-
-namespace ControleDeLicitacao.App.DTOs.Baixa;
+﻿namespace ControleDeLicitacao.App.DTOs.Baixa;
 
 public class EmpenhoDTO
 {

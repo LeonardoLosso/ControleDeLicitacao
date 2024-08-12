@@ -27,4 +27,17 @@ public class UploadController : BaseController
 
         return await RetornaNovo(result);
     }
+
+    [HttpPost("empenho/{idBaixa}")]
+    public async Task<IActionResult> UploadEmpenho(int idBaixa, [FromForm] IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("Nenhum arquivo enviado.");
+        }
+
+        var result = await _service.UploadEmpenho(file, idBaixa);
+
+        return await RetornaNovo(result);
+    }
 }

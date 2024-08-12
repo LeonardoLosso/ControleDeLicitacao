@@ -8,7 +8,6 @@ using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using ControleDeLicitacao.App.DTOs.Ata;
-using System.ComponentModel;
 
 namespace ControleDeLicitacao.App.Services.Cadastros;
 
@@ -187,7 +186,7 @@ public class ItemService
             Status = 1,
             UnidadePrimaria = " ",
             UnidadeSecundaria = " ",
-            Nome = $@"NÃO ENCONTRADO:{nome}"
+            Nome = $@"NÃO ENCONTRADO ({nome})"
         };
     }
 
@@ -244,6 +243,18 @@ public class ItemService
         if (busca.Count == 1)
             return _mapper.Map<ItemDTO>(busca.First());
 
+        return await BuscarPorNomesAuxiliares(nomesDistinct, nome);
+    }
+
+    private async Task<ItemDTO> BuscarPorNomesAuxiliares(List<string> nomesDistinct, string nome)
+    {
+        for (var i = 1; i < nomesDistinct.Count; i++)
+        {
+            var item = await BuscarItemPorAuxiliar(string.Concat(nomesDistinct[0], ' ', nomesDistinct[i]));
+            if (item.Count == 1)
+                return _mapper.Map<ItemDTO>(item.First());
+        }
+
         return new ItemDTO()
         {
             Id = 0,
@@ -253,9 +264,10 @@ public class ItemService
             Status = 1,
             UnidadePrimaria = " ",
             UnidadeSecundaria = " ",
-            Nome = $@"NÃO ENCONTRADO:{nome}"
+            Nome = $@"NÃO ENCONTRADO ({nome})"
         };
     }
+
     public async Task<List<ItemDeAtaDTO>> PreencherExtracao(List<ItemDeAtaDTO> itensAta)
     {
         var idAux = 100000;
@@ -273,7 +285,16 @@ public class ItemService
 
         return itensAta;
     }
+    private async Task<List<Item>> BuscarItemPorAuxiliar(string nome)
+    {
+        return await _itemRepository.Buscar()
+            .AsNoTracking()
+            .Include(item => item.ListaItens)
+                .ThenInclude(associativo => associativo.ItemFilho)
+            .Include(item => item.ListaNomes.Where(w => w.Nome.Contains(nome)))
+            .ToListAsync();
 
+    }
     //------------------------------------------------------------------------------
 
     private async Task<Item?> RetornarItem(int id)

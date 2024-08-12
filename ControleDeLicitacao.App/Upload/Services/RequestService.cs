@@ -32,9 +32,11 @@ public class RequestService
         var response = await _httpClient.SendAsync(request);
 
         if (!response.IsSuccessStatusCode) 
-            throw new GenericException("ERRO COM O REQUEST", 666);
+            throw new GenericException("ERRO COM A REQUISIÇÃO", 501);
 
         var responseContent = await response.Content.ReadAsStringAsync();
+
+        if(string.IsNullOrWhiteSpace(responseContent)) throw new GenericException("NÃO FOI POSSIVEL LER A RESPOSTA DA API GOOGLE", 501);
 
         var retorno = RetornaResponseBody(responseContent);
 
@@ -49,6 +51,8 @@ public class RequestService
         };
 
         var body = JsonSerializer.Deserialize<RootResponse>(json, options);
+
+        if (body is null) throw new GenericException("RETORNO DA I.A. FORA DO PADRÃO", 501);
 
         return body;
     }

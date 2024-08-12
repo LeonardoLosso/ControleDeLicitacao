@@ -52,3 +52,5 @@ Thumbs.db
 **/[Bb]in/**/*.*
 **/[Oo]bj/**/*.*
 /ControleDeLicitacao.API/appsettings.json
+/ControleDeLicitacao.API/appsettings.Development.json
+/ControleDeLicitacao.API/appsettings.Development.json

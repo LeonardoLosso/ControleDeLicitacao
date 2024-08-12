@@ -27,6 +27,8 @@ public class AtaService
     {
         dto.Itens = AgruparItens(dto);
 
+        ValidarNovo(dto.Edital);
+
         var ataLicitacao = _mapper.Map<AtaLicitacao>(dto);
 
         await _ataRepository.Adicionar(ataLicitacao);
@@ -198,6 +200,11 @@ public class AtaService
     private void ValidarInativo(int status)
     {
         if (status == 2) throw new GenericException("Não é possivel editar um documento inativo", 501);
+    }
+    private void ValidarNovo(string edital)
+    {
+        var existe = _ataRepository.Buscar().Where(a => a.Edital == edital).Any();
+        if (existe && !string.IsNullOrWhiteSpace(edital)) throw new GenericException($"Ata {edital} já registrada no sistema", 501);
     }
     private List<ItemDeAtaDTO> AgruparItens(AtaDTO dto)
     {
