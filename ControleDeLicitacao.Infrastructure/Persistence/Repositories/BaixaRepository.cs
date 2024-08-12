@@ -97,10 +97,14 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         await _context.SaveChangesAsync();
     }
-    public async Task AdicionarEmpenho(Empenho entity)
+    public async Task AdicionarEmpenho(Empenho entity, bool atualizaBaixa = false)
     {
         _dbSetEmpenho.Add(entity);
         await _context.SaveChangesAsync();
+
+        if(atualizaBaixa)
+            await AtualizarBaixa(entity.BaixaID);
+
     }
     public async Task AdicionarNota(Nota entity)
     {

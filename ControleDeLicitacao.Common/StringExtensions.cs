@@ -13,4 +13,14 @@ public static class StringExtensions
 
         return Regex.Replace(input, @"\D", string.Empty);
     }
+
+    public static string RemoveSpaces(this string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            return string.Empty;
+        }
+
+        return input.Replace(" ", string.Empty);
+    }
 }

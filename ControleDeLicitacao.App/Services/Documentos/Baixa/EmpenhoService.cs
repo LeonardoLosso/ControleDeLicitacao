@@ -228,11 +228,11 @@ public class EmpenhoService
                 BaixaID = g.First().BaixaID,
                 EmpenhoID = g.First().EmpenhoID,
                 ItemDeBaixa = g.First().ItemDeBaixa,
-                QtdeAEntregar = g.First().QtdeAEntregar,
-                QtdeEmpenhada = g.First().QtdeEmpenhada,
-                QtdeEntregue = g.First().QtdeAEntregar,
-                Total = g.First().Total,
-                ValorEntregue = g.First().ValorEntregue,
+                QtdeAEntregar = g.Sum(s => s.QtdeAEntregar),
+                QtdeEmpenhada = g.Sum(s => s.QtdeEmpenhada),
+                QtdeEntregue = g.Sum(s => s.QtdeEntregue),
+                Total = g.Sum(s => s.Total),
+                ValorEntregue = g.Sum(s => s.ValorEntregue),
                 ValorUnitario = g.First().ValorUnitario,
                 Nome = g.First().Nome,
                 Unidade = g.First().Unidade
@@ -240,5 +240,17 @@ public class EmpenhoService
             .ToList();
 
         return groupedItens;
+    }
+
+    internal async Task<EmpenhoDTO> AdicionarImportacao(EmpenhoDTO dto)
+    {
+        dto.Itens = AgruparItens(dto);
+        var empenho = _mapper.Map<Empenho>(dto);
+
+        if(empenho is null) throw new GenericException("Não foi possivel adicionar empenho", 501);
+
+        await _baixaRepository.AdicionarEmpenho(empenho, true);
+
+        return _mapper.Map<EmpenhoDTO>(empenho);
     }
 }

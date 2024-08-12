@@ -1,15 +1,14 @@
 ﻿using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.DTOs.Entidades;
-using ControleDeLicitacao.App.DTOs.Itens;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Upload.Services;
+using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Common.Enum;
 using Microsoft.AspNetCore.Http;
-using System.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using UglyToad.PdfPig;
@@ -21,24 +20,27 @@ public class UploadService
     private readonly RequestService _requestService;
     private readonly AtaService _ataService;
     private readonly BaixaService _baixaService;
+    private readonly EmpenhoService _empenhoService;
     private readonly EntidadeService _entidadeService;
     private readonly ItemService _itemService;
     public UploadService
         (RequestService requestService, AtaService ataService,
-        EntidadeService entidadeService, ItemService itemService, BaixaService baixaService)
+        EntidadeService entidadeService, ItemService itemService,
+        BaixaService baixaService, EmpenhoService empenhoService)
     {
         _requestService = requestService;
         _ataService = ataService;
         _entidadeService = entidadeService;
         _itemService = itemService;
         _baixaService = baixaService;
+        _empenhoService = empenhoService;
     }
     public async Task<AtaDTO> UploadAta(IFormFile file)
     {
         var documento = await PdfToString(file);
-        int contagem = Regex.Matches(documento, "NOTA DE EMPENHO", RegexOptions.IgnoreCase).Count;
+        int contagem = Regex.Matches(documento.Substring(0, 200), "NOTA DE EMPENHO", RegexOptions.IgnoreCase).Count;
 
-        if (contagem > 1) throw new GenericException("O Documento deve ser uma ATA", 501);
+        if (contagem > 0) throw new GenericException("O Documento deve ser uma ATA", 501);
 
         if (string.IsNullOrWhiteSpace(documento)) throw new GenericException("Não foi possivel ler o documento", 501);
 
@@ -73,7 +75,7 @@ public class UploadService
 
         var empenhoExtraido = await JsonToEmpenho(retorno, idBaixa);
 
-        //empenhoExtraido = await _ataService.Adicionar(empenhoExtraido);
+        empenhoExtraido = await _empenhoService.AdicionarImportacao(empenhoExtraido);
 
         return empenhoExtraido;
     }
@@ -150,7 +152,6 @@ public class UploadService
             "(ignore coisas como 'in natura', 'fruta' e as descrições) ";
 
         string condicional =
-            "Caso um item repita, some suas quantidades de valores totais. " +
             "Se o não houverem itens, retorne apenas um array vazio []";
 
         string modeloDeRetorno =
@@ -232,7 +233,7 @@ public class UploadService
         var ata = new AtaDTO();
         ata.ID = 0;
         ata.Status = 1;
-        ata.Edital = lista.DocumentoExtraido.NumAta;
+        ata.Edital = lista.DocumentoExtraido.NumAta.RemoveSpaces();
         ata.TotalReajustes = 0;
         if (lista.DocumentoExtraido.DataAta is not null)
         {
@@ -269,6 +270,10 @@ public class UploadService
     {
         var baixa = await _baixaService.ObterPorID(idBaixa);
 
+        if (baixa is null) throw new GenericException("Baixa não encontrada", 501);
+
+        if (baixa.Status != 1) throw new GenericException("Baixa está inativa", 501);
+
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -292,7 +297,7 @@ public class UploadService
         empenho.Unidade = baixa.Orgao;
         empenho.Status = 1;
 
-        empenho.NumEmpenho = lista.EmpenhoExtraido.NumEmpenho;
+        empenho.NumEmpenho = lista.EmpenhoExtraido.NumEmpenho.RemoveSpaces();
         empenho.Valor = lista.EmpenhoExtraido.ValorEmpenhado;
         empenho.Saldo = empenho.Valor;
 
@@ -302,7 +307,7 @@ public class UploadService
         }
         try
         {
-            var itens = await RetornaItensEmpenho(lista.EmpenhoExtraido.Itens, baixa.Itens);
+            var itens = RetornaItensEmpenho(lista.EmpenhoExtraido.Itens, baixa.Itens);
             empenho.Itens = itens;
         }
         catch { throw new GenericException("Erro ao extrair Itens", 501); }
@@ -339,19 +344,24 @@ public class UploadService
     {
         var itensEmpenho = new List<ItemDeEmpenhoDTO>();
 
+        var idAux = 100000;
         foreach (var item in itens)
         {
             var itemBaixa = BuscarItemBaixa(item, itensBaixa);
             var itemEmpenho = new ItemDeEmpenhoDTO()
             {
-                ID = 0,
-                EmpenhoID = ,
-                Desconto = 0,
-                Nome = item.Nome ?? "",
-                Quantidade = item.Quantidade,
+                ID = itemBaixa.ID != 0 ? itemBaixa.ID : idAux++,
+                EmpenhoID = 0,
+                Nome = itemBaixa.Nome ?? "",
+                QtdeEmpenhada = item.Quantidade,
+                QtdeAEntregar = item.Quantidade,
+                QtdeEntregue = 0,
+                BaixaID = itemBaixa.BaixaID,
                 Unidade = item.Unidade ?? "",
                 ValorUnitario = item.ValorUnitario,
-                ValorTotal = item.ValorTotal
+                Total = item.ValorTotal,
+                ItemDeBaixa = itemBaixa.ID != 0 ? true : false,
+                ValorEntregue = 0
             };
 
             itensEmpenho.Add(itemEmpenho);
@@ -366,22 +376,27 @@ public class UploadService
         var itemDeBaixa = new ItemDeBaixaDTO()
         {
             ID = itemExtract.ID,
-
-
+            BaixaID = itemExtract.BaixaID,
+            Unidade = !itemExtract.Unidade.Contains(" ") ?
+                item.Unidade : item.Unidade.Split(' ')[0],
+            Nome = itemExtract.Nome,
+            QtdeAEmpenhar = itemExtract.QtdeAEmpenhar,
+            QtdeEmpenhada = itemExtract.QtdeEmpenhada,
+            QtdeLicitada = itemExtract.QtdeLicitada,
+            Saldo = itemExtract.Saldo,
+            ValorEmpenhado = itemExtract.ValorEmpenhado,
+            ValorLicitado = itemExtract.ValorLicitado,
+            ValorUnitario = itemExtract.ValorUnitario
         };
-        item.Unidade =
-            !item.Unidade.Contains(" ") ?
-                item.Unidade : item.Unidade.Split(' ')[0];
-        item.Nome = itemExtract.Nome;
 
-        return itensBaixa;
+        return itemDeBaixa;
     }
 
     public ItemDeBaixaDTO ObterParaExtracao(string nome, List<ItemDeBaixaDTO> itensBaixa)
     {
         nome = nome.Trim();
 
-        var busca = itensBaixa.Where(w => w.Nome == nome).FirstOrDefault();
+        var busca = itensBaixa.Where(w => w.Nome.ToUpper() == nome.ToUpper()).FirstOrDefault();
 
         if (busca is not null) return busca;
 
@@ -396,12 +411,20 @@ public class UploadService
         {
             ID = 0,
             Unidade = " ",
-            Nome = $@"NÃO ENCONTRADO ({nome})"
+            BaixaID = itensBaixa[0].BaixaID,
+            Nome = $@"NÃO ENCONTRADO ({nome})",
+            QtdeAEmpenhar = 0,
+            QtdeEmpenhada = 0,
+            QtdeLicitada = 0,
+            Saldo = 0,
+            ValorEmpenhado = 0,
+            ValorLicitado = 0,
+            ValorUnitario = 0
         };
     }
     private ItemDeBaixaDTO ObterComTratamentoDeNome(string nome, char separador, List<ItemDeBaixaDTO> itensBaixa)
     {
-        var nomeComposto = nome.Split(separador).ToList();
+        var nomeComposto = nome.ToUpper().Split(separador).ToList();
         var nomesDistinct = nomeComposto.Distinct().ToList();
 
         if (separador == '/')
@@ -421,7 +444,7 @@ public class UploadService
             for (var i = 1; i < nomesDistinct.Count; i++)
             {
                 var item = itensBaixa
-                    .Where(w => w.Nome
+                    .Where(w => w.Nome.ToUpper()
                     .Contains(
                         string.Concat(nomesDistinct[0], ' ', nomesDistinct[i])
                     )).ToList();
@@ -432,14 +455,27 @@ public class UploadService
         }
 
         var busca = itensBaixa
-                    .Where(w => w.Nome
+                    .Where(w => w.Nome.ToUpper()
                     .Contains(nomesDistinct[0]))
                     .ToList();
 
         if (busca.Count == 1)
             return busca.First();
 
-        return new ItemDeBaixaDTO();
+        return new ItemDeBaixaDTO()
+        {
+            ID = 0,
+            Unidade = " ",
+            BaixaID = itensBaixa[0].BaixaID,
+            Nome = $@"NÃO ENCONTRADO ({nome})",
+            QtdeAEmpenhar = 0,
+            QtdeEmpenhada = 0,
+            QtdeLicitada = 0,
+            Saldo = 0,
+            ValorEmpenhado = 0,
+            ValorLicitado = 0,
+            ValorUnitario = 0
+        };
     }
     private async Task<EntidadeDTO?> RetornaEntidade(EntidadeDeRetorno retorno, int tipo = 1)
     {
