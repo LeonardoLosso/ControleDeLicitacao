@@ -49,7 +49,7 @@ public class GenerationConfig
     public int Temperature { get; set; } = 1;
     public int TopK { get; set; } = 64;
     public double TopP { get; set; } = 0.95;
-    public int MaxOutputTokens { get; set; } = 15000;
+    public int MaxOutputTokens { get; set; } = 8192;
     public string ResponseMimeType { get; set; } = ResponseType.Json;
 }
 

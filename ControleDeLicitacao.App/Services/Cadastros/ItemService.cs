@@ -168,7 +168,13 @@ public class ItemService
 
         var busca = await ObterPorNome(nome);
 
-        if (busca is not null) return _mapper.Map<ItemDTO>(busca);
+        if (busca is not null)
+        {
+            if (busca.Status == 1)
+                return _mapper.Map<ItemDTO>(busca);
+
+            return RetornaItemVazio(nome);
+        }
 
         if (nome.Contains("/"))
             return await ObterComTratamentoDeNome(nome, '/');
@@ -177,6 +183,10 @@ public class ItemService
             return await ObterComTratamentoDeNome(nome, ' ');
 
 
+        return RetornaItemVazio(nome);
+    }
+    private ItemDTO RetornaItemVazio(string nome)
+    {
         return new ItemDTO()
         {
             Id = 0,
@@ -184,12 +194,11 @@ public class ItemService
             ListaItens = null,
             ListaNomes = new List<string>(),
             Status = 1,
-            UnidadePrimaria = " ",
-            UnidadeSecundaria = " ",
+            UnidadePrimaria = "",
+            UnidadeSecundaria = "",
             Nome = $@"NÃO ENCONTRADO ({nome})"
         };
     }
-
     private async Task<Item?> ObterPorNome(string nome)
     {
         var busca = await _itemRepository
@@ -255,17 +264,7 @@ public class ItemService
                 return _mapper.Map<ItemDTO>(item.First());
         }
 
-        return new ItemDTO()
-        {
-            Id = 0,
-            EhCesta = false,
-            ListaItens = null,
-            ListaNomes = new List<string>(),
-            Status = 1,
-            UnidadePrimaria = " ",
-            UnidadeSecundaria = " ",
-            Nome = $@"NÃO ENCONTRADO ({nome})"
-        };
+        return RetornaItemVazio(nome);
     }
 
     public async Task<List<ItemDeAtaDTO>> PreencherExtracao(List<ItemDeAtaDTO> itensAta)
@@ -277,9 +276,7 @@ public class ItemService
             if (itemExtract.Id == 0) itemExtract.Id = idAux++;
 
             item.ID = itemExtract.Id;
-            item.Unidade = 
-                !item.Unidade.Contains(" ") ? 
-                    item.Unidade : item.Unidade.Split(' ')[0];
+            item.Unidade = itemExtract.UnidadePrimaria;
             item.Nome = itemExtract.Nome;
         }
 

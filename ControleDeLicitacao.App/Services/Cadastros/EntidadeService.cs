@@ -6,7 +6,6 @@ using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Cadastros;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using Microsoft.EntityFrameworkCore;
-using static ControleDeLicitacao.App.Services.Documentos.UploadService;
 
 namespace ControleDeLicitacao.App.Services.Cadastros;
 
@@ -140,7 +139,13 @@ public class EntidadeService
             .Where(e => e.CNPJ == cnpj)
             .FirstOrDefault();
 
-        if (retorno is not null) return _mapper.Map<EntidadeDTO>(retorno);
+        if (retorno is not null)
+        {
+            if (retorno.Status == 1)
+                return _mapper.Map<EntidadeDTO>(retorno);
+
+            return entidade;
+        }
 
         return await Adicionar(entidade);
     }

@@ -7,7 +7,6 @@ using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Upload.Services;
 using ControleDeLicitacao.Common;
-using ControleDeLicitacao.Common.Enum;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -79,7 +78,6 @@ public class UploadService
 
         return empenhoExtraido;
     }
-
     private async Task<string> PdfToString(IFormFile file)
     {
         var filePath = Path.GetTempFileName();
@@ -104,15 +102,14 @@ public class UploadService
         return fileContent;
     }
 
-
     //------------------------------------[GEMINI]--------------------------------------
-
     private string GeraTemplateAta()
     {
         string cabecalho =
             "preciso que extraia pra mim informações de um texto. " +
-            "Você ira encontrar informações da entidade licitante (será sempre uma prefeitura ou batalhão de policia), empresa contratada, e itens." +
-            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade, valor unitario e valor total. ";
+            "Você ira encontrar informações da entidade licitante (será sempre uma prefeitura ou batalhão de policia), empresa contratada, e itens. " +
+            "Tipo: Empresa = 1, Prefeitura = 2, Policia/secretaria de segurança = 3. Caso não entre no meu padrão, defina o tipo como 2" +
+            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. ";
 
         string reforco =
             "Quanto ao nome do item extraia apenas o nome dele como: " +
@@ -120,14 +117,18 @@ public class UploadService
             "(ignore coisas como 'in natura', 'fruta' e as descrições) ";
 
         string condicional =
-            "Caso um item repita, some suas quantidades de valores totais. ";
+            "IMPORTANTE: Quando um item repetir agrupe-o some quantidade e utilize o valor unitário menor. " +
+            "Para que o agrupamento funcione é importante analizar todo o documento antes de gerar a resposta";
 
         string modeloDeRetorno =
             "O objeto de retorno deve atender esse formato: " +
             "\"DocumentoExtraido\": { \"NumAta\": string,\"DataAta\": date," +
-            "\"Licitante\": {\"CNPJ\": string,\"Nome\": string,\"CEP\": string,\"Estado\": string,\"Logradouro\": string, \"Numero\": string,\"Email\": string, \"Telefone\": string,\"Cidade\": string}," +
-            "\"Empresa\": { \"CNPJ\": string,\"Nome\": string,\"CEP\": string, \"Estado\": string, \"Logradouro\": string, \"Numero\": string, \"Email\": string, \"Telefone\": string,\"Cidade\": string}," +
-            "\"Itens\":[{\"Nome\": string, \"Unidade\": string, \"Quantidade\": number, \"ValorUnitario\": number, \"ValorTotal\": number}]}";
+
+            "\"Licitante\": {\"CNPJ\": string,\"Nome\": string,\"Tipo\": number}," +
+
+            "\"Empresa\": {\"CNPJ\": string,\"Nome\": string,\"Tipo\": number}," +
+
+            "\"Itens\":[{\"Nome\": string, \"Quantidade\": number, \"ValorUnitario\": number}]}";
 
         string template = (
             cabecalho +
@@ -142,9 +143,9 @@ public class UploadService
     {
         string cabecalho =
             "preciso que extraia pra mim informações de um texto. " +
-            "Você ira encontrar informações da entidade licitante (será sempre umórgão publico que está solicitando a entrega), " +
+            "Você ira encontrar informações da entidade licitante (será sempre um órgão publico que está solicitando a entrega), " +
             "valor empenhado e os itens (se houver)." +
-            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade, valor unitario e valor total. ";
+            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. ";
 
         string reforco =
             "Quanto ao nome do item extraia apenas o nome dele como: " +
@@ -157,8 +158,8 @@ public class UploadService
         string modeloDeRetorno =
             "O objeto de retorno deve atender esse formato: " +
             "\"EmpenhoExtraido\": { \"NumEmpenho\": string,\"DataEmpenho\": date,\"ValorEmpenhado\": number," +
-            "\"Licitante\": {\"CNPJ\": string,\"Nome\": string,\"CEP\": string,\"Estado\": string,\"Logradouro\": string, \"Numero\": string,\"Email\": string, \"Telefone\": string,\"Cidade\": string}," +
-            "\"Itens\":[{\"Nome\": string, \"Unidade\": string, \"Quantidade\": number, \"ValorUnitario\": number, \"ValorTotal\": number}]}";
+            "\"Licitante\": {\"CNPJ\": string,\"Nome\": string}," +
+            "\"Itens\":[{\"Nome\": string, \"Quantidade\": number, \"ValorUnitario\": number}]}";
 
         string template = (
             cabecalho +
@@ -172,22 +173,14 @@ public class UploadService
     internal class ItemDeRetorno
     {
         public string Nome { get; set; }
-        public string Unidade { get; set; }
         public double Quantidade { get; set; }
         public double ValorUnitario { get; set; }
-        public double ValorTotal { get; set; }
     }
     internal class EntidadeDeRetorno
     {
         public string CNPJ { get; set; }
         public string Nome { get; set; }
-        public string CEP { get; set; }
-        public string Cidade { get; set; }
-        public string Estado { get; set; }
-        public string Logradouro { get; set; }
-        public string Numero { get; set; }
-        public string Email { get; set; }
-        public string Telefone { get; set; }
+        public int Tipo { get; set; }
     }
     internal class DocumentoExtraido
     {
@@ -328,9 +321,9 @@ public class UploadService
                 Desconto = 0,
                 Nome = item.Nome ?? "",
                 Quantidade = item.Quantidade,
-                Unidade = item.Unidade ?? "",
+                Unidade = "",
                 ValorUnitario = item.ValorUnitario,
-                ValorTotal = item.ValorTotal
+                ValorTotal = item.ValorUnitario * item.Quantidade
             };
 
             itensAta.Add(itemAta);
@@ -357,9 +350,9 @@ public class UploadService
                 QtdeAEntregar = item.Quantidade,
                 QtdeEntregue = 0,
                 BaixaID = itemBaixa.BaixaID,
-                Unidade = item.Unidade ?? "",
+                Unidade = "",
                 ValorUnitario = item.ValorUnitario,
-                Total = item.ValorTotal,
+                Total = item.ValorUnitario * item.Quantidade,
                 ItemDeBaixa = itemBaixa.ID != 0 ? true : false,
                 ValorEntregue = 0
             };
@@ -377,8 +370,7 @@ public class UploadService
         {
             ID = itemExtract.ID,
             BaixaID = itemExtract.BaixaID,
-            Unidade = !itemExtract.Unidade.Contains(" ") ?
-                item.Unidade : item.Unidade.Split(' ')[0],
+            Unidade = itemExtract.Unidade,
             Nome = itemExtract.Nome,
             QtdeAEmpenhar = itemExtract.QtdeAEmpenhar,
             QtdeEmpenhada = itemExtract.QtdeEmpenhada,
@@ -481,16 +473,16 @@ public class UploadService
     {
         var entidade = new EntidadeDTO();
         entidade.CNPJ = retorno.CNPJ ?? "";
-        entidade.Telefone = retorno.Telefone ?? "";
-        entidade.Email = retorno.Email ?? "";
+        entidade.Telefone = "";
+        entidade.Email = "";
         entidade.Nome = retorno.Nome ?? "";
         entidade.Fantasia = retorno.Nome ?? "";
         entidade.Endereco = new EnderecoDTO();
-        entidade.Endereco.Logradouro = retorno.Logradouro ?? "";
-        entidade.Endereco.Numero = retorno.Numero ?? "";
-        entidade.Endereco.Cidade = retorno.Cidade ?? "";
-        entidade.Endereco.UF = RetornaUF(retorno.Estado);
-        entidade.Tipo = entidade.Tipo == 1 ? 1 : RetornaTipo(entidade.Nome);
+        entidade.Endereco.Logradouro ="";
+        entidade.Endereco.Numero = "";
+        entidade.Endereco.Cidade = "";
+        entidade.Endereco.UF = "";
+        entidade.Tipo = retorno.Tipo;
         entidade.ID = 0;
         entidade.IE = "";
         entidade.Status = 1;
@@ -500,28 +492,6 @@ public class UploadService
         entidade = await _entidadeService.BuscaEntidadesPorCNPJ(entidade);
 
         return entidade;
-    }
-
-    private int RetornaTipo(string nome)
-    {
-        var nomeFormatado = nome.ToUpper();
-
-        string[] tipoPref = { "PREFEITURA", "MUNICIPIO", "MUNICÍPIO", "CIDADE" };
-
-        bool prefeitura = tipoPref.Any(tipo => nomeFormatado.Contains(tipo));
-
-        if (prefeitura) return 2;
-
-        return 3;
-    }
-
-    private string RetornaUF(string estado)
-    {
-        if (string.IsNullOrWhiteSpace(estado)) return "";
-        if (estado.Length == 2)
-            return estado;
-
-        return EstadosBrasil.ObterSigla(estado);
     }
 }
 
