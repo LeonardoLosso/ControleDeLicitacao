@@ -13,6 +13,8 @@ public class RequestService
     public RequestService(HttpClient httpClient)
     {
         _httpClient = httpClient;
+
+        _httpClient.Timeout = TimeSpan.FromMinutes(5);
     }
 
     public async Task<RootResponse> BuildRequest(string document, string template)
@@ -28,8 +30,15 @@ public class RequestService
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         request.Content = content;
-
-        var response = await _httpClient.SendAsync(request);
+        var response = new HttpResponseMessage();
+        try
+        {
+            response = await _httpClient.SendAsync(request);
+        }
+        catch (Exception ex)
+        {
+            throw new GenericException(ex.Message, 501);
+        }
 
         if (!response.IsSuccessStatusCode) 
             throw new GenericException("ERRO COM A REQUISIÇÃO", 501);
@@ -53,7 +62,7 @@ public class RequestService
         var body = JsonSerializer.Deserialize<RootResponse>(json, options);
 
         if (body is null) throw new GenericException("RETORNO DA I.A. FORA DO PADRÃO", 501);
-
+        if (body.Candidates[0].FinishReason.Equals("MAX_TOKENS")) throw new GenericException("Documento grande demais para a I.A. processar", 501);
         return body;
     }
     private RootRequest RetornaRequestBody(string document, string template)

@@ -125,7 +125,7 @@ public class AtaService
         if (!string.IsNullOrWhiteSpace(search))
             query = query.BuscarPalavraChave(search);
 
-        query = query.OrderByDescending(o => o.Status == 1);
+        query = query.OrderByDescending(o => o.DataAta);
 
         listagemDTO.TotalItems = query.Count();
 
