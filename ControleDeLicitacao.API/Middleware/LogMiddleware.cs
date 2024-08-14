@@ -65,7 +65,7 @@ public class LogMiddleware
             }
             catch (Exception ex)
             {
-                throw new GenericException("Erro com o middleware de auditoria", 501);
+                throw new GenericException(ex.Message, 501);
             }
         }
         else

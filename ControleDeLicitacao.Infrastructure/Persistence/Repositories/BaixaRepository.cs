@@ -303,7 +303,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         if (empenho is null) return;
 
-        var notas = await BuscarNota().Where(n => n.EmpenhoID == empenhoID).ToListAsync();
+        var notas = await BuscarNota()
+            .Where(n => n.EmpenhoID == empenhoID)
+            .Include(i => i.Itens)
+            .ToListAsync();
 
         if (!notas.Any()) return;
 

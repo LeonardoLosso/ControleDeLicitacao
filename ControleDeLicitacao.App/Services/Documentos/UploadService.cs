@@ -219,7 +219,10 @@ public class UploadService
         {
             lista = JsonSerializer.Deserialize<Retorno>(json, options);
         }
-        catch { throw new GenericException("Falha na extração formato ATA", 501); }
+        catch (Exception ex)
+        {
+            throw new GenericException("Falha na extração formato ATA", 501);
+        }
 
         if (lista is null) throw new GenericException("Falha na extração formato ATA", 501);
 
