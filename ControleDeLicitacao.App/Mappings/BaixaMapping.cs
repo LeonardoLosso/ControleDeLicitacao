@@ -45,5 +45,10 @@ public class BaixaMapping : Profile
         CreateMap<Nota, NotaSimplificadaDTO>()
             .ForMember(dest => dest.ValorEntregue, opt => opt.MapFrom(src => src.Itens.Sum(i => i.ValorTotal)))
             .ForMember(dest => dest.Unidade, opt => opt.Ignore());
+
+        //--------------------------------------------------------------------------------
+
+        CreateMap<BaixaPolicia, BaixaPoliciaDTO>()
+            .ReverseMap();
     }
 }

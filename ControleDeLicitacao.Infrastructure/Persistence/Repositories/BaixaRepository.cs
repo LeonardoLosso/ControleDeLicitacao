@@ -11,6 +11,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     private readonly DbSet<ItemDeBaixa> _dbSetItens;
 
     private readonly DbSet<Empenho> _dbSetEmpenho;
+    private readonly DbSet<BaixaPolicia> _dbSetBaixaPolicia;
 
     private readonly DbSet<Nota> _dbSetNota;
 
@@ -21,6 +22,8 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         _dbSetEmpenho = _context.Set<Empenho>();
         _dbSetNota = _context.Set<Nota>();
+
+        _dbSetBaixaPolicia = _context.Set<BaixaPolicia>();
     }
 
     public async Task<BaixaLicitacao?> ObterBaixaCompletaPorID(int id)
@@ -29,6 +32,15 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             .AsNoTracking()
             .Where(w => w.ID == id)
                 .Include(w => w.Itens)
+                .AsNoTracking()
+            .FirstOrDefaultAsync();
+    }
+    public async Task<BaixaPolicia?> ObterBaixaPoliciaCompletaPorID(int id)
+    {
+        return await BuscarBaixaPolicia()
+            .AsNoTracking()
+            .Where(w => w.ID == id)
+                //.Include(w => w.Itens)
                 .AsNoTracking()
             .FirstOrDefaultAsync();
     }
@@ -129,6 +141,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         await _context.SaveChangesAsync();
 
         await AtualizarEmpenho(entity.EmpenhoID);
+    }
+    public IQueryable<BaixaPolicia> BuscarBaixaPolicia()
+    {
+        return _dbSetBaixaPolicia.AsQueryable();
     }
     public IQueryable<Empenho> BuscarEmpenho()
     {

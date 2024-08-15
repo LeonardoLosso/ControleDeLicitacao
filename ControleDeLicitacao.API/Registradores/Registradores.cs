@@ -7,6 +7,7 @@ using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
 using ControleDeLicitacao.App.Upload.Services;
 using ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
+using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
@@ -75,10 +76,10 @@ public static class Registradores
         services.AddScoped<LogInfoService>();
         services.AddScoped<AtaService>();
         services.AddScoped<BaixaService>();
+        services.AddScoped<BaixaPolicia>();
         services.AddScoped<EmpenhoService>();
         services.AddScoped<NotaService>();
         services.AddScoped<UploadService>();
-        //services.AddScoped<RequestService>();
         services.AddHttpClient<RequestService>();
 
         return services;

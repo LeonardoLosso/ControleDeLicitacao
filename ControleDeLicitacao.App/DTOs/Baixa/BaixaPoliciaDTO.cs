@@ -1,6 +1,6 @@
 ﻿namespace ControleDeLicitacao.App.DTOs.Baixa;
 
-public class BaixaDTO
+public class BaixaPoliciaDTO
 {
     public int ID { get; set; }
     public int Status { get; set; }
@@ -10,5 +10,8 @@ public class BaixaDTO
     public DateTime? DataLicitacao { get; set; }
     public DateTime? DataAta { get; set; }
     public DateTime? Vigencia { get; set; }
-    public List<ItemDeBaixaDTO> Itens { get; set; }
+    public double ValorLicitado { get; set; }
+    public double ValorEmpenhado { get; set; }
+    public double ValorEntregue { get; set; }
+    public List<EmpenhoPoliciaDTO> Empenhos { get; set; }
 }

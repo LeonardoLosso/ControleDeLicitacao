@@ -16,6 +16,9 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto
         //----------------------------------------------------------------
         public DbSet<Nota> Nota { get; set; }
         public DbSet<ItemDeNota> ItemDeNota { get; set; }
+        //----------------------------------------------------------------
+        public DbSet<BaixaPolicia> BaixaPolicia { get; set; }
+        //public DbSet<ItemDeNota> ItemDeNota { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +49,12 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto
 
             modelBuilder.Entity<ItemDeNota>()
                 .HasKey(p => new { p.NotaID, p.ID });
+
+            modelBuilder.Entity<BaixaPolicia>()
+                .HasMany(i => i.Empenhos)
+                .WithOne(p => p.Baixa)
+                .HasForeignKey(p => p.BaixaID)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
