@@ -146,8 +146,24 @@ public class EntidadeService
 
             return entidade;
         }
+        return null;
+    }
+    public List<string> BuscarEmpresas()
+    {
+        var cnpjs = _entidadeRepository
+            .Buscar()
+            .AsNoTracking()
+            .Where(e => e.Tipo == 1)
+            .Select(e => e.CNPJ)
+            .ToList();
 
-        return await Adicionar(entidade);
+        if (!cnpjs.Any()) throw new GenericException("Nenhuma empresa cadastrada", 501);
+        return cnpjs.Select(cnpj => AplicarMascaraCNPJ(cnpj)).ToList();
+        
+    }
+    private string AplicarMascaraCNPJ(string cnpj)
+    {
+        return Convert.ToUInt64(cnpj).ToString(@"00\.000\.000\/0000\-00");
     }
     //---------------------------------------------------------------------
 

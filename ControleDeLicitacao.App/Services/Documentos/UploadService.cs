@@ -43,7 +43,8 @@ public class UploadService
 
         if (string.IsNullOrWhiteSpace(documento)) throw new GenericException("Não foi possivel ler o documento", 501);
 
-        var template = GeraTemplateAta();
+        string cnpj = ExtraiCNPJ(documento);
+        var template = GeraTemplateAta(cnpj);
 
         var response = await _requestService.BuildRequest(documento, template);
 
@@ -57,6 +58,46 @@ public class UploadService
 
         return ataExtraida;
     }
+
+    private string ExtraiCNPJ(string documento)
+    {
+        var cnpjs = _entidadeService.BuscarEmpresas();
+
+        var cnpjsEncontrados = VerificarEObterCnpjsNoTexto(documento, cnpjs);
+
+        if (!cnpjsEncontrados.Any()) throw new GenericException("Cnpj cadastrado não encontrado no documento", 501);
+
+        return cnpjsEncontrados.First();
+    }
+    public static List<string> VerificarEObterCnpjsNoTexto(string texto, List<string> listaDeCnpjs)
+    {
+        List<string> cnpjsEncontrados = new List<string>();
+
+        // Expressão regular para encontrar CNPJs no texto
+        var cnpjPattern = @"\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}";
+        var matches = Regex.Matches(texto, cnpjPattern);
+
+        foreach (Match match in matches)
+        {
+            string cnpjEncontrado = match.Value;
+
+            // Remove caracteres especiais do CNPJ encontrado para compará-lo
+            string cnpjSemFormatacao = Regex.Replace(cnpjEncontrado, @"\D", "");
+
+            foreach (var cnpj in listaDeCnpjs)
+            {
+                string cnpjListaSemFormatacao = Regex.Replace(cnpj, @"\D", "");
+
+                if (cnpjSemFormatacao == cnpjListaSemFormatacao)
+                {
+                    cnpjsEncontrados.Add(cnpjEncontrado);
+                }
+            }
+        }
+
+        return cnpjsEncontrados;
+    }
+
     public async Task<EmpenhoDTO> UploadEmpenho(IFormFile file, int idBaixa)
     {
         var documento = await PdfToString(file);
@@ -103,22 +144,21 @@ public class UploadService
     }
 
     //------------------------------------[GEMINI]--------------------------------------
-    private string GeraTemplateAta()
+    private string GeraTemplateAta(string cnpj)
     {
         string cabecalho =
-            "preciso que extraia pra mim informações de um texto. " +
+            $"preciso que extraia pra mim informações de um texto APENAS sobre a empresa com o cnpj: {cnpj}. " +
+            "Ignore completamente itens e dados de outras empresas" +
             "Você ira encontrar informações da entidade licitante (será sempre uma prefeitura ou batalhão de policia), empresa contratada, e itens. " +
             "Tipo: Empresa = 1, Prefeitura = 2, Policia/secretaria de segurança = 3. Caso não entre no meu padrão, defina o tipo como 2" +
-            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. ";
+            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. " ;
 
         string reforco =
             "Quanto ao nome do item extraia apenas o nome dele como: " +
-            "'abobora', 'morango', 'limão taiti', substantivos proprios " +
+            "'abobora', 'morango', 'limão', substantivos proprios, " +
+            "se conter tipo retorne com o tipo se fizer parte do nome, por exemplo: maçã gala, banana nanica... etc " +
+            "preciso do nome do item" +
             "(ignore coisas como 'in natura', 'fruta' e as descrições) ";
-
-        string condicional =
-            "IMPORTANTE: Quando um item repetir agrupe-o some quantidade e utilize o valor unitário menor. " +
-            "Para que o agrupamento funcione é importante analizar todo o documento antes de gerar a resposta";
 
         string modeloDeRetorno =
             "O objeto de retorno deve atender esse formato: " +
@@ -133,7 +173,6 @@ public class UploadService
         string template = (
             cabecalho +
             reforco +
-            condicional +
             modeloDeRetorno);
 
         return template;
@@ -178,8 +217,8 @@ public class UploadService
     }
     internal class EntidadeDeRetorno
     {
-        public string CNPJ { get; set; }
-        public string Nome { get; set; }
+        public string? CNPJ { get; set; }
+        public string? Nome { get; set; }
         public int Tipo { get; set; }
     }
     internal class DocumentoExtraido
