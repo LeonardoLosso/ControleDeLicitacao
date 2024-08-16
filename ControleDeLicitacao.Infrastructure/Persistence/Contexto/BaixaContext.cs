@@ -18,7 +18,7 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto
         public DbSet<ItemDeNota> ItemDeNota { get; set; }
         //----------------------------------------------------------------
         public DbSet<BaixaPolicia> BaixaPolicia { get; set; }
-        //public DbSet<ItemDeNota> ItemDeNota { get; set; }
+        public DbSet<EmpenhoPolicia> EmpenhoPolicia { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
