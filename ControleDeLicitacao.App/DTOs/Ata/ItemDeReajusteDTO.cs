@@ -7,8 +7,8 @@ public class ItemDeReajusteDTO
     public int ReajusteID { get; set; }
     public string Nome { get; set; }
     public string Unidade { get; set; }
-    public double Quantidade { get; set; }
+    public double QtdeLicitada { get; set; }
     public double ValorUnitario { get; set; }
-    public double ValorTotal { get; set; }
+    public double ValorLicitado { get; set; }
     public double Desconto { get; set; }
 }

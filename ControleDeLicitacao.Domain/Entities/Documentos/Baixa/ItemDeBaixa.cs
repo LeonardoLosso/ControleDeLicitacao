@@ -19,22 +19,23 @@ public class ItemDeBaixa
     public string Unidade { get; set; }
 
     [Required]
-    public double QtdeEmpenhada { get; set; }
+    public double QtdeEmpenhada { get; set; } = 0;
 
     [Required]
-    public double QtdeLicitada { get; set; }
+    public double QtdeLicitada { get; set; } = 0;
 
     [Required]
-    public double QtdeAEmpenhar { get; set; }
+    public double QtdeAEmpenhar { get; set; } = 0;
 
     [Required]
-    public double ValorEmpenhado { get; set; }
+    public double ValorEmpenhado { get; set; } = 0;
 
     [Required]
-    public double ValorLicitado { get; set; }
+    public double ValorLicitado { get; set; } = 0;
 
     [Required]
-    public double Saldo { get; set; }
+    public double Saldo { get; set; } = 0;
+    public double Desconto { get; set; }
 
     [Required]
     public double ValorUnitario { get; set; }

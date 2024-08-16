@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
-using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 
@@ -20,6 +20,18 @@ public class BaixaMapping : Profile
             .ReverseMap();
 
         CreateMap<ItemDeBaixa, ItemDeBaixaDTO>().ReverseMap();
+
+        CreateMap<BaixaLicitacao, AtaDTO>()
+            .ForMember(dest => dest.Empresa, opt => opt.MapFrom(src => src.EmpresaID))
+            .ForMember(dest => dest.Orgao, opt => opt.MapFrom(src => src.OrgaoID))
+            .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.Itens))
+            .ReverseMap();
+
+        CreateMap<ItemDeBaixa, ItemDeAtaDTO>()
+            .ForMember(dest => dest.QtdeLicitada, opt => opt.MapFrom(src => src.QtdeLicitada))
+            .ForMember(dest => dest.ValorLicitado, opt => opt.MapFrom(src => src.ValorLicitado))
+            .ForMember(dest => dest.AtaID, opt => opt.MapFrom(src => src.BaixaID))
+            .ReverseMap();
 
         //--------------------------------------------------------------------------------
 

@@ -3,7 +3,6 @@ using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.DTOs.Entidades;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
-using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Upload.Services;
 using ControleDeLicitacao.Common;
@@ -17,18 +16,16 @@ namespace ControleDeLicitacao.App.Services.Documentos;
 public class UploadService
 {
     private readonly RequestService _requestService;
-    private readonly AtaService _ataService;
     private readonly BaixaService _baixaService;
     private readonly EmpenhoService _empenhoService;
     private readonly EntidadeService _entidadeService;
     private readonly ItemService _itemService;
     public UploadService
-        (RequestService requestService, AtaService ataService,
+        (RequestService requestService,
         EntidadeService entidadeService, ItemService itemService,
         BaixaService baixaService, EmpenhoService empenhoService)
     {
         _requestService = requestService;
-        _ataService = ataService;
         _entidadeService = entidadeService;
         _itemService = itemService;
         _baixaService = baixaService;
@@ -52,9 +49,8 @@ public class UploadService
 
         var ataExtraida = await JsonToAtaLicitacao(retorno);
 
-        ataExtraida = await _ataService.Adicionar(ataExtraida);
+        ataExtraida = await _baixaService.Adicionar(ataExtraida);
 
-        var baixa = await _baixaService.Adicionar(ataExtraida.ID);
 
         return ataExtraida;
     }
@@ -278,7 +274,6 @@ public class UploadService
         try
         {
             var itens = await RetornaItens(lista.DocumentoExtraido.Itens);
-            ata.TotalLicitado = itens.Sum(i => i.ValorTotal);
             ata.Itens = itens;
         }
         catch { throw new GenericException("Erro ao extrair Itens", 501); }
@@ -362,10 +357,10 @@ public class UploadService
                 AtaID = 0,
                 Desconto = 0,
                 Nome = item.Nome ?? "",
-                Quantidade = item.Quantidade,
+                QtdeLicitada = item.Quantidade,
                 Unidade = "",
                 ValorUnitario = item.ValorUnitario,
-                ValorTotal = item.ValorUnitario * item.Quantidade
+                ValorLicitado = item.ValorUnitario * item.Quantidade
             };
 
             itensAta.Add(itemAta);

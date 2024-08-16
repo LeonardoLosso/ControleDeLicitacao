@@ -10,5 +10,7 @@ public class AtaSimplificadaDTO
     public string Orgao { get; set; }
     public DateTime? DataLicitacao { get; set; }
     public DateTime? DataAta { get; set; }
+    public double Saldo { get; set; }
+    public double TotalEmpenhado { get; set; }
     public double TotalLicitado { get; set; }
 }

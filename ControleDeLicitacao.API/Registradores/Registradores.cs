@@ -2,7 +2,6 @@
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.App.Services.Cadastros.User;
 using ControleDeLicitacao.App.Services.Documentos;
-using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
 using ControleDeLicitacao.App.Upload.Services;
@@ -28,7 +27,6 @@ public static class Registradores
 
         services.AddDbContext<UsuarioContext>(opts => opts.UseSqlServer(connString));
 
-        services.AddDbContext<AtaContext>(opts => opts.UseSqlServer(connString));
 
         services.AddDbContext<BaixaContext>(opts => opts.UseSqlServer(connString));
 
@@ -74,7 +72,6 @@ public static class Registradores
         services.AddScoped<UsuarioService>();
         services.AddSingleton<TokenService>();
         services.AddScoped<LogInfoService>();
-        services.AddScoped<AtaService>();
         services.AddScoped<BaixaService>();
         services.AddScoped<BaixaPolicia>();
         services.AddScoped<EmpenhoService>();
@@ -90,7 +87,6 @@ public static class Registradores
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<DbContext, EntidadeContext>();
         services.AddScoped<ItemRepository>();
-        services.AddScoped<AtaRepository>();
         services.AddScoped<BaixaRepository>();
 
         return services;
@@ -101,7 +97,6 @@ public static class Registradores
         services.AddAutoMapper(typeof(EntidadeMapping).Assembly);
         services.AddAutoMapper(typeof(ItemMapping).Assembly);
         services.AddAutoMapper(typeof(UsuarioMapping).Assembly);
-        services.AddAutoMapper(typeof(AtaMapping).Assembly);
         services.AddAutoMapper(typeof(ReajusteMapping).Assembly);
         services.AddAutoMapper(typeof(BaixaMapping).Assembly);
 

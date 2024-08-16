@@ -24,5 +24,6 @@ namespace ControleDeLicitacao.App.DTOs.Baixa
         public double Saldo { get; set; }
 
         public double ValorUnitario { get; set; }
+        public double Desconto { get; set; }
     }
 }

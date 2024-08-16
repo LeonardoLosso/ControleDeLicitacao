@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using ControleDeLicitacao.App.DTOs;
+using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Error;
-using ControleDeLicitacao.App.Services.Documentos.Ata;
+using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Common;
+using ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +16,14 @@ public class BaixaService
 {
     private readonly IMapper _mapper;
     private readonly BaixaRepository _baixaRepository;
-    private readonly AtaService _ataService;
+    private readonly EntidadeService _entidadeService;
 
-    public BaixaService(IMapper mapper, BaixaRepository baixaRepository, AtaService ataService)
+
+    public BaixaService(IMapper mapper, BaixaRepository baixaRepository, EntidadeService entidadeService)
     {
         _mapper = mapper;
         _baixaRepository = baixaRepository;
-        _ataService = ataService;
+        _entidadeService = entidadeService;
     }
 
     public async Task<BaixaDTO?> ObterPorID(int id)
@@ -30,6 +34,16 @@ public class BaixaService
         if (baixaLicitacao is null) return null;
 
         return _mapper.Map<BaixaDTO>(baixaLicitacao);
+    }
+
+    public async Task<AtaDTO?> ObterPorIDMapAta(int id)
+    {
+
+        var baixaLicitacao = await _baixaRepository.ObterBaixaCompletaPorID(id);
+
+        if (baixaLicitacao is null) return null;
+
+        return _mapper.Map<AtaDTO>(baixaLicitacao);
     }
 
     public async Task<List<ItemDeBaixaDTO>> ObterItensPorID(int id, string? search = null)
@@ -48,127 +62,213 @@ public class BaixaService
         return itens;
     }
 
-    public async Task<BaixaDTO> Adicionar(int id)
+    public async Task<AtaDTO> Adicionar(AtaDTO dto)
     {
-        var ata = await _ataService.ObterPorID(id);
+        dto.Itens = AgruparItens(dto);
 
-        if (ata is null) return null;
+        var ataLicitacao = _mapper.Map<BaixaLicitacao>(dto);
 
-        var baixa = new BaixaLicitacao()
-        {
-            ID = ata.ID,
-            DataAta = ata.DataAta,
-            DataLicitacao = ata.DataLicitacao,
-            Vigencia = ata.Vigencia,
-            Edital = ata.Edital,
-            EmpresaID = ata.Empresa,
-            OrgaoID = ata.Orgao,
-            Status = ata.Status,
-            Itens = new List<ItemDeBaixa>()
-        };
-        foreach (var item in ata.Itens)
-        {
-            var itemBaixa = new ItemDeBaixa()
-            {
-                ID = item.ID,
-                BaixaID = baixa.ID,
-                Nome = item.Nome,
-                Unidade = item.Unidade,
-                QtdeEmpenhada = 0,
-                QtdeLicitada = item.Quantidade,
-                QtdeAEmpenhar = item.Quantidade,
-                ValorEmpenhado = 0,
-                ValorLicitado = item.ValorTotal,
-                Saldo = item.ValorTotal,
-                ValorUnitario = item.ValorUnitario,
-            };
-            baixa.Itens.Add(itemBaixa);
-        }
+        await _baixaRepository.Adicionar(ataLicitacao);
 
-        await _baixaRepository.Adicionar(baixa);
-
-        return _mapper.Map<BaixaDTO>(baixa);
+        return _mapper.Map<AtaDTO>(ataLicitacao);
     }
-    public async Task AlterarStatus(BaixaDTO dto)
-    {
-        //VALIDAR EMPENHOS ATIVOS
 
-        var possuiEmpenhoAtivo = await _baixaRepository
-            .BuscarEmpenho()
-            .Where(w => w.BaixaID == dto.ID && w.Status == 1)
-            .AnyAsync();
-        if (possuiEmpenhoAtivo)
-            throw new GenericException("O Documento possui Empenhos ativos!", 501);
+    public async Task Editar(BaixaDTO dto, bool validaStatus = true)
+    {
+        dto.Itens = AgruparItensBaixa(dto);
+
+        if (validaStatus)
+        {
+            ValidarInativo(dto.Status);
+        }
 
         var baixa = _mapper.Map<BaixaLicitacao>(dto);
 
-        if(baixa is not null)
-        {
-            await _baixaRepository.Editar(baixa);
-        }
+        if (baixa is null) return;
+
+        await _baixaRepository.Editar(baixa);
     }
-    public async Task Editar(int id)
+    public async Task<ListagemDTO<AtaSimplificadaDTO>> Listar(int? pagina = null,
+                                                              int? tipo = null,
+                                                              int? status = null,
+                                                              int? unidade = null,
+                                                              DateTime? dataInicial = null,
+                                                              DateTime? dataFinal = null,
+                                                              DateTime? dataAtaInicial = null,
+                                                              DateTime? dataAtaFinal = null,
+                                                              string? search = null)
     {
-        try
+        var take = 15;
+        var listagemDTO = new ListagemDTO<AtaSimplificadaDTO>();
+        var query = _baixaRepository.Buscar();
+
+        if (tipo.HasValue)
         {
-            var ata = await _ataService.ObterPorID(id);
+            if (tipo == 3)
+                query = query.Where(w => w.Unidade == tipo);
+            else query = query.Where(w => w.Unidade != 3);
+        }
 
-            var dto = await ObterPorID(id);
+        if (status.HasValue)
+            query = query.Where(w => w.Status == status);
 
-            if (dto is not null && ata is not null)
+        if (unidade.HasValue)
+            query = query.Where(w => w.Unidade == unidade);
+
+        if (dataInicial.HasValue)
+            query = query.Where(w => w.DataLicitacao >= dataInicial);
+
+        if (dataFinal.HasValue)
+            query = query.Where(w => w.DataLicitacao <= dataFinal);
+
+        if (dataAtaInicial.HasValue)
+            query = query.Where(w => w.DataAta >= dataAtaInicial);
+
+        if (dataAtaFinal.HasValue)
+            query = query.Where(w => w.DataAta <= dataAtaFinal);
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.BuscarPalavraChave(search);
+
+        query = query.OrderByDescending(o => o.DataAta);
+
+        listagemDTO.TotalItems = query.Count();
+
+        if (pagina.HasValue)
+        {
+            listagemDTO.Page = pagina ?? 0;
+            listagemDTO.CalcularTotalPage();
+
+            var skip = (pagina.Value - 1) * take;
+            query = query.Skip(skip).Take(take);
+        }
+
+
+        var lista = await query.Select(s =>
+        new AtaSimplificadaDTO
+        {
+            ID = s.ID,
+            Edital = s.Edital,
+            Status = s.Status,
+            DataAta = s.DataAta,
+            DataLicitacao = s.DataLicitacao,
+            Empresa = $"{s.EmpresaID} - {_entidadeService.ObterNome(s.EmpresaID)}",
+            Orgao = $"{s.OrgaoID} - {_entidadeService.ObterNome(s.OrgaoID)}",
+            Saldo = s.Itens.Sum(i => i.Saldo),
+            TotalEmpenhado = s.Itens.Sum(i => i.ValorEmpenhado),
+            TotalLicitado = s.Itens.Sum(i => i.ValorLicitado),
+            Unidade = s.Unidade
+        }).ToListAsync();
+
+        listagemDTO.Lista = lista;
+
+        return listagemDTO;
+    }
+    private List<ItemDeAtaDTO> AgruparItens(AtaDTO dto)
+    {
+        var itens = dto.Itens;
+
+        var groupedItens = itens
+            .GroupBy(i => i.ID)
+            .Select(g => new ItemDeAtaDTO
             {
-                dto.DataAta = ata.DataAta;
-                dto.DataLicitacao = ata.DataLicitacao;
-                dto.Vigencia = ata.Vigencia;
-                dto.Edital = ata.Edital;
-                dto.Empresa = ata.Empresa;
-                dto.Orgao = ata.Orgao;
+                ID = g.Key,
+                AtaID = g.First().AtaID,
+                Nome = g.First().Nome,
+                Unidade = g.First().Unidade,
+                QtdeLicitada = g.Sum(i => i.QtdeLicitada),
+                ValorUnitario = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario,
+                ValorLicitado = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario * g.Sum(i => i.QtdeLicitada),
+                Desconto = g.OrderBy(i => i.ValorUnitario).First().Desconto
+            })
+            .ToList();
+
+        return groupedItens;
+    }
+    private List<ItemDeBaixaDTO> AgruparItensBaixa(BaixaDTO dto)
+    {
+        var itens = dto.Itens;
+
+        var groupedItens = itens
+            .GroupBy(i => i.ID)
+            .Select(g => new ItemDeBaixaDTO
+            {
+                ID = g.Key,
+                BaixaID = g.First().BaixaID,
+                Nome = g.First().Nome,
+                Unidade = g.First().Unidade,
+                QtdeLicitada = g.Sum(i => i.QtdeLicitada),
+                ValorUnitario = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario,
+                ValorLicitado = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario * g.Sum(i => i.QtdeLicitada),
+                Desconto = g.OrderBy(i => i.ValorUnitario).First().Desconto,
+                QtdeEmpenhada = g.Sum(i => i.QtdeEmpenhada),
+                QtdeAEmpenhar = g.Sum(i => i.QtdeLicitada) - g.Sum(i => i.QtdeEmpenhada),
+                Saldo = g.Sum(i => i.Saldo),
+                ValorEmpenhado = g.Sum(i => i.ValorEmpenhado),
+            })
+            .ToList();
+
+        return groupedItens;
+    }
+    private void ValidarInativo(int status)
+    {
+        if (status == 2) throw new GenericException("Não é possivel editar um documento inativo", 501);
+    }
+
+    //----------------------------------------------------------
+    public async Task<ReajusteDTO> AdicionarReajuste(ReajusteDTO dto)
+    {
+        if (dto.Itens.Count == 0) throw new GenericException("Adicione itens antes de criar historico", 512);
+
+        var status = await _baixaRepository.Buscar()
+            .AsNoTracking()
+            .Where(w => w.ID == dto.AtaID)
+            .Select(s => s.Status).FirstOrDefaultAsync();
 
 
+        ValidarInativo(status);
 
-                dto.Itens = new List<ItemDeBaixaDTO>();
-                foreach (var item in ata.Itens)
-                {
-                    var itemBaixa = new ItemDeBaixaDTO()
-                    {
-                        ID = item.ID,
-                        BaixaID = dto.ID,
-                        Nome = item.Nome,
-                        Unidade = item.Unidade,
-                        QtdeEmpenhada = 0,
-                        QtdeLicitada = item.Quantidade,
-                        QtdeAEmpenhar = item.Quantidade,
-                        ValorEmpenhado = 0,
-                        ValorLicitado = item.ValorTotal,
-                        Saldo = item.ValorTotal,
-                        ValorUnitario = item.ValorUnitario,
-                    };
-                    dto.Itens.Add(itemBaixa);
-                }
-                //else
-                //{
-                //    foreach(var item in dto.Itens)
-                //    {
-                //        var itemAta = ata.Itens
-                //            .Where(i => i.ID == item.ID && i.AtaID == ata.ID)
-                //            .FirstOrDefault();
 
-                //        if(itemAta is not null)
-                //        {
-                //            item.ValorUnitario = itemAta.ValorUnitario;
-                //            item.ValorLicitado = itemAta.ValorTotal;
-                //            item.Saldo = itemAta.ValorTotal - item.ValorEmpenhado;
-                //        }
-                //    }
-                //}
+        var reajuste = _mapper.Map<Reajuste>(dto);
 
-                var baixa = _mapper.Map<BaixaLicitacao>(dto);
-                await _baixaRepository.Editar(baixa);
+        await _baixaRepository.AdicionarReajuste(reajuste);
+
+        return _mapper.Map<ReajusteDTO>(reajuste);
+    }
+    public async Task ExcluirReajuste(int id)
+    {
+        var reajuste = await _baixaRepository
+            .BuscarReajuste()
+            .AsNoTracking()
+            .Where(w => w.ID == id)
+            .Include(i => i.Itens)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        await _baixaRepository.ExcluirReajuste(reajuste);
+    }
+    public async Task<List<ReajusteDTO>?> ListarReajuste(int id)
+    {
+        var reajustes = await _baixaRepository
+            .BuscarReajuste()
+            .AsNoTracking()
+            .Where(w => w.AtaID == id)
+            .Include(i => i.Itens)
+            .ToListAsync();
+
+        if (reajustes.Count == 0) return null;
+
+        var lista = new List<ReajusteDTO>();
+
+        foreach (var item in reajustes)
+        {
+            var reajuste = _mapper.Map<ReajusteDTO>(item);
+
+            if (reajuste is not null)
+            {
+                lista.Add(reajuste);
             }
         }
-        catch (Exception ex)
-        {
-            throw new GenericException("Erro ao editar Baixa!", 513, ex);
-        }
+        return lista;
     }
 }

@@ -1,4 +1,5 @@
-﻿using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
+﻿using ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste;
+using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
     private readonly DbSet<Nota> _dbSetNota;
 
+    private readonly DbSet<Reajuste> _dbSetReajuste;
+
     public BaixaRepository(BaixaContext context) : base(context)
     {
         _context = context;
@@ -24,6 +27,8 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetNota = _context.Set<Nota>();
 
         _dbSetBaixaPolicia = _context.Set<BaixaPolicia>();
+
+        _dbSetReajuste = _context.Set<Reajuste>();
     }
 
     public async Task<BaixaLicitacao?> ObterBaixaCompletaPorID(int id)
@@ -44,43 +49,21 @@ public class BaixaRepository : Repository<BaixaLicitacao>
                 .AsNoTracking()
             .FirstOrDefaultAsync();
     }
-    public override async Task Adicionar(BaixaLicitacao entity)
-    {
-
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [BaixaLicitacao] ON");
-
-                await _context.BaixaLicitacao.AddAsync(entity);
-                await _context.SaveChangesAsync();
-
-                await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [BaixaLicitacao] OFF");
-
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
+    
     public override async Task Editar(BaixaLicitacao updatedBaixa)
     {
-        var existingAta = await _context.Set<BaixaLicitacao>()
+        var existingBaixa = await _context.Set<BaixaLicitacao>()
             .Include(a => a.Itens)
             .FirstOrDefaultAsync(a => a.ID == updatedBaixa.ID);
 
-        if (existingAta is null)
+        if (existingBaixa is null)
         {
             throw new InvalidOperationException("BaixaLicitacao not found.");
         }
 
-        _context.Entry(existingAta).CurrentValues.SetValues(updatedBaixa);
+        _context.Entry(existingBaixa).CurrentValues.SetValues(updatedBaixa);
 
-        foreach (var existingItem in existingAta.Itens.ToList())
+        foreach (var existingItem in existingBaixa.Itens.ToList())
         {
             var updatedItem = updatedBaixa.Itens
                                         .FirstOrDefault(
@@ -100,10 +83,10 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         foreach (var newItem in updatedBaixa.Itens)
         {
-            if (!existingAta.Itens
-                .Any(i => i.BaixaID == newItem.BaixaID && i.ID == newItem.ID && i.ValorUnitario == i.ValorUnitario))
+            if (!existingBaixa.Itens
+                .Any(i => i.BaixaID == newItem.BaixaID && i.ID == newItem.ID && i.ValorUnitario == newItem.ValorUnitario))
             {
-                existingAta.Itens.Add(newItem);
+                existingBaixa.Itens.Add(newItem);
             }
         }
 
@@ -114,7 +97,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetEmpenho.Add(entity);
         await _context.SaveChangesAsync();
 
-        if(atualizaBaixa)
+        if (atualizaBaixa)
             await AtualizarBaixa(entity.BaixaID);
 
     }
@@ -123,10 +106,8 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetNota.Add(entity);
         await _context.SaveChangesAsync();
 
-        if (entity.Itens.Count > 0)
-        {
-            await AtualizarEmpenho(entity.EmpenhoID);
-        }
+
+        await AtualizarEmpenho(entity.EmpenhoID);
     }
     public async Task ExcluirEmpenho(Empenho entity)
     {
@@ -267,6 +248,23 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         await AtualizarEmpenho(updatedNota.EmpenhoID);
     }
 
+    //--------------------------------------------------------
+    public async Task AdicionarReajuste(Reajuste reajuste)
+    {
+        _dbSetReajuste.Add(reajuste);
+        await _context.SaveChangesAsync();
+    }
+    public IQueryable<Reajuste> BuscarReajuste()
+    {
+        return _dbSetReajuste.AsQueryable();
+    }
+
+    public async Task ExcluirReajuste(Reajuste reajuste)
+    {
+        _dbSetReajuste.Remove(reajuste);
+        await _context.SaveChangesAsync();
+    }
+
     //---------------------[PRIVATE]--------------------------
     private async Task<List<Empenho>> ObterEmpenhosPorBaixa(int id)
     {
@@ -351,5 +349,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         _context.Update(empenho);
         await _context.SaveChangesAsync();
+
+        await AtualizarBaixa(empenho.BaixaID);
     }
 }

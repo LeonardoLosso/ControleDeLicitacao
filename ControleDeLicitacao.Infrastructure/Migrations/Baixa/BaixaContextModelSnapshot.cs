@@ -22,10 +22,72 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste.ItemDeReajuste", b =>
+                {
+                    b.Property<int>("AtaID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReajusteID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Desconto")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<double>("Quantidade")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Unidade")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<double>("ValorTotal")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
+
+                    b.HasKey("AtaID", "ReajusteID", "ID");
+
+                    b.HasIndex("ReajusteID");
+
+                    b.ToTable("ItemDeReajuste");
+                });
+
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste.Reajuste", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int>("AtaID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Reajuste");
+                });
+
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", b =>
                 {
                     b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
                     b.Property<DateTime?>("DataAta")
                         .HasColumnType("datetime2");
@@ -45,6 +107,12 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalReajustes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Unidade")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Vigencia")
@@ -150,6 +218,9 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .HasColumnType("int");
 
                     b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Desconto")
                         .HasColumnType("float");
 
                     b.Property<string>("Nome")
@@ -349,6 +420,17 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                     b.ToTable("Nota");
                 });
 
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste.ItemDeReajuste", b =>
+                {
+                    b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste.Reajuste", "Reajuste")
+                        .WithMany("Itens")
+                        .HasForeignKey("ReajusteID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reajuste");
+                });
+
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.ItemDeBaixa", b =>
                 {
                     b.HasOne("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", "Baixa")
@@ -391,6 +473,11 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .IsRequired();
 
                     b.Navigation("Nota");
+                });
+
+            modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste.Reajuste", b =>
+                {
+                    b.Navigation("Itens");
                 });
 
             modelBuilder.Entity("ControleDeLicitacao.Domain.Entities.Documentos.Baixa.BaixaLicitacao", b =>

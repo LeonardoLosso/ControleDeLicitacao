@@ -1,19 +1,20 @@
 ﻿using ControleDeLicitacao.App.DTOs.Ata;
-using ControleDeLicitacao.App.Services.Documentos.Ata;
 using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using ControleDeLicitacao.App.Services.Documentos.Baixa;
+using ControleDeLicitacao.App.DTOs.Baixa;
 
 namespace ControleDeLicitacao.API.Controllers.Documentos.Ata;
 
 [Route("[controller]")]
 public class AtaController : BaseController
 {
-    private readonly AtaService _service;
+    private readonly BaixaService _service;
     public AtaController(
         LogInfoService logInfoService,
-        AtaService service)
+        BaixaService service)
          : base(logInfoService)
     {
         _service = service;
@@ -30,7 +31,7 @@ public class AtaController : BaseController
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Editar(int id, [FromBody] JsonPatchDocument<AtaDTO> patchDoc)
+    public async Task<IActionResult> Editar(int id, [FromBody] JsonPatchDocument<BaixaDTO> patchDoc)
     {
         await base.ValidaRecurso(304);
 
@@ -55,7 +56,7 @@ public class AtaController : BaseController
     }
 
     [HttpPatch("status/{id}")]
-    public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<AtaDTO> patchDoc)
+    public async Task<IActionResult> AlteraStatus(int id, JsonPatchDocument<BaixaDTO> patchDoc)
     {
         await base.ValidaRecurso(305);
         var dto = await _service.ObterPorID(id);
@@ -83,7 +84,7 @@ public class AtaController : BaseController
     {
         await base.ValidaRecurso(301);
 
-        var ata = await _service.ObterPorID(id);
+        var ata = await _service.ObterPorIDMapAta(id);
 
         if (ata is null) return NotFound();
 

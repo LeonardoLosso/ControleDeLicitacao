@@ -2,6 +2,8 @@
 
 public class BaixaDTO
 {
+    public int Unidade { get; set; }
+
     public int ID { get; set; }
     public int Status { get; set; }
     public string Edital { get; set; }
@@ -11,4 +13,6 @@ public class BaixaDTO
     public DateTime? DataAta { get; set; }
     public DateTime? Vigencia { get; set; }
     public List<ItemDeBaixaDTO> Itens { get; set; }
+    public int TotalReajustes { get; set; }
+
 }
