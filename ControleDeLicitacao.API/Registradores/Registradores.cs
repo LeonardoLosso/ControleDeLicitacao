@@ -73,7 +73,7 @@ public static class Registradores
         services.AddSingleton<TokenService>();
         services.AddScoped<LogInfoService>();
         services.AddScoped<BaixaService>();
-        services.AddScoped<BaixaPolicia>();
+        services.AddScoped<BaixaPoliciaService>();
         services.AddScoped<EmpenhoService>();
         services.AddScoped<NotaService>();
         services.AddScoped<UploadService>();

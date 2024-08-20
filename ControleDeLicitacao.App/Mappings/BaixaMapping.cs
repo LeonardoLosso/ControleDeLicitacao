@@ -60,7 +60,13 @@ public class BaixaMapping : Profile
 
         //--------------------------------------------------------------------------------
 
-        CreateMap<BaixaPolicia, BaixaPoliciaDTO>()
+        CreateMap<BaixaLicitacao, BaixaPoliciaDTO>()
+            .ForMember(dest => dest.Empresa, opt => opt.MapFrom(src => src.EmpresaID))
+            .ForMember(dest => dest.Orgao, opt => opt.MapFrom(src => src.OrgaoID))
             .ReverseMap();
+
+        CreateMap<EmpenhoPolicia, EmpenhoPoliciaDTO>()
+            .ReverseMap();
+
     }
 }

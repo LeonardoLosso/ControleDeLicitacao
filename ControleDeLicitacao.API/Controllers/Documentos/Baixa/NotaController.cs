@@ -31,7 +31,7 @@ public class NotaController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> Listar(int id)
     {
-        await base.ValidaRecurso(501); // se erro excluir tab notas
+        await base.ValidaRecurso(501);
 
         var lista = await _service.Listar(id);
         return Ok(lista);

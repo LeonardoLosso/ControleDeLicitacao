@@ -23,12 +23,15 @@ public class ItemDeNota
 
     [Required]
     public double Quantidade { get; set; }
+    public double QtdeCaixa { get; set; } = 0;
 
     [Required]
     public double ValorUnitario { get; set; }
 
     [Required]
     public double ValorTotal { get; set; }
+    public double ValorCaixa { get; set; } = 0;
+
 
     [ForeignKey(nameof(NotaID))]
     public Nota Nota { get; set; }

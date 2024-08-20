@@ -4,6 +4,7 @@ using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
 {
     [DbContext(typeof(BaixaContext))]
-    partial class BaixaContextModelSnapshot : ModelSnapshot
+    [Migration("20240819161126_AlteracaoPolicia")]
+    partial class AlteracaoPolicia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -314,9 +316,6 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<double>("QtdeCaixa")
-                        .HasColumnType("float");
-
                     b.Property<double>("Quantidade")
                         .HasColumnType("float");
 
@@ -324,9 +323,6 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Baixa
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
-
-                    b.Property<double>("ValorCaixa")
-                        .HasColumnType("float");
 
                     b.Property<double>("ValorTotal")
                         .HasColumnType("float");

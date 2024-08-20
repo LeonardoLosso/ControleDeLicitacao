@@ -10,5 +10,7 @@ public class ItemDeNotaDTO
     public double Quantidade { get; set; }
     public double ValorUnitario { get; set; }
     public double ValorTotal { get; set; }
+    public double QtdeCaixa { get; set; }
+    public double ValorCaixa { get; set; }
 
 }

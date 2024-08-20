@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 
@@ -24,6 +23,4 @@ public class EmpenhoPolicia
     [Required]
     public double Valor { get; set; }
 
-    [ForeignKey(nameof(BaixaID))]
-    public BaixaPolicia Baixa { get; set; }
 }

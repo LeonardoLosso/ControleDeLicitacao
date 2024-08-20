@@ -4,6 +4,7 @@ namespace ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
 public class NotaDTO
 {
     public int ID { get; set; }
+    public bool EhPolicia { get; set; } = false;
     public string NumNota { get; set; }
     public string Edital { get; set; }
     public int BaixaID { get; set; }

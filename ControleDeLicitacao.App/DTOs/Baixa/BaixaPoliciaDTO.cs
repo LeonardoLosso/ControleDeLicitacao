@@ -7,11 +7,12 @@ public class BaixaPoliciaDTO
     public string Edital { get; set; }
     public int Empresa { get; set; }
     public int Orgao { get; set; }
+    public int Unidade { get; set; }
     public DateTime? DataLicitacao { get; set; }
     public DateTime? DataAta { get; set; }
     public DateTime? Vigencia { get; set; }
     public double ValorLicitado { get; set; }
-    public double ValorEmpenhado { get; set; }
-    public double ValorEntregue { get; set; }
+    public double ValorEmpenhado { get; set; } = 0;
+    public double ValorEntregue { get; set; } = 0;
     public List<EmpenhoPoliciaDTO> Empenhos { get; set; }
 }

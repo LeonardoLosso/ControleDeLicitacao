@@ -12,7 +12,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     private readonly DbSet<ItemDeBaixa> _dbSetItens;
 
     private readonly DbSet<Empenho> _dbSetEmpenho;
-    private readonly DbSet<BaixaPolicia> _dbSetBaixaPolicia;
+    private readonly DbSet<EmpenhoPolicia> _dbSetEmpenhoPolicia;
 
     private readonly DbSet<Nota> _dbSetNota;
 
@@ -24,9 +24,9 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetItens = _context.Set<ItemDeBaixa>();
 
         _dbSetEmpenho = _context.Set<Empenho>();
+        _dbSetEmpenhoPolicia = _context.Set<EmpenhoPolicia>();
         _dbSetNota = _context.Set<Nota>();
 
-        _dbSetBaixaPolicia = _context.Set<BaixaPolicia>();
 
         _dbSetReajuste = _context.Set<Reajuste>();
     }
@@ -40,16 +40,6 @@ public class BaixaRepository : Repository<BaixaLicitacao>
                 .AsNoTracking()
             .FirstOrDefaultAsync();
     }
-    public async Task<BaixaPolicia?> ObterBaixaPoliciaCompletaPorID(int id)
-    {
-        return await BuscarBaixaPolicia()
-            .AsNoTracking()
-            .Where(w => w.ID == id)
-                //.Include(w => w.Itens)
-                .AsNoTracking()
-            .FirstOrDefaultAsync();
-    }
-    
     public override async Task Editar(BaixaLicitacao updatedBaixa)
     {
         var existingBaixa = await _context.Set<BaixaLicitacao>()
@@ -123,13 +113,13 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         await AtualizarEmpenho(entity.EmpenhoID);
     }
-    public IQueryable<BaixaPolicia> BuscarBaixaPolicia()
-    {
-        return _dbSetBaixaPolicia.AsQueryable();
-    }
     public IQueryable<Empenho> BuscarEmpenho()
     {
         return _dbSetEmpenho.AsQueryable();
+    }
+    public IQueryable<EmpenhoPolicia> BuscarEmpenhoPolicia()
+    {
+        return _dbSetEmpenhoPolicia.AsQueryable();
     }
     public IQueryable<Nota> BuscarNota()
     {
@@ -351,5 +341,18 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         await _context.SaveChangesAsync();
 
         await AtualizarBaixa(empenho.BaixaID);
+    }
+
+    public async Task SalvarBaixaPolicia(List<EmpenhoPolicia> empenhos, int id)
+    {
+        var remover = await BuscarEmpenhoPolicia()
+            .AsNoTracking()
+            .Where(e => e.BaixaID == id)
+            .ToListAsync();
+
+        _dbSetEmpenhoPolicia.RemoveRange(remover);
+
+        _dbSetEmpenhoPolicia.AddRange(empenhos);
+        await _context.SaveChangesAsync();
     }
 }

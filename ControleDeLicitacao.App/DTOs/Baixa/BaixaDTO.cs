@@ -3,7 +3,6 @@
 public class BaixaDTO
 {
     public int Unidade { get; set; }
-
     public int ID { get; set; }
     public int Status { get; set; }
     public string Edital { get; set; }
