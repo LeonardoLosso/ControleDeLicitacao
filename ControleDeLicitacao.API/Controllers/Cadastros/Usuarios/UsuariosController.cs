@@ -13,7 +13,7 @@ public class UsuariosController : BaseController
 {
     private UsuarioService _service;
 
-    public UsuariosController(LogInfoService logInfoService, UsuarioService service): base(logInfoService)
+    public UsuariosController(LogInfoService logInfoService, UsuarioService service) : base(logInfoService)
     {
         _service = service;
     }

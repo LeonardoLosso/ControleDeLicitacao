@@ -22,7 +22,7 @@ public class Entidade : IDominio
     [MinLength(11)]
     public string CNPJ { get; set; }
 
-    [MaxLength(9)]
+    [MaxLength(14)]
     public string IE { get; set; }
 
     [MaxLength(11)]

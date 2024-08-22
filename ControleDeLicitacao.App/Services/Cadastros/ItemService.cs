@@ -23,12 +23,21 @@ public class ItemService
 
     }
 
-    public async Task<ItemDTO> Adicionar(ItemDTO dto)
+    public async Task<ItemDTO?> Adicionar(ItemDTO dto)
     {
 
         var item = _mapper.Map<Item>(dto);
 
         if (item is null) return null;
+
+        var existe = await _itemRepository
+            .Buscar()
+            .AsNoTracking()
+            .Where(i => i.Nome == item.Nome)
+            .AnyAsync();
+
+        if (existe)
+            throw new GenericException("Já existe um item com esse nome", 501);
 
         if (item.EhCesta)
         {
