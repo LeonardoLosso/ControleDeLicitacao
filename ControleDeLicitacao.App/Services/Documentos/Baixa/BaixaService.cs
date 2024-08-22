@@ -155,7 +155,6 @@ public class BaixaService
             Empresa = $"{s.EmpresaID} - {_entidadeService.ObterNome(s.EmpresaID)}",
             Orgao = $"{s.OrgaoID} - {_entidadeService.ObterNome(s.OrgaoID)}",
             Saldo = s.Itens.Sum(i => i.Saldo),
-            TotalEmpenhado = s.Itens.Sum(i => i.ValorEmpenhado),
             TotalLicitado = s.Itens.Sum(i => i.ValorLicitado),
             Unidade = s.Unidade
         }).ToListAsync();
