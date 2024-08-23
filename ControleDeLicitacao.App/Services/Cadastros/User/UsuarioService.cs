@@ -36,6 +36,9 @@ public class UsuarioService
     public async Task Cadastrar(UsuarioDTO dto)
     {
         TrataStrings(dto);
+        if (string.IsNullOrWhiteSpace(dto.Password))
+            throw new GenericException("Senha em branco", 501);
+
         Usuario usuario = _mapper.Map<Usuario>(dto);
 
         usuario.Permissoes = ConverterPermissoes(dto);
@@ -68,7 +71,7 @@ public class UsuarioService
 
     public async Task EditarAsync(UsuarioDTO dto)
     {
-        TrataStrings (dto);
+        TrataStrings(dto);
 
         var usuario = await _userManager.FindByIdAsync(dto.Id.ToString());
 
@@ -117,7 +120,9 @@ public class UsuarioService
     {
         var take = 15;
         var listagemDTO = new ListagemDTO<UsuarioSimplificadoDTO>();
-        var query = _context.Usuarios.AsQueryable();
+        var query = _context.Usuarios
+            .AsQueryable()
+            .Where(u => u.UserName != "@leo.szychta");
 
         //params
         if (status.HasValue)
@@ -143,15 +148,17 @@ public class UsuarioService
         }
 
 
-        var lista = await query.Select(s =>
-        new UsuarioSimplificadoDTO
-        {
-            Id = s.Id,
-            Status = s.Status,
-            Nome = s.Nome,
-            UserName = s.UserName,
-            CPF = s.CPF
-        }).ToListAsync();
+        var lista = await query
+            .Select(s =>
+            new UsuarioSimplificadoDTO
+            {
+                Id = s.Id,
+                Status = s.Status,
+                Nome = s.Nome,
+                UserName = s.UserName,
+                Telefone = s.Telefone,
+                Email = s.Email
+            }).ToListAsync();
 
         listagemDTO.Lista = lista;
 

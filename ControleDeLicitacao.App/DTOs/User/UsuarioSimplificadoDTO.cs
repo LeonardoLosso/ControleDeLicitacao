@@ -8,7 +8,10 @@ public class UsuarioSimplificadoDTO
 
     public int Status {  get; set; }
 
+    public string Telefone { get; set; }
+
+    public string Email { get; set; }
+
     public string UserName { get; set; }
 
-    public string CPF { get; set; }
 }
