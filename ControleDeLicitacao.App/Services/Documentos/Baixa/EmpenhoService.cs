@@ -5,7 +5,6 @@ using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace ControleDeLicitacao.App.Services.Documentos.Baixa;
 

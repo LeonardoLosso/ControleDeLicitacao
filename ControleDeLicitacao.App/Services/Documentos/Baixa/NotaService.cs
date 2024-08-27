@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
-using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;

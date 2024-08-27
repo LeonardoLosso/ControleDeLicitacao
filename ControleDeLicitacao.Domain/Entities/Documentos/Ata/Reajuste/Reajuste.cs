@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleDeLicitacao.Domain.Entities.Documentos.Ata.Reajuste;
 

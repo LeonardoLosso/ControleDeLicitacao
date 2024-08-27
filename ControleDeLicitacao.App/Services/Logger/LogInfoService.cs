@@ -1,7 +1,6 @@
 ﻿
 using ControleDeLicitacao.Domain.Entities.Log;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
-using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeLicitacao.App.Services.Logger;
 

@@ -6,7 +6,6 @@ using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
 using ControleDeLicitacao.App.Upload.Services;
 using ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
-using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
