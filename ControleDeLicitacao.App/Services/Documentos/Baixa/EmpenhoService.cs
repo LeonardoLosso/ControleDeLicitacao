@@ -5,6 +5,7 @@ using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ControleDeLicitacao.App.Services.Documentos.Baixa;
 
@@ -34,13 +35,28 @@ public class EmpenhoService
     }
     public async Task<bool> PossuiEmpenho(int id)
     {
-        var possui = await _baixaRepository
+        var tipo = _baixaRepository
+            .Buscar()
+            .Where(b => b.ID == id)
+            .AsNoTracking()
+            .Select(b => b.Unidade)
+            .FirstOrDefault();
+        
+        if(tipo == 3)
+        {
+            return await _baixaRepository
+            .BuscarEmpenhoPolicia()
+            .Where(w => w.BaixaID == id)
+            .AsNoTracking()
+            .AnyAsync();
+        }
+
+        return await _baixaRepository
             .BuscarEmpenho()
             .Where(w => w.BaixaID == id)
             .AsNoTracking()
             .AnyAsync();
 
-        return possui;
     }
 
     public async Task<List<EmpenhoSimplificadoDTO>?> Listar(int idBaixa)

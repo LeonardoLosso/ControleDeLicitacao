@@ -3,6 +3,7 @@ using ControleDeLicitacao.App.DTOs.Ata;
 using ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
+using ControleDeLicitacao.Domain.Entities.Documentos.Baixa;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -32,15 +33,9 @@ public class NotaService
 
         return dto;
     }
-    public async Task<List<NotaSimplificadaDTO>?> Listar(int idEmpenho)
+    public async Task<List<NotaSimplificadaDTO>?> Listar(int id, int? tipo)
     {
-        var notas = await _baixaRepository
-            .BuscarNota()
-            .AsNoTracking()
-            .Include(i => i.Itens)
-                .AsNoTracking()
-            .Where(w => w.EmpenhoID == idEmpenho)
-            .ToListAsync();
+        var notas = tipo == 1? await ListarNotasPolicia(id) : await ListarNotasPrefeitura(id);
 
         if (notas.Count == 0) return null;
 
@@ -122,10 +117,33 @@ public class NotaService
                 Unidade = g.First().Unidade,
                 Quantidade = g.Sum(i => i.Quantidade),
                 ValorUnitario = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario,
-                ValorTotal = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario * g.Sum(i => i.Quantidade)
+                ValorTotal = g.OrderBy(i => i.ValorUnitario).First().ValorUnitario * g.Sum(i => i.Quantidade),
+                QtdeCaixa = g.First().QtdeCaixa,
+                ValorCaixa = g.First().ValorCaixa
             })
             .ToList();
 
         return groupedItens;
+    }
+
+    private async Task<List<Nota>> ListarNotasPrefeitura(int id)
+    {
+        return await _baixaRepository
+            .BuscarNota()
+            .AsNoTracking()
+        .Include(i => i.Itens)
+                .AsNoTracking()
+            .Where(w => w.EmpenhoID == id)
+            .ToListAsync();
+    }
+    private async Task<List<Nota>> ListarNotasPolicia(int id)
+    {
+        return await _baixaRepository
+            .BuscarNota()
+            .AsNoTracking()
+        .Include(i => i.Itens)
+                .AsNoTracking()
+            .Where(w => w.BaixaID == id)
+            .ToListAsync();
     }
 }

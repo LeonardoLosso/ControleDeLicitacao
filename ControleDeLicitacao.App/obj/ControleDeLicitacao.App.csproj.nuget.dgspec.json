@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj": {}
+    "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj": {}
   },
   "projects": {
-    "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj": {
+    "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj",
+        "projectUniqueName": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj",
         "projectName": "ControleDeLicitacao.App",
-        "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj",
-        "packagesPath": "C:\\Users\\isado\\.nuget\\packages\\",
-        "outputPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.App\\obj\\",
+        "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\ControleDeLicitacao.App.csproj",
+        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
+        "outputPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.App\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\isado\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,17 +26,19 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.telerik.com/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj": {
-                "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj"
+              "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj": {
+                "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj"
               },
-              "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj": {
-                "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj"
+              "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj": {
+                "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj"
               }
             }
           }
@@ -89,24 +91,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.424\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj": {
+    "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj",
+        "projectUniqueName": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj",
         "projectName": "ControleDeLicitacao.Common",
-        "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj",
-        "packagesPath": "C:\\Users\\isado\\.nuget\\packages\\",
-        "outputPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Common\\obj\\",
+        "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Common\\ControleDeLicitacao.Common.csproj",
+        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
+        "outputPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Common\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\isado\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -115,7 +117,9 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.telerik.com/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -153,24 +157,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.424\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj": {
+    "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj",
+        "projectUniqueName": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj",
         "projectName": "ControleDeLicitacao.Domain",
-        "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj",
-        "packagesPath": "C:\\Users\\isado\\.nuget\\packages\\",
-        "outputPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\obj\\",
+        "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj",
+        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
+        "outputPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\isado\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -179,7 +183,9 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.telerik.com/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -223,24 +229,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.424\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj": {
+    "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj",
+        "projectUniqueName": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj",
         "projectName": "ControleDeLicitacao.Infrastructure",
-        "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\isado\\.nuget\\packages\\",
-        "outputPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\obj\\",
+        "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\ControleDeLicitacao.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
+        "outputPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\isado\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -249,14 +255,16 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.telerik.com/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj": {
-                "projectPath": "C:\\GitHubLeo\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj"
+              "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj": {
+                "projectPath": "C:\\GitHub\\ControleDeLicitacao\\ControleDeLicitacao.Domain\\ControleDeLicitacao.Domain.csproj"
               }
             }
           }
@@ -321,7 +329,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.424\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     }

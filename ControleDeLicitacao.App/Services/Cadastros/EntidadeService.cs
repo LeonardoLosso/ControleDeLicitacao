@@ -60,7 +60,13 @@ public class EntidadeService
 
         //params
         if (tipo.HasValue)
-            query = query.Where(w => w.Tipo == tipo);
+        {
+            if (tipo.Value != 0)
+                query = query.Where(w => w.Tipo == tipo);
+            else
+                query = query.Where(w => w.Tipo != 1);
+
+        }
 
         if (status.HasValue)
             query = query.Where(w => w.Status == status);
@@ -159,7 +165,7 @@ public class EntidadeService
 
         if (!cnpjs.Any()) throw new GenericException("Nenhuma empresa cadastrada", 501);
         return cnpjs.Select(cnpj => AplicarMascaraCNPJ(cnpj)).ToList();
-        
+
     }
     private string AplicarMascaraCNPJ(string cnpj)
     {

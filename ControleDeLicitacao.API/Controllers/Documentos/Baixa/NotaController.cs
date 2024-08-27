@@ -29,11 +29,11 @@ public class NotaController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Listar(int id)
+    public async Task<IActionResult> Listar(int id, [FromQuery]int? tipo = 0)
     {
         await base.ValidaRecurso(501);
 
-        var lista = await _service.Listar(id);
+        var lista = await _service.Listar(id, tipo);
         return Ok(lista);
     }
 

@@ -68,6 +68,11 @@ public class BaixaService
 
         var ataLicitacao = _mapper.Map<BaixaLicitacao>(dto);
 
+        foreach (var item in ataLicitacao.Itens)
+        {
+            item.QtdeAEmpenhar = item.QtdeLicitada;
+            item.Saldo = item.ValorLicitado;
+        }
         await _baixaRepository.Adicionar(ataLicitacao);
 
         return _mapper.Map<AtaDTO>(ataLicitacao);
@@ -202,8 +207,8 @@ public class BaixaService
                 Desconto = g.OrderBy(i => i.ValorUnitario).First().Desconto,
                 QtdeEmpenhada = g.Sum(i => i.QtdeEmpenhada),
                 QtdeAEmpenhar = g.Sum(i => i.QtdeLicitada) - g.Sum(i => i.QtdeEmpenhada),
-                Saldo = g.Sum(i => i.Saldo),
                 ValorEmpenhado = g.Sum(i => i.ValorEmpenhado),
+                Saldo = g.Sum(i => i.ValorLicitado - i.ValorEmpenhado)
             })
             .ToList();
 

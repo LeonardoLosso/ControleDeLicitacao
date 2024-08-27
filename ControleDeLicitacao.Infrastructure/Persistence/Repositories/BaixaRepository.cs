@@ -36,7 +36,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         return await Buscar()
             .AsNoTracking()
             .Where(w => w.ID == id)
-                .Include(w => w.Itens)
+                .Include(w => w.Itens.OrderBy(i => i.Nome))
                 .AsNoTracking()
             .FirstOrDefaultAsync();
     }
@@ -215,8 +215,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             var updatedItem = updatedNota.Itens
                                         .FirstOrDefault(
                                             i => i.NotaID == existingItem.NotaID
-                                            && i.ID == existingItem.ID
-                                            && i.ValorUnitario == existingItem.ValorUnitario);
+                                            && i.ID == existingItem.ID);
 
             if (updatedItem is null)
                 _context.ItemDeNota.Remove(existingItem);
@@ -227,7 +226,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         foreach (var newItem in updatedNota.Itens)
         {
             if (!existingNota.Itens
-                .Any(i => i.NotaID == newItem.NotaID && i.ID == newItem.ID && i.ValorUnitario == i.ValorUnitario))
+                .Any(i => i.NotaID == newItem.NotaID && i.ID == newItem.ID))
             {
                 existingNota.Itens.Add(newItem);
             }
