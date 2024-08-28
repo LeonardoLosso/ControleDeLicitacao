@@ -9,7 +9,7 @@ namespace ControleDeLicitacao.App.Upload.Services;
 public class RequestService
 {
     private readonly HttpClient _httpClient;
-    private const string API_KEY = "AIzaSyBi2hz0W9UtNMIz8R76CuA9cxZz25ri_Kk";
+    private const string API_KEY = "AIzaSyBYejOrL2iQAMM2GkIRRYfTAvjGIDO0YRc";
     public RequestService(HttpClient httpClient)
     {
         _httpClient = httpClient;

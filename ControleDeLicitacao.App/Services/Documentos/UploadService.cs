@@ -145,7 +145,7 @@ public class UploadService
         string cabecalho =
             $"preciso que extraia pra mim informações de um texto APENAS sobre a empresa com o cnpj: {cnpj}. " +
             "Ignore completamente itens e dados de outras empresas" +
-            "Você ira encontrar informações da entidade licitante (será sempre uma prefeitura ou batalhão de policia), empresa contratada, e itens. " +
+            "Você ira encontrar informações da entidade licitante (será sempre uma prefeitura ou batalhão de policia), empresa contratada, data da licitação e itens. " +
             "Tipo: Empresa = 1, Prefeitura = 2, Policia/secretaria de segurança = 3. Caso não entre no meu padrão, defina o tipo como 2" +
             "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. " ;
 
@@ -179,7 +179,7 @@ public class UploadService
         string cabecalho =
             "preciso que extraia pra mim informações de um texto. " +
             "Você ira encontrar informações da entidade licitante (será sempre um órgão publico que está solicitando a entrega), " +
-            "valor empenhado e os itens (se houver)." +
+            "valor empenhado, data do empenho e os itens (se houver)." +
             "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. ";
 
         string reforco =
