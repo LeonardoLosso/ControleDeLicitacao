@@ -8,41 +8,41 @@ public class LogInfoService
 {
     private readonly LogContext _context;
 
-    private string _operacao;
-    private string _userId;
-    private string _httpMethod;
-    private string _requestPath;
+    private string? _operacao;
+    private string? _userId;
+    private string? _httpMethod;
+    private string? _requestPath;
 
-    private DateTime _requestTime;
+    private DateTime? _requestTime;
 
     public LogInfoService(LogContext context)
     {
         _context = context;
     }
 
-    public string UserId
+    public string? UserId
     {
         get { return _userId; }
     }
-    public string Operacao
+    public string? Operacao
     {
         get { return _operacao; }
 
     }
-    public string HttpMethod
+    public string? HttpMethod
     {
         get { return _httpMethod; }
     }
-    public string RequestPath
+    public string? RequestPath
     {
         get { return _requestPath; }
     }
-    public DateTime RequestTime
+    public DateTime? RequestTime
     {
         get { return _requestTime; }
     }
 
-    public void SetRequestInfo(string userId, string method, string path, DateTime requestTime)
+    public void SetRequestInfo(string? userId, string? method, string? path, DateTime? requestTime)
     {
         _userId = userId;
         _httpMethod = method;

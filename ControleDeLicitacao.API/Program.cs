@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 //-----------[BUILDER]------------
+builder.Configuration
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+       .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+       .AddEnvironmentVariables();
+
 var connString = builder.Configuration.GetConnectionString("Connection");
 var logConnString = builder.Configuration.GetConnectionString("LogConnection");
 

@@ -57,7 +57,7 @@ public class LogMiddleware
                     if (status >= 200 && status <= 299)
                     {
                         _logService.SetRequestInfo(userId, method, path, requestTime);
-                        await _logService.SalvarLogAsync();
+                        //await _logService.SalvarLogAsync();
                     }
 
                     await responseBody.CopyToAsync(originalBodyStream);

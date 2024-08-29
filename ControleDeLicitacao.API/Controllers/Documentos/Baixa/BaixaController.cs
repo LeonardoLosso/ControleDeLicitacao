@@ -36,4 +36,9 @@ public class BaixaController : BaseController
 
         return Ok(dto);
     }
+    [HttpGet("teste")]
+    public IActionResult Teste()
+    {
+        return Ok();
+    }
 }
