@@ -66,6 +66,7 @@ public static class Registradores
     }
     public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
+        services.AddSingleton<IHostedService, StartupTask>();
         services.AddScoped<EntidadeService>();
         services.AddScoped<ItemService>();
         services.AddScoped<UsuarioService>();
