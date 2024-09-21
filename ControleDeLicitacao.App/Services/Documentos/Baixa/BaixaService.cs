@@ -133,7 +133,19 @@ public class BaixaService
             query = query.Where(w => w.DataAta <= dataAtaFinal);
 
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.BuscarPalavraChave(search);
+        {
+            var aux = query.BuscarPalavraChave(search);
+            if (aux.Any())
+                query = aux;
+            else
+            {
+                var entidadeAux = _entidadeService.BuscarQueryable(search);
+                query = query
+                    .Where(w => entidadeAux.Contains(w.EmpresaID) ||
+                    entidadeAux.Contains(w.OrgaoID) ||
+                    entidadeAux.Contains(w.Unidade));
+            }
+        }
 
         query = query.OrderByDescending(o => o.DataAta);
 

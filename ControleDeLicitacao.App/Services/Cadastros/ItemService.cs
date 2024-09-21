@@ -248,14 +248,15 @@ public class ItemService
             nomesDistinct.Clear();
             nomesDistinct = nomeComposto.Distinct().ToList();
 
+        }
 
+        if (nomesDistinct.Count > 1)
             for (var i = 1; i < nomesDistinct.Count; i++)
             {
                 var item = await ListarPorNome(string.Concat(nomesDistinct[0], ' ', nomesDistinct[i]));
                 if (item.Count == 1)
                     return _mapper.Map<ItemDTO>(item.First());
             }
-        }
 
         var busca = await ListarPorNome(nomesDistinct[0]);
         if (busca.Count == 1)
@@ -295,9 +296,7 @@ public class ItemService
     {
         return await _itemRepository.Buscar()
             .AsNoTracking()
-            .Include(item => item.ListaItens)
-                .ThenInclude(associativo => associativo.ItemFilho)
-            .Include(item => item.ListaNomes.Where(w => w.Nome.Contains(nome)))
+            .Where(item => item.ListaNomes.Any(w => w.Nome.Equals(nome)))
             .ToListAsync();
 
     }

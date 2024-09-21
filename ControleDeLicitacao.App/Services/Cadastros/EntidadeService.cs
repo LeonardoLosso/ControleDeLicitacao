@@ -167,6 +167,14 @@ public class EntidadeService
         return cnpjs.Select(cnpj => AplicarMascaraCNPJ(cnpj)).ToList();
 
     }
+    public List<int>? BuscarQueryable(string search)
+    {
+        var query = _entidadeRepository.Buscar();
+
+        query = query.BuscarPalavraChave(search);
+        
+        return query.Select(e => e.ID).ToList();
+    }
     private string AplicarMascaraCNPJ(string cnpj)
     {
         return Convert.ToUInt64(cnpj).ToString(@"00\.000\.000\/0000\-00");
