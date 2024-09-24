@@ -261,10 +261,14 @@ public class UploadService
 
         if (lista is null) throw new GenericException("Falha na extração formato ATA", 501);
 
+        var edital = lista.DocumentoExtraido.NumAta.RemoveSpaces();
+        if (!string.IsNullOrEmpty(edital))
+            edital = edital.Length > 10? edital.Substring(edital.Length - 10) : edital;
+
         var ata = new AtaDTO();
         ata.ID = 0;
         ata.Status = 1;
-        ata.Edital = lista.DocumentoExtraido.NumAta.RemoveSpaces();
+        ata.Edital = edital;
         ata.TotalReajustes = 0;
         if (lista.DocumentoExtraido.DataAta is not null)
         {
