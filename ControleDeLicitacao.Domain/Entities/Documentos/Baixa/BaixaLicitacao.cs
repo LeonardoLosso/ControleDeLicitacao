@@ -8,6 +8,9 @@ public class BaixaLicitacao : IDominio
     [Key]
     public int ID { get; set; }
 
+    [MaxLength(30)]
+    public string Responsavel { get; set; } = string.Empty;
+
     [Required]
     [MaxLength(10)]
     public string Edital {  get; set; }

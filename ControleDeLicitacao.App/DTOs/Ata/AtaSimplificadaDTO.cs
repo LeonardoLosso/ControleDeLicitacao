@@ -3,6 +3,7 @@
 public class AtaSimplificadaDTO
 {
     public int ID { get; set; }
+    public string Responsavel { get; set; } = string.Empty;
     public string Edital { get; set; }
     public int Status { get; set; }
     public int Unidade { get; set; }

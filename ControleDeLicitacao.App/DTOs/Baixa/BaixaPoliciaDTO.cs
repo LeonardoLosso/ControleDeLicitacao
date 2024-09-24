@@ -4,6 +4,7 @@ public class BaixaPoliciaDTO
 {
     public int ID { get; set; }
     public int Status { get; set; }
+    public string Responsavel { get; set; } = string.Empty;
     public string Edital { get; set; }
     public int Empresa { get; set; }
     public int Orgao { get; set; }

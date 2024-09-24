@@ -165,6 +165,7 @@ public class BaixaService
         new AtaSimplificadaDTO
         {
             ID = s.ID,
+            Responsavel = s.Responsavel,
             Edital = s.Edital,
             Status = s.Status,
             DataAta = s.DataAta,
