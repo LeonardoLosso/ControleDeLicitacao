@@ -49,6 +49,10 @@ namespace ControleDeLicitacao.Infrastructure.Persistence.Contexto
                 .HasForeignKey(p => p.NotaID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Nota>()
+                .Property(e => e.Observacao)
+                .HasMaxLength(500);
+
             modelBuilder.Entity<ItemDeNota>()
                 .HasKey(p => new { p.NotaID, p.ID });
 

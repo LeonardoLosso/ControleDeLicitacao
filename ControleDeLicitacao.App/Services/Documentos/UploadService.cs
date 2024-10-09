@@ -180,7 +180,8 @@ public class UploadService
             "preciso que extraia pra mim informações de um texto. " +
             "Você ira encontrar informações da entidade licitante (será sempre um órgão publico que está solicitando a entrega), " +
             "valor empenhado, data do empenho e os itens (se houver)." +
-            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. ";
+            "A respeito dos itens, preciso apenas daqueles itens que contenham quantidade e valor unitario. " +
+            "A respeito da data preciso dela no formato YYYY-MM-DD";
 
         string reforco =
             "Quanto ao nome do item extraia apenas o nome dele como: " +
@@ -215,7 +216,7 @@ public class UploadService
     {
         public string? CNPJ { get; set; }
         public string? Nome { get; set; }
-        public int Tipo { get; set; }
+        public int? Tipo { get; set; }
     }
     internal class DocumentoExtraido
     {
@@ -523,7 +524,7 @@ public class UploadService
         entidade.Endereco.Numero = "";
         entidade.Endereco.Cidade = "";
         entidade.Endereco.UF = "";
-        entidade.Tipo = retorno.Tipo;
+        entidade.Tipo = retorno.Tipo?? 1;
         entidade.ID = 0;
         entidade.IE = "";
         entidade.Status = 1;

@@ -68,6 +68,8 @@ public class EmpenhoService
 
         if (empenhos.Count == 0) return null;
 
+        empenhos = empenhos.OrderByDescending(o => o.Status == 1).ToList();
+
         var lista = new List<EmpenhoSimplificadoDTO>();
 
         foreach (var item in empenhos)

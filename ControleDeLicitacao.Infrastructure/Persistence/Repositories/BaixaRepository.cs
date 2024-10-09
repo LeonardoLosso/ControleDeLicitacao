@@ -43,7 +43,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public override async Task Editar(BaixaLicitacao updatedBaixa)
     {
         var existingBaixa = await _context.Set<BaixaLicitacao>()
-            .Include(a => a.Itens)
+            .Include(a => a.Itens.OrderBy(i => i.Nome))
             .FirstOrDefaultAsync(a => a.ID == updatedBaixa.ID);
 
         if (existingBaixa is null)
@@ -133,7 +133,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     {
         return await _dbSetEmpenho
             .AsNoTracking()
-            .Include(i => i.Itens)
+            .Include(i => i.Itens.OrderBy(i => i.Nome))
                 .AsNoTracking()
             .FirstOrDefaultAsync(e => e.ID == id);
     }
@@ -141,7 +141,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     {
         return await _dbSetNota
             .AsNoTracking()
-            .Include(i => i.Itens)
+            .Include(i => i.Itens.OrderBy(i => i.Nome))
                 .AsNoTracking()
             .FirstOrDefaultAsync(e => e.ID == id);
     }
@@ -150,7 +150,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         var inativo = updatedEmpenho.Status == 2;
 
         var existingEmpenho = await _dbSetEmpenho
-            .Include(a => a.Itens)
+            .Include(a => a.Itens.OrderBy(i => i.Nome))
             .FirstOrDefaultAsync(a => a.ID == updatedEmpenho.ID);
 
         if (existingEmpenho is null)
@@ -200,7 +200,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public async Task EditarNota(Nota updatedNota)
     {
         var existingNota = await _dbSetNota
-            .Include(a => a.Itens)
+            .Include(a => a.Itens.OrderBy(i => i.Nome))
             .FirstOrDefaultAsync(a => a.ID == updatedNota.ID);
 
         if (existingNota is null)
@@ -259,7 +259,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     {
         return await BuscarEmpenho()
             .Where(e => e.BaixaID == id)
-            .Include(i => i.Itens)
+            .Include(i => i.Itens.OrderBy(i => i.Nome))
             .ToListAsync();
     }
     private async Task AtualizarBaixa(int id)
@@ -308,7 +308,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
         var notas = await BuscarNota()
             .Where(n => n.EmpenhoID == empenhoID)
-            .Include(i => i.Itens)
+            .Include(i => i.Itens.OrderBy(i => i.Nome))
             .ToListAsync();
 
         if (!notas.Any()) return;

@@ -7,6 +7,8 @@ public class Nota
     [Key]
     public int ID { get; set; }
 
+    public string Observacao { get; set; } = string.Empty;
+
     [Required]
     [MaxLength(10)]
     public string NumNota { get; set; }

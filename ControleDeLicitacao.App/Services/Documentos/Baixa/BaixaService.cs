@@ -148,6 +148,7 @@ public class BaixaService
         }
 
         query = query.OrderByDescending(o => o.DataAta);
+        query = query.OrderByDescending(o => o.Status == 1);
 
         listagemDTO.TotalItems = query.Count();
 
