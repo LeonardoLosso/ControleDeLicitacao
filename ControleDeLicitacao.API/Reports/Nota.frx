@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/09/2024 17:19:57" ReportInfo.Modified="10/10/2024 17:21:02" ReportInfo.CreatorVersion="2024.2.0.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="itens" ReferenceName="itens" DataType="System.Int32" Enabled="true">
+      <Column Name="ID" DataType="System.Int32"/>
+      <Column Name="Nome" DataType="System.String"/>
+      <Column Name="NotaID" DataType="System.Int32"/>
+      <Column Name="EmpenhoID" DataType="System.Int32"/>
+      <Column Name="Unidade" DataType="System.String"/>
+      <Column Name="Quantidade" DataType="System.Double" Format="Number"/>
+      <Column Name="ValorUnitario" DataType="System.Double"/>
+      <Column Name="ValorTotal" DataType="System.Double"/>
+      <Column Name="QtdeCaixa" DataType="System.Double"/>
+      <Column Name="ValorCaixa" DataType="System.Double"/>
+    </BusinessObjectDataSource>
+    <Parameter Name="Edital" DataType="System.String" AsString="28/2024"/>
+    <Parameter Name="Numero" DataType="System.String" AsString="17096"/>
+    <Parameter Name="Empenho" DataType="System.String" AsString="1160/2024"/>
+    <Parameter Name="Orgao" DataType="System.String" AsString="Prefeitura Paiçandu"/>
+    <Parameter Name="Empresa" DataType="System.String" AsString="N.R. Alimentos"/>
+    <Parameter Name="Unidade" DataType="System.String" AsString="MERENDA"/>
+    <Parameter Name="EhPolicia" DataType="System.Boolean" AsString="False"/>
+    <Parameter Name="DataEmissao" DataType="System.DateTime" AsString="25/09/2024 03:00:00"/>
+    <Parameter Name="DataEntrega" DataType="System.DateTime" AsString="05/09/2024 03:00:00"/>
+    <Parameter Name="Observacao" DataType="System.String" AsString="ENTREGAS 05 E 09/09/24"/>
+    <Total Name="ValorTotal" Expression="[itens.ValorTotal]" Evaluator="Data1"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="103.95">
+      <TextObject Name="Text22" Left="425.25" Top="9.45" Width="75.6" Height="18.9" Text="[Edital]" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text24" Left="425.25" Top="37.8" Width="75.6" Height="18.9" Text="[Empenho]" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container1" Left="510.3" Width="207.9" Height="94.5" Fill.Color="Gainsboro">
+        <TextObject Name="Text23" Left="9.45" Top="9.45" Width="189" Height="18.9" Text="Nº [Numero]" HorzAlign="Center" VertAlign="Center" Font="Arial, 16pt, style=Bold"/>
+        <TextObject Name="Text26" Left="9.45" Top="37.8" Width="94.5" Height="18.9" Text="EMISSÃO:" Font="Arial, 10pt"/>
+        <TextObject Name="Text27" Left="103.95" Top="37.8" Width="94.5" Height="18.9" Fill.Color="Gainsboro" Text="[DataEmissao]" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+        <TextObject Name="Text28" Left="9.45" Top="66.15" Width="94.5" Height="18.9" Text="ENTREGA: " Font="Arial, 10pt"/>
+        <TextObject Name="Text29" Left="103.95" Top="66.15" Width="94.5" Height="18.9" Fill.Color="Gainsboro" Text="[DataEntrega]" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      </ContainerObject>
+      <TextObject Name="Text30" Left="321.3" Top="9.45" Width="103.95" Height="18.9" Text="Nº EDITAL:" Font="Arial, 10pt"/>
+      <TextObject Name="Text31" Left="321.3" Top="37.8" Width="103.95" Height="18.9" Text="Nº EMPENHO:" Font="Arial, 10pt"/>
+      <TextObject Name="Text34" Top="37.8" Width="85.05" Height="18.9" Text="ÓRGÃO:" Font="Arial, 10pt"/>
+      <TextObject Name="Text35" Top="66.15" Width="85.05" Height="18.9" Text="UNIDADE:" Font="Arial, 10pt"/>
+      <TextObject Name="Text36" Left="85.05" Top="37.8" Width="226.8" Height="18.9" Text="[Orgao]" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text37" Left="85.05" Top="66.15" Width="226.8" Height="18.9" Text="[Unidade]" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text32" Left="85.05" Top="9.45" Width="226.8" Height="18.9" Text="[Empresa]" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text33" Top="9.45" Width="85.05" Height="18.9" Text="EMPRESA:" Font="Arial, 10pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="106.62" Width="718.2" Height="28.35">
+      <TextObject Name="Text2" Width="47.25" Height="18.9" Text="ID" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text4" Left="47.25" Width="141.75" Height="18.9" Text="NOME" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text8" Left="189" Width="113.4" Height="18.9" Text="QTDE." HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text6" Left="302.4" Width="85.05" Height="18.9" Text="UNITÁRIO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text12" Left="387.45" Width="103.95" Height="18.9" VisibleExpression="[EhPolicia]" Text="QTDE. CAIXA" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text14" Left="491.4" Width="103.95" Height="18.9" VisibleExpression="[EhPolicia]" Text="VALOR CAIXA" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text17" Left="614.25" Width="103.95" Height="18.9" Text="VALOR TOTAL" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="137.63" Width="718.2" Height="37.8" CanBreak="true" DataSource="itens">
+      <TextObject Name="Text1" Width="47.25" Height="37.8" Fill.Color="Gainsboro" Text="[itens.ID]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text3" Left="47.25" Width="141.75" Height="37.8" Text="[itens.Nome]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text7" Left="189" Width="66.15" Height="37.8" Text="[itens.Quantidade]" HideZeros="true" Format="Number" Format.UseLocale="true" Format.DecimalDigits="0" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text9" Left="330.75" Width="47.25" Height="37.8" Text="[itens.ValorUnitario]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text10" Left="311.85" Width="28.35" Height="37.8" Text="R$" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+      <TextObject Name="Text5" Left="255.15" Width="47.25" Height="37.8" Text="[itens.Unidade]" VertAlign="Center" Font="Arial, 8pt"/>
+      <TextObject Name="Text11" Left="378" Width="103.95" Height="37.8" Visible="false" VisibleExpression="[EhPolicia]" Text="[itens.QtdeCaixa]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text13" Left="519.75" Width="56.7" Height="37.8" VisibleExpression="[EhPolicia]" Text="[itens.ValorCaixa]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text16" Left="614.25" Width="103.95" Height="37.8" Fill.Color="Gainsboro" Text="[itens.ValorTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text18" Left="604.8" Width="28.35" Height="37.8" Fill.Color="Gainsboro" Text="R$" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+      <LineObject Name="Line2" Width="718.2"/>
+      <TextObject Name="Text15" Left="340.2" Width="198.45" Height="37.8" VisibleExpression="[EhPolicia]" Text="R$" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="178.1" Width="718.2" Height="28.35">
+      <TextObject Name="Text19" Left="614.25" Width="103.95" Height="28.35" Fill.Color="Gainsboro" Text="[ValorTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text20" Left="604.8" Width="28.35" Height="28.35" Fill.Color="Gainsboro" Text="R$" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+      <LineObject Name="Line3" Width="718.2"/>
+      <TextObject Name="Text21" Left="481.95" Width="122.85" Height="28.35" Text="TOTAL DA NOTA:" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

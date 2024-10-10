@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -27,10 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ControleDeLicitacao.Common\ControleDeLicitacao.Common.csproj" />
     <ProjectReference Include="..\ControleDeLicitacao.Infrastructure\ControleDeLicitacao.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\Reports\" />
   </ItemGroup>
 
 </Project>

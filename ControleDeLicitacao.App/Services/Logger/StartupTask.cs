@@ -40,7 +40,7 @@ public class StartupTask : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        //RunSystem();
+        RunSystem();
     }
     public Task StopAsync(CancellationToken cancellationToken)
     {

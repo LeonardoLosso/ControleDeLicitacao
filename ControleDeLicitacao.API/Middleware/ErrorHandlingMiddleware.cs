@@ -48,7 +48,7 @@ public class ErrorHandlingMiddleware
         else
         {
             code = (int)HttpStatusCode.InternalServerError;
-            code = exception.Message.Contains("null") ? 501 : code;
+            code = exception.Message.Contains("reference not set") ? 501 : code;
             result = JsonConvert.SerializeObject(new
             {
                 StatusCode = code,

@@ -392,9 +392,14 @@ public class UploadService
                 QtdeAEntregar = item.Quantidade,
                 QtdeEntregue = 0,
                 BaixaID = itemBaixa.BaixaID,
-                Unidade = "",
-                ValorUnitario = item.ValorUnitario,
-                Total = item.ValorUnitario * item.Quantidade,
+
+                Unidade = itemBaixa is null ?
+                    "" : itemBaixa.Unidade,
+
+                ValorUnitario = itemBaixa is null ? 
+                    item.ValorUnitario : itemBaixa.ValorUnitario,
+
+                Total = itemBaixa.ValorUnitario * item.Quantidade,
                 ItemDeBaixa = itemBaixa.ID != 0 ? true : false,
                 ValorEntregue = 0
             };

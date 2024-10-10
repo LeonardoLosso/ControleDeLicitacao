@@ -4,6 +4,7 @@ using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace ControleDeLicitacao.API.Controllers.Documentos.Baixa;
 
@@ -81,25 +82,17 @@ public class NotaController : BaseController
         return await RetornaDelete(id);
     }
 
-    //[HttpGet("report/{id}")]
-    //public async Task<IActionResult> GetReport(int id)
-    //{
-    //    var path = @"C:\Users\pc\Desktop\teste\Nota.frx";
-
-    //    if (!System.IO.File.Exists(path))
-    //        return Ok (await _service.CreateReport(id, path));
-
-    //    var rep = await _service.LoadReport(id, path);
-
-    //    return File(rep, "application/pdf");
-    //}
-
     [HttpGet("report/{id}")]
     public async Task<IActionResult> GetReport(int id)
     {
-        var path = Path.GetDirectoryName(this.GetType().FullName);
+        var path = Path.Combine(AppContext.BaseDirectory, @"Reports\Nota.frx");
 
-        return Ok(path);
+        if (!System.IO.File.Exists(path))
+            return Ok(await _service.CreateReport(id, path));
+
+        var rep = await _service.LoadReport(id, path);
+
+        return File(rep, "application/pdf");
     }
 
     //se pah então a consulta do relatorio criação / etc precisará ser feita de outra forma quando crescer
