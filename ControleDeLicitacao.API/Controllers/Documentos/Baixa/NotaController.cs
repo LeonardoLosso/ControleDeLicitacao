@@ -80,4 +80,30 @@ public class NotaController : BaseController
         await _service.Excluir(id);
         return await RetornaDelete(id);
     }
+
+    //[HttpGet("report/{id}")]
+    //public async Task<IActionResult> GetReport(int id)
+    //{
+    //    var path = @"C:\Users\pc\Desktop\teste\Nota.frx";
+
+    //    if (!System.IO.File.Exists(path))
+    //        return Ok (await _service.CreateReport(id, path));
+
+    //    var rep = await _service.LoadReport(id, path);
+
+    //    return File(rep, "application/pdf");
+    //}
+
+    [HttpGet("report/{id}")]
+    public async Task<IActionResult> GetReport(int id)
+    {
+        var path = Path.GetDirectoryName(this.GetType().FullName);
+
+        return Ok(path);
+    }
+
+    //se pah então a consulta do relatorio criação / etc precisará ser feita de outra forma quando crescer
+    //receberá o ID do relatorio e os dados de consulta. 
+    //Depois da consulta feita então irá encaminhar para o menu de relatorios
+    //Então irá verificar se LOAD ou SAVE. Ai retornar o resultado
 }

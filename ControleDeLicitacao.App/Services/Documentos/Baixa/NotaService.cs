@@ -4,6 +4,8 @@ using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.App.Services.Cadastros;
 using ControleDeLicitacao.Domain.Entities.Documentos.Baixa.NotasEmpenho;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
+using FastReport;
+using FastReport.Export.PdfSimple;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeLicitacao.App.Services.Documentos.Baixa;
@@ -143,5 +145,58 @@ public class NotaService
                 .AsNoTracking()
             .Where(w => w.BaixaID == id)
             .ToListAsync();
+    }
+
+    //-----------------------------------------
+    public async Task<bool> CreateReport(int id, string path)
+    {
+        var reportFile = path;
+
+        var freport = new Report();
+
+        await setReportData(freport, id);
+
+        freport.Report.Save(reportFile);
+
+        return true;
+    }
+    public async Task<byte[]> LoadReport(int id, string path)
+    {
+        var reportFile = path;
+
+        var freport = new Report();
+        freport.Report.Load(reportFile);
+        await setReportData(freport, id);
+        freport.Prepare();
+
+        var pdfExport = new PDFSimpleExport();
+
+        using MemoryStream ms = new MemoryStream();
+        pdfExport.Export(freport, ms);
+
+        ms.Flush();
+        return ms.ToArray();
+    }
+
+    private async Task setReportData(Report freport, int id)
+    {
+        var data = await ObterPorID(id);
+        var unidade = _entidadeService.ObterNome(data.Unidade);
+        var baixa = await _baixaRepository.ObterPorID(data.BaixaID);
+        var orgao = _entidadeService.ObterNome(baixa.OrgaoID);
+        var empresa = _entidadeService.ObterNome(baixa.EmpresaID);
+
+        freport.SetParameterValue("Edital", data.Edital);
+        freport.SetParameterValue("Numero", data.NumNota);
+        freport.SetParameterValue("Empenho", data.NumEmpenho);
+        freport.SetParameterValue("Orgao", orgao);
+        freport.SetParameterValue("Empresa", empresa);
+        freport.SetParameterValue("Unidade", unidade);
+        freport.SetParameterValue("EhPolicia", data.EhPolicia);
+        freport.SetParameterValue("DataEmissao", data.DataEmissao);
+        freport.SetParameterValue("DataEntrega", data.DataEntrega);
+        freport.SetParameterValue("Observacao", data.Observacao);
+
+        freport.Dictionary.RegisterBusinessObject(data.Itens, "itens", 10, true);
     }
 }

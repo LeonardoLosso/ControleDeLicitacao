@@ -178,6 +178,18 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
+            "FastReport.OpenSource": {
+              "target": "Package",
+              "version": "[2024.2.14, )"
+            },
+            "FastReport.OpenSource.Export.PdfSimple": {
+              "target": "Package",
+              "version": "[2024.2.14, )"
+            },
+            "FastReport.OpenSource.Web": {
+              "target": "Package",
+              "version": "[2024.2.14, )"
+            },
             "Google.Apis.Auth": {
               "target": "Package",
               "version": "[1.68.0, )"
