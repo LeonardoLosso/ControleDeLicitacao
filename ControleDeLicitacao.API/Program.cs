@@ -16,7 +16,9 @@ var logConnString = builder.Configuration.GetConnectionString("LogConnection");
 
 //conexão com o banco de dados
 builder.Services.AddContexts(connString);
-builder.Services.AddDbContext<LogContext>(opts => opts.UseSqlServer(logConnString));
+builder.Services.AddDbContext<LogContext>(
+    opts => opts.UseSqlServer(logConnString,
+    sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 //configurações de usuario
 builder.Services.AddUserConfig();

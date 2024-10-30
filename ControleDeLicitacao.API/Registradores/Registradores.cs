@@ -20,14 +20,25 @@ public static class Registradores
 {
     public static IServiceCollection AddContexts(this IServiceCollection services, string connString)
     {
-        services.AddDbContext<EntidadeContext>(opts => opts.UseSqlServer(connString));
+        services.AddDbContext<EntidadeContext>(
+            opts => opts.UseSqlServer(
+                connString, 
+                sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
-        services.AddDbContext<ItemContext>(opts => opts.UseSqlServer(connString));
+        services.AddDbContext<ItemContext>(
+            opts => opts.UseSqlServer(
+                connString, 
+                sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
-        services.AddDbContext<UsuarioContext>(opts => opts.UseSqlServer(connString));
+        services.AddDbContext<UsuarioContext>(
+            opts => opts.UseSqlServer(
+                connString, 
+                sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
-
-        services.AddDbContext<BaixaContext>(opts => opts.UseSqlServer(connString));
+        services.AddDbContext<BaixaContext>(
+            opts => opts.UseSqlServer(
+                connString, 
+                sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
         return services;
     }
@@ -108,14 +119,12 @@ public static class Registradores
 
         services.AddCors(options =>
         {
-            options.AddDefaultPolicy(
-                policy =>
-                {
-                    policy.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                    //.AllowCredentials();
-                });
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
         });
 
         services.AddControllers(options =>

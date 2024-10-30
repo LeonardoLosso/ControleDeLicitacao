@@ -39,6 +39,6 @@ public class BaixaController : BaseController
     [HttpGet("teste")]
     public IActionResult Teste()
     {
-        return Ok();
+        return Ok(new { teste = "Conectado" });
     }
 }
