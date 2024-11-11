@@ -1,10 +1,8 @@
 ﻿using ControleDeLicitacao.App.DTOs.Baixa.NotasEmpenhos;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
-using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 
 namespace ControleDeLicitacao.API.Controllers.Documentos.Baixa;
 
@@ -12,7 +10,7 @@ namespace ControleDeLicitacao.API.Controllers.Documentos.Baixa;
 public class NotaController : BaseController
 {
     private readonly NotaService _service;
-    public NotaController(LogInfoService logInfoService, NotaService service) : base(logInfoService)
+    public NotaController(NotaService service) : base()
     {
         _service = service;
     }

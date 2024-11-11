@@ -30,31 +30,37 @@ namespace ControleDeLicitacao.Infrastructure.Migrations.Log
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Horario")
+                    b.Property<DateTime?>("Horario")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Operacao")
-                        .IsRequired()
+                    b.Property<string>("NewValue")
                         .HasColumnType("text");
 
+                    b.Property<string>("OldValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Operacao")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("Path")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<int?>("RecordId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TipoRequest")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Log");
+                    b.ToTable("SystemLog");
                 });
 #pragma warning restore 612, 618
         }

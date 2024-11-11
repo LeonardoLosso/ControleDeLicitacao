@@ -1539,6 +1539,7 @@
           "AutoMapper": "13.0.1",
           "ControleDeLicitacao.Domain": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.14",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "6.0.14",
           "Microsoft.EntityFrameworkCore": "6.0.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.14"
         },

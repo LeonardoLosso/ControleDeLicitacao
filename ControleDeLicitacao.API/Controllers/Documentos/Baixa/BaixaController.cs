@@ -1,5 +1,4 @@
 ﻿using ControleDeLicitacao.App.Services.Documentos.Baixa;
-using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleDeLicitacao.API.Controllers.Documentos.Baixa;
@@ -10,8 +9,7 @@ public class BaixaController : BaseController
     private readonly BaixaService _service;
 
     public BaixaController(
-        LogInfoService logInfoService,
-        BaixaService baixaService) : base(logInfoService)
+        BaixaService baixaService) : base()
     {
         _service = baixaService;
     }

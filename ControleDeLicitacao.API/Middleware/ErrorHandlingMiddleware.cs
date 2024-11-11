@@ -59,6 +59,7 @@ public class ErrorHandlingMiddleware
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = code == 500 ? 515 : code;
+
         return context.Response.WriteAsync(result);
     }
 }

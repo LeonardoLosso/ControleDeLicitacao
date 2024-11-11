@@ -10,7 +10,7 @@ public class ItemRepository : Repository<Item>
     private readonly ItemContext _context;
     private readonly DbSet<ItemNomeAssociativo> _dbSetNomes;
     private readonly DbSet<ItemAssociativo> _dbSetItens;
-    public ItemRepository(ItemContext context) : base(context)
+    public ItemRepository(ItemContext context, LogContext logContext, UserKeeper userKeeper) : base(context, logContext, userKeeper)
     {
         _context = context;
         _dbSetNomes = _context.Set<ItemNomeAssociativo>();
@@ -21,7 +21,8 @@ public class ItemRepository : Repository<Item>
     {
         await RemoverAssociacoes(item.ID, item.EhCesta);
 
-        await base.Editar(item);
+        _context.Update(item);
+        await base.SalvaContexto();
     }
 
     private async Task RemoverAssociacoes(int id, bool ehCesta)
@@ -35,6 +36,5 @@ public class ItemRepository : Repository<Item>
         var nomesAssociativos = await _dbSetNomes.Where(n => n.ItemID == id).ToListAsync();
         _dbSetNomes.RemoveRange(nomesAssociativos);
 
-        await _context.SaveChangesAsync();
     }
 }

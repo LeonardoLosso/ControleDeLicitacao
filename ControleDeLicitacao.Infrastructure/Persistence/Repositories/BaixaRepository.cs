@@ -18,7 +18,8 @@ public class BaixaRepository : Repository<BaixaLicitacao>
 
     private readonly DbSet<Reajuste> _dbSetReajuste;
 
-    public BaixaRepository(BaixaContext context) : base(context)
+    public BaixaRepository(BaixaContext context, LogContext logContext, UserKeeper userKeeper) 
+        : base(context, logContext, userKeeper)
     {
         _context = context;
         _dbSetItens = _context.Set<ItemDeBaixa>();
@@ -80,12 +81,12 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             }
         }
 
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
     }
     public async Task AdicionarEmpenho(Empenho entity, bool atualizaBaixa = false)
     {
         _dbSetEmpenho.Add(entity);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
 
         if (atualizaBaixa)
             await AtualizarBaixa(entity.BaixaID);
@@ -94,7 +95,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public async Task AdicionarNota(Nota entity)
     {
         _dbSetNota.Add(entity);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
 
 
         await AtualizarEmpenho(entity.EmpenhoID);
@@ -104,12 +105,12 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         var baixaID = entity.BaixaID;
         _dbSetEmpenho.Remove(entity);
         await AtualizarBaixa(baixaID);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
     }
     public async Task ExcluirNota(Nota entity)
     {
         _dbSetNota.Remove(entity);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
 
         await AtualizarEmpenho(entity.EmpenhoID);
     }
@@ -193,7 +194,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             }
         }
 
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
 
         await AtualizarBaixa(updatedEmpenho.BaixaID);
     }
@@ -232,7 +233,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
             }
         }
 
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
 
         await AtualizarEmpenho(updatedNota.EmpenhoID);
     }
@@ -241,7 +242,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public async Task AdicionarReajuste(Reajuste reajuste)
     {
         _dbSetReajuste.Add(reajuste);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
     }
     public IQueryable<Reajuste> BuscarReajuste()
     {
@@ -251,7 +252,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
     public async Task ExcluirReajuste(Reajuste reajuste)
     {
         _dbSetReajuste.Remove(reajuste);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
     }
 
     //---------------------[PRIVATE]--------------------------
@@ -298,7 +299,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         }
 
         _context.Update(baixa);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
     }
     private async Task AtualizarEmpenho(int empenhoID)
     {
@@ -337,7 +338,7 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         empenho.Saldo = empenho.Valor - empenho.Itens.Sum(i => i.ValorEntregue);
 
         _context.Update(empenho);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
 
         await AtualizarBaixa(empenho.BaixaID);
     }
@@ -352,6 +353,6 @@ public class BaixaRepository : Repository<BaixaLicitacao>
         _dbSetEmpenhoPolicia.RemoveRange(remover);
 
         _dbSetEmpenhoPolicia.AddRange(empenhos);
-        await _context.SaveChangesAsync();
+        await base.SalvaContexto();
     }
 }

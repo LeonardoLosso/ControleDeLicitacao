@@ -1,6 +1,5 @@
 ﻿using ControleDeLicitacao.App.DTOs.Itens;
 using ControleDeLicitacao.App.Services.Cadastros;
-using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +11,7 @@ public class ItensController : BaseController
 {
     private ItemService _service;
 
-    public ItensController(LogInfoService logInfoService, ItemService service) : base(logInfoService)
+    public ItensController(ItemService service) : base()
     {
         _service = service;
     }

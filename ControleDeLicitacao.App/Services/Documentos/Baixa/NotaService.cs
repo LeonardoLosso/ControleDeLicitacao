@@ -111,8 +111,8 @@ public class NotaService
             .Select(g => new ItemDeNotaDTO
             {
                 ID = g.Key,
-                EmpenhoID = g.First().EmpenhoID,
-                NotaID = g.First().NotaID,
+                EmpenhoID = dto.EmpenhoID,
+                NotaID = dto.ID,
                 Nome = g.First().Nome,
                 Unidade = g.First().Unidade,
                 Quantidade = g.Sum(i => i.Quantidade),
