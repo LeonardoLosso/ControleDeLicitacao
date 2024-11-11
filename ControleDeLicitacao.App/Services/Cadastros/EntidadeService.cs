@@ -4,17 +4,17 @@ using ControleDeLicitacao.App.DTOs.Entidades;
 using ControleDeLicitacao.App.Error;
 using ControleDeLicitacao.Common;
 using ControleDeLicitacao.Domain.Entities.Cadastros;
-using ControleDeLicitacao.Infrastructure.Persistence.Interface;
+using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeLicitacao.App.Services.Cadastros;
 
 public class EntidadeService
 {
-    private readonly IRepository<Entidade> _entidadeRepository;
+    private readonly EntidadeRepository _entidadeRepository;
     private readonly IMapper _mapper;
 
-    public EntidadeService(IRepository<Entidade> entidadeRepository, IMapper mapper)
+    public EntidadeService(EntidadeRepository entidadeRepository, IMapper mapper)
     {
         _entidadeRepository = entidadeRepository ?? throw new ArgumentNullException(nameof(entidadeRepository));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

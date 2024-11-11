@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using ControleDeLicitacao.App.Error;
-using ControleDeLicitacao.App.Services.Logger;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros.Usuarios;
 
@@ -13,7 +12,7 @@ public class UsuariosController : BaseController
 {
     private UsuarioService _service;
 
-    public UsuariosController(LogInfoService logInfoService, UsuarioService service) : base(logInfoService)
+    public UsuariosController(UsuarioService service) : base()
     {
         _service = service;
     }

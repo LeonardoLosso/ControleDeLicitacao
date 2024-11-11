@@ -1,6 +1,5 @@
 ﻿using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
-using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +11,7 @@ public class BaixaPoliciaController : BaseController
 {
     private readonly BaixaPoliciaService _service;
     public BaixaPoliciaController(
-        LogInfoService logInfoService,
-        BaixaPoliciaService service) : base (logInfoService)
+        BaixaPoliciaService service) : base ()
     {
         _service = service;
     }

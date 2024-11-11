@@ -1,5 +1,4 @@
 ﻿using ControleDeLicitacao.App.DTOs.Ata;
-using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +12,8 @@ public class AtaController : BaseController
 {
     private readonly BaixaService _service;
     public AtaController(
-        LogInfoService logInfoService,
         BaixaService service)
-         : base(logInfoService)
+         : base()
     {
         _service = service;
     }

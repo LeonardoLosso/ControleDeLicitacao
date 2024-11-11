@@ -6,6 +6,7 @@ using ControleDeLicitacao.App.Services.Documentos.Baixa;
 using ControleDeLicitacao.App.Services.Logger;
 using ControleDeLicitacao.App.Upload.Services;
 using ControleDeLicitacao.Domain.Entities.Cadastros.Usuario;
+using ControleDeLicitacao.Infrastructure;
 using ControleDeLicitacao.Infrastructure.Persistence.Contexto;
 using ControleDeLicitacao.Infrastructure.Persistence.Interface;
 using ControleDeLicitacao.Infrastructure.Persistence.Repositories;
@@ -82,7 +83,7 @@ public static class Registradores
         services.AddScoped<ItemService>();
         services.AddScoped<UsuarioService>();
         services.AddSingleton<TokenService>();
-        services.AddScoped<LogInfoService>();
+        services.AddSingleton<UserKeeper>();
         services.AddScoped<BaixaService>();
         services.AddScoped<BaixaPoliciaService>();
         services.AddScoped<EmpenhoService>();
@@ -97,6 +98,7 @@ public static class Registradores
     {
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<DbContext, EntidadeContext>();
+        services.AddScoped<EntidadeRepository>();
         services.AddScoped<ItemRepository>();
         services.AddScoped<BaixaRepository>();
 

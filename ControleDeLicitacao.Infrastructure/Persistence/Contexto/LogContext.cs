@@ -7,6 +7,6 @@ public class LogContext : DbContext
 {
     public LogContext(DbContextOptions<LogContext> opts) : base(opts) { }
 
-    public DbSet<LogEntity> Log { get; set; }
+    public DbSet<LogEntity> SystemLog { get; set; }
 
 }

@@ -3,7 +3,6 @@ using ControleDeLicitacao.App.DTOs.Entidades;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using ControleDeLicitacao.App.Services.Cadastros;
-using ControleDeLicitacao.App.Services.Logger;
 
 namespace ControleDeLicitacao.API.Controllers.Cadastros;
 
@@ -11,7 +10,7 @@ namespace ControleDeLicitacao.API.Controllers.Cadastros;
 public class EntidadesController : BaseController
 {
     private readonly EntidadeService _service;
-    public EntidadesController(LogInfoService logInfoService, EntidadeService service) : base(logInfoService)
+    public EntidadesController(EntidadeService service) : base()
     {
         _service = service;
     }

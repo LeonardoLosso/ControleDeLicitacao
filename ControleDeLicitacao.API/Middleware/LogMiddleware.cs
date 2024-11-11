@@ -1,6 +1,5 @@
-﻿using ControleDeLicitacao.App.Error;
-using ControleDeLicitacao.App.Services.Cadastros.User;
-using ControleDeLicitacao.App.Services.Logger;
+﻿using ControleDeLicitacao.App.Services.Cadastros.User;
+using ControleDeLicitacao.Infrastructure;
 using System.Text;
 
 namespace ControleDeLicitacao.API.Middleware;
@@ -8,65 +7,34 @@ public class LogMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly TokenService _tokenService;
+    private readonly UserKeeper _userKeeper;
 
     public LogMiddleware(
         RequestDelegate next,
-        TokenService tokenService)
+        TokenService tokenService,
+        UserKeeper userKeeper)
     {
         _next = next;
         _tokenService = tokenService;
+        _userKeeper = userKeeper;
     }
 
     public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
     {
         if (ValidarRequest(context))
         {
-            try
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+            var userId = "";
+
+            if (token != null)
             {
-                var _logService = serviceProvider.GetRequiredService<LogInfoService>();
-
-                var path = context.Request.Path;
-
-                var method = context.Request.Method;
-
-                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                var userId = "";
-
-                if (token != null)
-                {
-                    var decodedToken = _tokenService.DecodeToken(token);
-                    userId = decodedToken.Claims.First().Value;
-                }
-
-                var requestBodyContent = await ReadRequestBody(context.Request);
-                var requestTime = DateTime.UtcNow;
-
-                var originalBodyStream = context.Response.Body;
-                using (var responseBody = new MemoryStream())
-                {
-                    context.Response.Body = responseBody;
-
-                    await _next(context);
-
-                    var responseBodyContent = await ReadResponseBody(responseBody);
-                    var responseTime = DateTime.UtcNow;
-
-                    var status = context.Response.StatusCode;
-                    // Log the operation
-                    if (status >= 200 && status <= 299)
-                    {
-                        _logService.SetRequestInfo(userId, method, path, requestTime);
-                        //await _logService.SalvarLogAsync();
-                    }
-
-                    await responseBody.CopyToAsync(originalBodyStream);
-                }
+                var decodedToken = _tokenService.DecodeToken(token);
+                _userKeeper.CurrentUser = decodedToken.Claims.First().Value;
             }
-            catch (Exception ex)
-            {
-                throw new GenericException(ex.Message, 501);
-            }
+
+            await _next(context);
+
         }
         else
         {

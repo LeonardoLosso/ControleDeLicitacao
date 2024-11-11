@@ -8,6 +8,8 @@ public class LogEntity
     [Key] 
     public int Id { get; set; }
 
+    public int? RecordId { get; set; }
+
     [MaxLength(10)]
     public string? TipoRequest { get; set; }
 
@@ -19,16 +21,14 @@ public class LogEntity
 
     public DateTime? Horario { get; set; }
 
-    [Column(TypeName = "text")]
+    [MaxLength(20)]
     public string? Operacao { get; set; }
 
-    public LogEntity(int id, string? tipoRequest, string? path, string? userName, DateTime? horario, string? operacao)
-    {
-        Id = id;
-        TipoRequest = tipoRequest;
-        Path = path;
-        UserName = userName;
-        Horario = horario;
-        Operacao = operacao;
-    }
+    [Column(TypeName = "text")]
+
+    public string? NewValue { get; set; }
+
+    [Column(TypeName = "text")]
+    public string? OldValue { get; set; }
+
 }

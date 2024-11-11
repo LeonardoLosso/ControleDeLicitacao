@@ -1,6 +1,5 @@
 ﻿using ControleDeLicitacao.App.DTOs.Baixa;
 using ControleDeLicitacao.App.Services.Documentos.Baixa;
-using ControleDeLicitacao.App.Services.Logger;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ namespace ControleDeLicitacao.API.Controllers.Documentos.Baixa;
 public class EmpenhoController : BaseController
 {
     private readonly EmpenhoService _service;
-    public EmpenhoController(LogInfoService logInfoService, EmpenhoService service) : base(logInfoService)
+    public EmpenhoController(EmpenhoService service) : base()
     {
         _service = service;
     }

@@ -41,7 +41,7 @@ public class EmpenhoService
             .Select(b => b.Unidade)
             .FirstOrDefault();
         
-        if(tipo == 3)
+        if(tipo == 3 || tipo == 9)
         {
             return await _baixaRepository
             .BuscarEmpenhoPolicia()
@@ -241,7 +241,7 @@ public class EmpenhoService
             .Select(g => new ItemDeEmpenhoDTO
             {
                 ID = g.Key,
-                BaixaID = g.First().BaixaID,
+                BaixaID = dto.BaixaID,
                 EmpenhoID = g.First().EmpenhoID,
                 ItemDeBaixa = g.First().ItemDeBaixa,
                 QtdeAEntregar = g.Sum(s => s.QtdeAEntregar),

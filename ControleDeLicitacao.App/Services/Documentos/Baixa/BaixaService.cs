@@ -109,9 +109,9 @@ public class BaixaService
 
         if (tipo.HasValue)
         {
-            if (tipo == 3)
+            if (tipo == 3 || tipo == 9)
                 query = query.Where(w => w.Unidade == tipo);
-            else query = query.Where(w => w.Unidade != 3);
+            else query = query.Where(w => w.Unidade != 3 && w.Unidade != 9);
         }
 
         if (status.HasValue)
@@ -191,7 +191,7 @@ public class BaixaService
             .Select(g => new ItemDeAtaDTO
             {
                 ID = g.Key,
-                AtaID = g.First().AtaID,
+                AtaID = dto.ID,
                 Nome = g.First().Nome,
                 Unidade = g.First().Unidade,
                 QtdeLicitada = g.Sum(i => i.QtdeLicitada),
@@ -212,7 +212,7 @@ public class BaixaService
             .Select(g => new ItemDeBaixaDTO
             {
                 ID = g.Key,
-                BaixaID = g.First().BaixaID,
+                BaixaID = dto.ID,
                 Nome = g.First().Nome,
                 Unidade = g.First().Unidade,
                 QtdeLicitada = g.Sum(i => i.QtdeLicitada),
