@@ -40,8 +40,8 @@ public class EmpenhoService
             .AsNoTracking()
             .Select(b => b.Unidade)
             .FirstOrDefault();
-        
-        if(tipo == 3 || tipo == 9)
+
+        if (tipo == 3 || tipo == 9)
         {
             return await _baixaRepository
             .BuscarEmpenhoPolicia()
@@ -91,13 +91,19 @@ public class EmpenhoService
         return lista;
     }
 
-    public async Task<List<ItemDeEmpenhoDTO>?> ListarItens(int id)
+    public async Task<List<ItemDeEmpenhoDTO>?> ListarItens(int id, string? search)
     {
         var empenho = await _baixaRepository.BuscarEmpenhoPorID(id);
 
         if (empenho is null) return null;
 
         var itens = empenho.Itens.Where(i => i.QtdeAEntregar > 0).ToList();
+
+        if (!string.IsNullOrWhiteSpace(search))
+            itens = itens.Where(
+                i => i.Nome.ToUpper()
+                .Contains(search.ToUpper())
+            ).ToList();
 
         var lista = new List<ItemDeEmpenhoDTO>();
 
@@ -263,7 +269,7 @@ public class EmpenhoService
         dto.Itens = AgruparItens(dto);
         var empenho = _mapper.Map<Empenho>(dto);
 
-        if(empenho is null) throw new GenericException("Não foi possivel adicionar empenho", 501);
+        if (empenho is null) throw new GenericException("Não foi possivel adicionar empenho", 501);
 
         await _baixaRepository.AdicionarEmpenho(empenho, true);
 
