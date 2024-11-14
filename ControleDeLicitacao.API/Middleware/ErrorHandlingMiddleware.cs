@@ -53,7 +53,7 @@ public class ErrorHandlingMiddleware
             {
                 StatusCode = code,
                 Message = exception.Message,
-                Detailed = exception.InnerException.Message ?? ""
+                Detailed = exception?.InnerException?.Message ?? ""
             });
         }
 

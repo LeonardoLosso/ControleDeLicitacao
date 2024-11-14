@@ -106,8 +106,6 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         await _logContext.AddRangeAsync(auditLogs, cancellationToken);
 
         await _logContext.SaveChangesAsync(cancellationToken);
-
-        _logContext.Dispose();
     }
 
 }
