@@ -43,9 +43,9 @@ public class EmpenhoController : BaseController
     }
 
     [HttpGet("itens/{id}")]
-    public async Task<IActionResult> ListarItens(int id)
+    public async Task<IActionResult> ListarItens(int id, [FromQuery] string? search)
     {
-        var lista = await _service.ListarItens(id);
+        var lista = await _service.ListarItens(id, search);
         return Ok(lista);
     }
 
